@@ -13,7 +13,13 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var closestBeaconLabel: UILabel!
     
-    private var beaconRegionUUID = UUID(uuidString: "1a9a515e-a845-467e-a313-3a8735f47514")!
+    private var beaconRegionUUID = UUID(uuidString: "2c2d41fb-d4c5-4a4d-a49a-e8fd5c256293")!
+    
+    // Square battery beacons region ID 2c2d41fb-d4c5-4a4d-a49a-e8fd5c256293
+    // Card beacons region ID 1a9a515e-a845-467e-a313-3a8735f47514
+    
+    // The best results are when the beacon in NOT on the back of the phone or oover the screen, but in the upper half, on the right side of the phone, where the locking button is
+    
     private var beaconsMajor = 0
     
     lazy fileprivate var locationManager: CLLocationManager = {
@@ -74,7 +80,7 @@ class ViewController: UIViewController {
     @objc func refreshDetectedBeacons() {
         let now = Date().timeIntervalSince1970
         detectedBeacons = detectedBeacons.filter({ (beacon) -> Bool in
-            beacon.timestamp.timeIntervalSince1970 + 4 > now // removed beacons appearances from more than 4 seconds ago
+            beacon.timestamp.timeIntervalSince1970 + 3 > now // removed beacons appearances from more than 3 seconds ago
         })
     }
     
@@ -108,7 +114,7 @@ extension ViewController: CLLocationManagerDelegate {
         
         for beacon in beacons {
             if (beacon.accuracy < 0 || beacon.proximity == .near || beacon.proximity == .far || beacon.proximity == .unknown) { continue }
-            
+
             detectedBeacons.append(beacon)
             
             print("""
