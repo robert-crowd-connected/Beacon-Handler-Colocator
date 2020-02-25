@@ -10,7 +10,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Beacon_Install_And_Retrieval" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Beacon_Handler_Colocator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -26,8 +26,8 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Beacon Scanning" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qfp-SX-rqU">
-                                <rect key="frame" x="140" y="84" width="134.5" height="20"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <rect key="frame" x="138" y="74" width="138.5" height="20"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -48,44 +48,208 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Monitoring Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tQk-Cc-aH2">
-                                <rect key="frame" x="32" y="164" width="136" height="20"/>
+                                <rect key="frame" x="24" y="229" width="136" height="20"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zeo-D8-xkV">
-                                <rect key="frame" x="333" y="158.5" width="51" height="31"/>
+                                <rect key="frame" x="341" y="223.5" width="51" height="31"/>
                                 <connections>
                                     <action selector="actionMonitoringStatusChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Wdk-KD-fX7"/>
                                 </connections>
                             </switch>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fjz-Ua-Iv2">
+                                <rect key="frame" x="40" y="517" width="125" height="36"/>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="cQE-9M-xhX"/>
+                                    <constraint firstAttribute="width" constant="125" id="iA6-Sf-S0X"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Install">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="actionInstallBeacon:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KoQ-BT-M1W"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K6K-yK-Axj">
+                                <rect key="frame" x="249" y="517" width="125" height="36"/>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="qRM-NP-3Mv"/>
+                                    <constraint firstAttribute="width" constant="125" id="sfh-e4-ma1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Retrieve">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="actionRetrieveBeacon:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3Yf-Gu-bwN"/>
+                                </connections>
+                            </button>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="x0g-Rz-xIn">
+                                <rect key="frame" x="24" y="118" width="366" height="32"/>
+                                <segments>
+                                    <segment title="Card Beacons"/>
+                                    <segment title="Battery Beacons"/>
+                                </segments>
+                                <connections>
+                                    <action selector="actionChangeBeaconsType:" destination="BYZ-38-t0r" eventType="valueChanged" id="QsS-hL-3c2"/>
+                                </connections>
+                            </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Major Value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bq7-FL-CUH">
+                                <rect key="frame" x="24" y="179" width="89" height="20"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9fh-mm-9Wr">
+                                <rect key="frame" x="290" y="172" width="100" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="3mV-dj-a5u"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="actionChangeMajorValue:" destination="BYZ-38-t0r" eventType="editingDidEnd" id="7jp-m1-G6H"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="tQk-Cc-aH2" firstAttribute="top" secondItem="Qfp-SX-rqU" secondAttribute="bottom" constant="60" id="2ZX-jb-afV"/>
+                            <constraint firstItem="Fjz-Ua-Iv2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="1bv-Pv-e3x"/>
+                            <constraint firstItem="Fjz-Ua-Iv2" firstAttribute="top" secondItem="WYk-8T-Yv1" secondAttribute="bottom" constant="60" id="84x-JI-qPr"/>
+                            <constraint firstItem="tQk-Cc-aH2" firstAttribute="top" secondItem="Bq7-FL-CUH" secondAttribute="bottom" constant="30" id="8k5-t1-iVh"/>
+                            <constraint firstItem="Bq7-FL-CUH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="24" id="E4j-ch-C9m"/>
+                            <constraint firstItem="Bq7-FL-CUH" firstAttribute="top" secondItem="x0g-Rz-xIn" secondAttribute="bottom" constant="30" id="FzL-Za-JSP"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WYk-8T-Yv1" secondAttribute="trailing" constant="16" id="Iaz-oG-XJA"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="5td-1h-XKc" secondAttribute="trailing" constant="32" id="JQM-rz-ddL"/>
                             <constraint firstItem="WYk-8T-Yv1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="K4d-RR-2Zc"/>
                             <constraint firstItem="Uz0-Xs-YYN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="KeO-b5-lny"/>
                             <constraint firstItem="Zeo-D8-xkV" firstAttribute="centerY" secondItem="tQk-Cc-aH2" secondAttribute="centerY" id="Oy7-ZF-inu"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Uz0-Xs-YYN" secondAttribute="bottom" constant="60" id="Qix-l4-NsZ"/>
+                            <constraint firstItem="9fh-mm-9Wr" firstAttribute="centerY" secondItem="Bq7-FL-CUH" secondAttribute="centerY" id="Tn1-1S-dxt"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="5td-1h-XKc" secondAttribute="bottom" constant="60" id="Ul8-OX-6Ix"/>
                             <constraint firstItem="WYk-8T-Yv1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Unc-lg-h0J"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Zeo-D8-xkV" secondAttribute="trailing" constant="32" id="ffC-bX-hgj"/>
+                            <constraint firstItem="x0g-Rz-xIn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="24" id="Vwi-xz-BQU"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9fh-mm-9Wr" secondAttribute="trailing" constant="24" id="WJm-KS-85v"/>
+                            <constraint firstItem="x0g-Rz-xIn" firstAttribute="top" secondItem="Qfp-SX-rqU" secondAttribute="bottom" constant="24" id="ZCv-kD-CH6"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="x0g-Rz-xIn" secondAttribute="trailing" constant="24" id="Zop-oP-hN4"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Zeo-D8-xkV" secondAttribute="trailing" constant="24" id="ffC-bX-hgj"/>
                             <constraint firstItem="Qfp-SX-rqU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="gIU-Qh-JaT"/>
-                            <constraint firstItem="Qfp-SX-rqU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="nsN-qX-mVx"/>
+                            <constraint firstItem="Qfp-SX-rqU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="30" id="nsN-qX-mVx"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="K6K-yK-Axj" secondAttribute="trailing" constant="40" id="qpt-y8-64Q"/>
                             <constraint firstItem="WYk-8T-Yv1" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="uqy-57-SK6"/>
-                            <constraint firstItem="tQk-Cc-aH2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="vXx-6i-Rj4"/>
+                            <constraint firstItem="tQk-Cc-aH2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="24" id="vXx-6i-Rj4"/>
+                            <constraint firstItem="K6K-yK-Axj" firstAttribute="top" secondItem="WYk-8T-Yv1" secondAttribute="bottom" constant="60" id="xs9-bd-DGX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="beaconsTypeSegmentControl" destination="x0g-Rz-xIn" id="XFL-OJ-ub5"/>
                         <outlet property="closestBeaconLabel" destination="WYk-8T-Yv1" id="d1W-2N-9ua"/>
+                        <outlet property="installBeaconButton" destination="Fjz-Ua-Iv2" id="PgF-d3-Ttd"/>
+                        <outlet property="majorValueTextField" destination="9fh-mm-9Wr" id="rYb-Os-bcQ"/>
+                        <outlet property="retrieveBeaconButton" destination="K6K-yK-Axj" id="fsI-kX-zwJ"/>
+                        <outlet property="scannerStatusSwitch" destination="Zeo-D8-xkV" id="lUy-yA-Pu1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="139" y="94"/>
+        </scene>
+        <!--Beacon Installation View Controller-->
+        <scene sceneID="shL-PK-Pl3">
+            <objects>
+                <viewController storyboardIdentifier="BeaconInstallationViewController" id="mDw-Zg-L4E" customClass="BeaconInstallationViewController" customModule="Beacon_Handler_Colocator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0SY-qQ-C2I">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3L3-2d-Cyn">
+                                <rect key="frame" x="138.5" y="805" width="137" height="32"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
+                                <state key="normal" title="Cancel Installation">
+                                    <color key="titleColor" red="0.0" green="0.29628838280000003" blue="0.49997976039999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionCancelInstallation:" destination="mDw-Zg-L4E" eventType="touchUpInside" id="LlX-w0-Biy"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Beacon Installing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Sr-Uo-Ef8">
+                                <rect key="frame" x="139" y="74" width="136" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iBeacon Major x Minor y UUID z" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zv3-Vm-Ibm">
+                                <rect key="frame" x="24" y="115" width="366" height="17.5"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lpQ-iI-AHS">
+                                <rect key="frame" x="40" y="709" width="125" height="36"/>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="2M8-kQ-NaL"/>
+                                    <constraint firstAttribute="width" constant="125" id="a4P-ej-c9R"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Install">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="actionInstall:" destination="mDw-Zg-L4E" eventType="touchUpInside" id="rHE-te-hq9"/>
+                                    <action selector="actionInstallBeacon:" destination="BYZ-38-t0r" eventType="touchUpInside" id="C4f-rd-kYF"/>
+                                </connections>
+                            </button>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="y5f-7r-Mta">
+                                <rect key="frame" x="0.0" y="157.5" width="414" height="491.5"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="pd3-Wh-Ruh" firstAttribute="bottom" secondItem="3L3-2d-Cyn" secondAttribute="bottom" constant="25" id="3tR-6f-0z5"/>
+                            <constraint firstItem="3L3-2d-Cyn" firstAttribute="centerX" secondItem="0SY-qQ-C2I" secondAttribute="centerX" id="96u-Bj-NQT"/>
+                            <constraint firstItem="zv3-Vm-Ibm" firstAttribute="top" secondItem="5Sr-Uo-Ef8" secondAttribute="bottom" constant="20" id="Ajg-Pf-sgd"/>
+                            <constraint firstItem="lpQ-iI-AHS" firstAttribute="top" secondItem="y5f-7r-Mta" secondAttribute="bottom" constant="60" id="FrA-Hl-ymh"/>
+                            <constraint firstItem="5Sr-Uo-Ef8" firstAttribute="centerX" secondItem="0SY-qQ-C2I" secondAttribute="centerX" id="LBb-qC-Z0l"/>
+                            <constraint firstItem="lpQ-iI-AHS" firstAttribute="leading" secondItem="pd3-Wh-Ruh" secondAttribute="leading" constant="40" id="MYB-J8-TFd"/>
+                            <constraint firstItem="pd3-Wh-Ruh" firstAttribute="trailing" secondItem="zv3-Vm-Ibm" secondAttribute="trailing" constant="24" id="Q3C-xF-6GR"/>
+                            <constraint firstItem="3L3-2d-Cyn" firstAttribute="top" secondItem="lpQ-iI-AHS" secondAttribute="bottom" constant="60" id="ch2-9F-8V5"/>
+                            <constraint firstItem="5Sr-Uo-Ef8" firstAttribute="top" secondItem="pd3-Wh-Ruh" secondAttribute="top" constant="30" id="hnl-hH-Vkj"/>
+                            <constraint firstItem="zv3-Vm-Ibm" firstAttribute="leading" secondItem="pd3-Wh-Ruh" secondAttribute="leading" constant="24" id="kTl-Cg-lvz"/>
+                            <constraint firstItem="y5f-7r-Mta" firstAttribute="top" secondItem="zv3-Vm-Ibm" secondAttribute="bottom" constant="25" id="mX9-Bf-bhd"/>
+                            <constraint firstItem="y5f-7r-Mta" firstAttribute="leading" secondItem="pd3-Wh-Ruh" secondAttribute="leading" id="xQV-jv-lpk"/>
+                            <constraint firstItem="y5f-7r-Mta" firstAttribute="trailing" secondItem="pd3-Wh-Ruh" secondAttribute="trailing" id="ype-h5-9GW"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="pd3-Wh-Ruh"/>
+                    </view>
+                    <connections>
+                        <outlet property="beaconDataLabel" destination="zv3-Vm-Ibm" id="ky1-s1-C9e"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9H6-Nn-3Vv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="931.88405797101461" y="90.401785714285708"/>
         </scene>
     </scenes>
 </document>

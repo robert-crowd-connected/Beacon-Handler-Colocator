@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9769D45424052EFE000B503F /* BeaconCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45324052EFE000B503F /* BeaconCategory.swift */; };
+		9769D45624053FD2000B503F /* BeaconInstallationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */; };
 		9794015D23FEF42800670FE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9794015C23FEF42800670FE3 /* AppDelegate.swift */; };
 		9794015F23FEF42800670FE3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9794015E23FEF42800670FE3 /* SceneDelegate.swift */; };
 		9794016123FEF42800670FE3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9794016023FEF42800670FE3 /* ViewController.swift */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9769D45324052EFE000B503F /* BeaconCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconCategory.swift; sourceTree = "<group>"; };
+		9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconInstallationViewController.swift; sourceTree = "<group>"; };
 		9794015923FEF42800670FE3 /* Beacon Handler Colocator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Beacon Handler Colocator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9794015C23FEF42800670FE3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9794015E23FEF42800670FE3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +67,8 @@
 				9794016523FEF42800670FE3 /* Assets.xcassets */,
 				9794016723FEF42800670FE3 /* LaunchScreen.storyboard */,
 				9794016A23FEF42800670FE3 /* Info.plist */,
+				9769D45324052EFE000B503F /* BeaconCategory.swift */,
+				9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */,
 			);
 			path = "Beacon Handler Colocator";
 			sourceTree = "<group>";
@@ -139,6 +145,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9794016123FEF42800670FE3 /* ViewController.swift in Sources */,
+				9769D45624053FD2000B503F /* BeaconInstallationViewController.swift in Sources */,
+				9769D45424052EFE000B503F /* BeaconCategory.swift in Sources */,
 				9794015D23FEF42800670FE3 /* AppDelegate.swift in Sources */,
 				9794015F23FEF42800670FE3 /* SceneDelegate.swift in Sources */,
 			);
