@@ -10,6 +10,7 @@ import Foundation
 
 let kMajorValueStorageKey = "MAJORVALUESTORAGEKEY"
 let kBeaconCattegoryStorageKey = "BEACONCATEGORYSTORAGEKEY"
+let kRegionUUIDStorageKey = "REGIONUUIDSTORAGEKEY"
 
 public enum BeaconCategory: Int {
     case card = 0

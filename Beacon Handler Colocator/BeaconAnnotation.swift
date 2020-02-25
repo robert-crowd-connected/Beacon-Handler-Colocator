@@ -24,3 +24,10 @@ class BeaconAnnotation : NSObject, MKAnnotation {
         super.init()
     }
 }
+
+public enum Direction {
+    case left
+    case right
+    case up
+    case down
+}

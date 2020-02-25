@@ -18,9 +18,18 @@ class BeaconInstallationViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     
+    @IBOutlet weak var moveUpButton: UIButton!
+    @IBOutlet weak var moveRightButton: UIButton!
+    @IBOutlet weak var moveDownButton: UIButton!
+    @IBOutlet weak var moveLeftButton: UIButton!
+    
     public var beacon: CLBeacon!
     
-    private var beaconAnnotation: BeaconAnnotation?
+    private var beaconAnnotation: BeaconAnnotation? {
+        didSet {
+            changeMoveBeaconButtonsVisibility(to: beaconAnnotation != nil)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,16 +38,44 @@ class BeaconInstallationViewController: UIViewController {
         beaconUUIDLabel.text = "UUID \(beacon.uuid)"
         
         mapView.delegate = self
-        let tapGesture = UITapGestureRecognizer(target: self,
-                                                action: #selector(tapOnMap))
-        mapView.addGestureRecognizer(tapGesture)
+        
+        addTapGestures()
+        changeMoveBeaconButtonsVisibility(to: false)
         
         setupLocationManager()
     }
     
+    private func addTapGestures() {
+        let tapGesture = UITapGestureRecognizer(target: self,
+                                                action: #selector(tapOnMap))
+       mapView.addGestureRecognizer(tapGesture)
+       
+       let longTapRightButton = UILongPressGestureRecognizer(target: self,
+                                                             action: #selector(longPressRightButton))
+       moveRightButton.addGestureRecognizer(longTapRightButton)
+        
+        let longTapLeftButton = UILongPressGestureRecognizer(target: self,
+                                                              action: #selector(longPressLeftButton))
+        moveLeftButton.addGestureRecognizer(longTapLeftButton)
+        
+        let longTapUpButton = UILongPressGestureRecognizer(target: self,
+                                                              action: #selector(longPressUpButton))
+        moveUpButton.addGestureRecognizer(longTapUpButton)
+        
+        let longTapDownButton = UILongPressGestureRecognizer(target: self,
+                                                              action: #selector(longPressDownButton))
+        moveDownButton.addGestureRecognizer(longTapDownButton)
+    }
+    
+    private func changeMoveBeaconButtonsVisibility(to state: Bool) {
+        moveUpButton.isHidden = !state
+        moveRightButton.isHidden = !state
+        moveDownButton.isHidden = !state
+        moveLeftButton.isHidden = !state
+    }
+    
     private func setupLocationManager() {
         let locationManager = CLLocationManager()
-        locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         if let userLocation = locationManager.location?.coordinate {
@@ -66,59 +103,81 @@ class BeaconInstallationViewController: UIViewController {
         self.mapView.removeAnnotations(allAnnotations)
         self.mapView.addAnnotation(beaconAnnotation!)
     }
+
+    private func moveBeacon(direction: Direction, distance: Double) {
+        if beaconAnnotation == nil { return }
+        
+        switch direction {
+        case .left:
+            UIView.animate(withDuration: 0.25) {
+                var loc = self.beaconAnnotation!.coordinate
+                loc.longitude = loc.longitude - distance
+                self.beaconAnnotation!.coordinate = loc
+            }
+        case .right:
+            UIView.animate(withDuration: 0.25) {
+                var loc = self.beaconAnnotation!.coordinate
+                loc.longitude = loc.longitude + distance
+                self.beaconAnnotation!.coordinate = loc
+            }
+        case .up:
+            UIView.animate(withDuration: 0.25) {
+                var loc = self.beaconAnnotation!.coordinate
+                loc.latitude = loc.latitude + distance
+                self.beaconAnnotation!.coordinate = loc
+            }
+        case .down:
+            UIView.animate(withDuration: 0.25) {
+                var loc = self.beaconAnnotation!.coordinate
+                loc.latitude = loc.latitude - distance
+                self.beaconAnnotation!.coordinate = loc
+            }
+        }
+    }
     
-    //
+    @objc func longPressRightButton(sender: UIGestureRecognizer) {
+        moveBeacon(direction: .right, distance: 0.000005)
+    }
     
-    //Testing long press on button
+    @objc func longPressLeftButton(sender: UIGestureRecognizer) {
+        moveBeacon(direction: .left, distance: 0.000005)
+    }
     
+    @objc func longPressUpButton(sender: UIGestureRecognizer) {
+        moveBeacon(direction: .up, distance: 0.000005)
+    }
     
-    
-    //
+    @objc func longPressDownButton(sender: UIGestureRecognizer) {
+        moveBeacon(direction: .down, distance: 0.000005)
+    }
     
     @IBAction func actionMoveBeaconRight(_ sender: Any) {
-        if beaconAnnotation == nil { return }
-        UIView.animate(withDuration: 0.25) {
-            var loc = self.beaconAnnotation!.coordinate
-            
-            loc.longitude = loc.longitude + 0.000001
-            self.beaconAnnotation!.coordinate = loc
-        }
+        moveBeacon(direction: .right, distance: 0.000001)
     }
     
     @IBAction func actionMoveBeaconLeft(_ sender: Any) {
-        if beaconAnnotation == nil { return }
-        UIView.animate(withDuration: 0.25) {
-            var loc = self.beaconAnnotation!.coordinate
-            loc.longitude = loc.longitude - 0.000001
-            self.beaconAnnotation!.coordinate = loc
-        }
+        moveBeacon(direction: .left, distance: 0.000001)
     }
     
     @IBAction func actionMoveBeaconUp(_ sender: Any) {
-        if beaconAnnotation == nil { return }
-        UIView.animate(withDuration: 0.25) {
-            var loc = self.beaconAnnotation!.coordinate
-            
-            loc.latitude = loc.latitude + 0.000001
-            self.beaconAnnotation!.coordinate = loc
-        }
+        moveBeacon(direction: .up, distance: 0.000001)
     }
     
     @IBAction func moveBeaconDown(_ sender: Any) {
-        if beaconAnnotation == nil { return }
-        UIView.animate(withDuration: 0.25) {
-            var loc = self.beaconAnnotation!.coordinate
-            loc.latitude = loc.latitude - 0.000001
-            self.beaconAnnotation!.coordinate = loc
-        }
+        moveBeacon(direction: .down, distance: 0.000001)
     }
     
     @IBAction func actionInstall(_ sender: Any) {
+        if beaconAnnotation == nil { return }
+        BeaconHandlingService.shared.install(iBeacon: beacon, at: beaconAnnotation!.coordinate)
+        
         let successAlert = UIAlertController(title: "iBeacon successfully installed!",
-                                      message: nil, preferredStyle: .alert)
+                                             message: "Latitude \(beaconAnnotation!.coordinate.latitude)\nLongitude \(beaconAnnotation!.coordinate.longitude)", preferredStyle: .alert)
         self.present(successAlert, animated: false, completion: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                self.dismiss(animated: true, completion: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+                self.dismiss(animated: true, completion: {
+                    self.navigationController?.popViewController(animated: true)
+                })
             }
         })
     }
@@ -151,6 +210,3 @@ extension BeaconInstallationViewController: MKMapViewDelegate {
         }
     }
 }
-
-
-extension BeaconInstallationViewController: CLLocationManagerDelegate { }
