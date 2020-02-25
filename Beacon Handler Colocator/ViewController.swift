@@ -159,7 +159,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         if closestBeacon == nil { return }
         guard let beaconInstallationViewController = storyboard?.instantiateViewController(withIdentifier: "BeaconInstallationViewController") as? BeaconInstallationViewController else { return }
         beaconInstallationViewController.beacon = closestBeacon!
-        self.present(beaconInstallationViewController, animated: true, completion: nil)
+        navigationController?.pushViewController(beaconInstallationViewController, animated: true)
     }
     
     @IBAction func actionRetrieveBeacon(_ sender: Any) {
@@ -204,13 +204,13 @@ extension ViewController: CLLocationManagerDelegate {
 
             detectedBeacons.append(beacon)
             
-            print("""
-                
-            Minor: \(beacon.minor)
-            RSSI: \(beacon.rssi)
-            Proximity: \(beacon.proximity.rawValue)
-            Accuracy: \(beacon.accuracy)
-            """)
+//            print("""
+//                
+//            Minor: \(beacon.minor)
+//            RSSI: \(beacon.rssi)
+//            Proximity: \(beacon.proximity.rawValue)
+//            Accuracy: \(beacon.accuracy)
+//            """)
         }
     }
 }
