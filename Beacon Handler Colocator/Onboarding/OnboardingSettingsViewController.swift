@@ -29,19 +29,23 @@ class OnboardingSettingsViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configureViews()
+    }
+    
+    private func configureViews() {
         if sessionType == .install {
             welcomeLabel.text = "Preparing beacon installation"
             sessionImageView.image = UIImage(named: "install")
+            manualModeButton.isHidden = true
         } else {
             welcomeLabel.text = "Preparing beacon retrieval"
             sessionImageView.image = UIImage(named: "retrieve")
+            manualModeButton.isHidden = false
         }
-        welcomeLabel.textColor = UIColor.wizardPurple
         
+        welcomeLabel.textColor = UIColor.wizardPurple
         regionUUIDLabel.textColor = UIColor.wizardMiddleColor
         majorLabel.textColor = UIColor.wizardMiddleColor
-        
         manualModeButton.setTitleColor(UIColor.wizardPurple, for: .normal)
         
         let gradient: CAGradientLayer = CAGradientLayer()
@@ -82,8 +86,11 @@ class OnboardingSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func actionChangedMajor(_ sender: UITextField) {
-        if let newMajor = sender.text, newMajor.count < 6 {
-            UserDefaults.standard.set(newMajor, forKey: kMajorValueStorageKey)
+        if let newMajor = sender.text, let newMajorInt = Int(newMajor) {
+            UserDefaults.standard.set(newMajorInt, forKey: kMajorValueStorageKey)
+            checkSettings()
+        } else {
+            UserDefaults.standard.removeObject(forKey: kMajorValueStorageKey)
             checkSettings()
         }
     }
@@ -98,19 +105,33 @@ class OnboardingSettingsViewController: UIViewController, UITextFieldDelegate {
     
     private func changeButtonsVisibility(to state: Bool) {
         continueButton.isHidden = !state
-        manualModeButton.isHidden = !state
+    }
+    
+    private func checkSettingsConfiguration() -> Bool {
+        if let _ = UserDefaults.standard.value(forKey: kRegionUUIDStorageKey) as? String,
+            let _ = UserDefaults.standard.value(forKey: kMajorValueStorageKey) as? Int {
+            return true
+        } else {
+            return false
+        }
     }
     
     @IBAction func actionContinue(_ sender: Any) {
+        if !checkSettingsConfiguration() {
+            let alert = UIAlertController(title: "Configuration data missing",
+                                                 message: "Make sure a region UUID and a Major are set up before continuing", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+            self.present(alert, animated: false, completion: { })
+            return
+        }
+        
         guard let scannerViewController = storyboard?.instantiateViewController(withIdentifier: "ScannerViewController") as? ScannerViewController else { return }
         scannerViewController.sessionType = sessionType
         self.navigationController?.pushViewController(scannerViewController, animated: true)
     }
     
     @IBAction func actionManualMode(_ sender: Any) {
-        guard let handleBeaconsManualViewController = storyboard?.instantiateViewController(withIdentifier: "HandleBeaconsManualViewController") as? HandleBeaconsManualViewController else { return }
-        handleBeaconsManualViewController.sessionType = sessionType
+        guard let handleBeaconsManualViewController = storyboard?.instantiateViewController(withIdentifier: "HandleBeaconsManualViewController") as? RetrieveBeaconsManualViewController else { return }
         self.navigationController?.pushViewController(handleBeaconsManualViewController, animated: true)
     }
-    
 }

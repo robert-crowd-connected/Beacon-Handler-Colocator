@@ -17,7 +17,10 @@ class OnboardingActionSelectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configureViews()
+    }
+    
+    private func configureViews() {
         welcomeLabel.textColor = UIColor.wizardPurple
         
         let gradient: CAGradientLayer = CAGradientLayer()

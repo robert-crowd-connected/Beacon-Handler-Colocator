@@ -19,12 +19,10 @@ class HistoricViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         titleLabel.textColor = UIColor.wizardPurple
         
         //load data
     }
-    
 }
 
 extension HistoricViewController: UITableViewDataSource, UITableViewDelegate {

@@ -23,4 +23,8 @@ class BeaconHandlingService {
         //TODO Call API with beacon data
     }
     
+    public func retrieveBeaconManual(minor: Int) {
+        //TODO Get region uuid and major from UserDefaults
+        // Call API with beacon data
+    }
 }

@@ -574,9 +574,9 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0yr-Tc-OUQ">
-                                <rect key="frame" x="156" y="810" width="102" height="32"/>
+                                <rect key="frame" x="123.5" y="810" width="167" height="32"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
-                                <state key="normal" title="Manual Mode">
+                                <state key="normal" title="Retrieve Manual Mode">
                                     <color key="titleColor" red="0.0" green="0.29628838280000003" blue="0.49997976039999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
@@ -625,7 +625,7 @@
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Ex 0" textAlignment="natural" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="P9T-We-QwL">
                                         <rect key="frame" x="8" y="15.5" width="334" height="19"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                         <connections>
                                             <action selector="actionChangedMajor:" destination="jmd-nI-XXI" eventType="editingDidEnd" id="eyN-wj-0tv"/>
                                         </connections>
@@ -705,21 +705,21 @@
             </objects>
             <point key="canvasLocation" x="924.63768115942037" y="68.973214285714278"/>
         </scene>
-        <!--Handle Beacons Manual View Controller-->
+        <!--Retrieve Beacons Manual View Controller-->
         <scene sceneID="ibX-7m-KzP">
             <objects>
-                <viewController storyboardIdentifier="HandleBeaconsManualViewController" id="3gx-j4-h0H" customClass="HandleBeaconsManualViewController" customModule="Beacon_Handler_Colocator" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HandleBeaconsManualViewController" id="3gx-j4-h0H" customClass="RetrieveBeaconsManualViewController" customModule="Beacon_Handler_Colocator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Hyg-tH-vk0">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Install beacons" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qST-pN-tDx">
-                                <rect key="frame" x="137" y="104" width="140" height="24"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Retrieve Beacons" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qST-pN-tDx">
+                                <rect key="frame" x="125.5" y="104" width="163.5" height="24"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="20"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="install" translatesAutoresizingMaskIntoConstraints="NO" id="ylG-Sv-ptu">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="retrieve" translatesAutoresizingMaskIntoConstraints="NO" id="ylG-Sv-ptu">
                                 <rect key="frame" x="322" y="104" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="uuX-6x-svV"/>
@@ -733,29 +733,14 @@
                                     <constraint firstAttribute="width" constant="24" id="X5w-iL-dJk"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Please insert Beacon Minor" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8E-qJ-Xtb">
-                                <rect key="frame" x="52" y="211" width="324" height="43"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Ex 00243" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Esd-3w-SvN">
-                                <rect key="frame" x="132" y="322" width="145" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="actionChangedRegion:" destination="jmd-nI-XXI" eventType="editingDidEnd" id="quO-gH-Fga"/>
-                                </connections>
-                            </textField>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pjf-gH-9Xw">
-                                <rect key="frame" x="32" y="501" width="350" height="50"/>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pjf-gH-9Xw">
+                                <rect key="frame" x="32" y="568" width="350" height="50"/>
                                 <color key="backgroundColor" red="0.53747620559999998" green="0.53747620559999998" blue="0.53747620559999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="plZ-JT-zIV"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Install/Retrieve">
+                                <state key="normal" title="Retrieve Beacon">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -765,20 +750,77 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="actionContinue:" destination="jmd-nI-XXI" eventType="touchUpInside" id="ZyO-b2-Jdi"/>
+                                    <action selector="actionRetrieveBeacon:" destination="3gx-j4-h0H" eventType="touchUpInside" id="K3T-u9-JZd"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please insert beacon minor" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8E-qJ-Xtb">
+                                <rect key="frame" x="94" y="426.5" width="226.5" height="21.5"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Ex 00243" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Esd-3w-SvN">
+                                <rect key="frame" x="147" y="478" width="120" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="VLd-nf-yQb"/>
+                                    <constraint firstAttribute="height" constant="40" id="uKN-xH-XG2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
+                                <connections>
+                                    <action selector="actionChangedRegion:" destination="jmd-nI-XXI" eventType="editingDidEnd" id="quO-gH-Fga"/>
+                                </connections>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Major" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O7a-8n-uAQ">
+                                <rect key="frame" x="32" y="212" width="38.5" height="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="18" id="hIE-Nh-FZ1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Region UUID" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O7l-t9-hNf">
+                                <rect key="frame" x="32" y="178" width="350" height="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="18" id="hUL-A9-Zw2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="Esd-3w-SvN" firstAttribute="centerX" secondItem="Hyg-tH-vk0" secondAttribute="centerX" id="62h-m8-I4h"/>
+                            <constraint firstItem="z8E-qJ-Xtb" firstAttribute="centerX" secondItem="Hyg-tH-vk0" secondAttribute="centerX" id="897-ch-n8I"/>
+                            <constraint firstItem="PUq-ll-PCp" firstAttribute="trailing" secondItem="pjf-gH-9Xw" secondAttribute="trailing" constant="32" id="HHE-Vl-r8d"/>
+                            <constraint firstItem="pjf-gH-9Xw" firstAttribute="centerX" secondItem="Hyg-tH-vk0" secondAttribute="centerX" id="JD2-fa-QpE"/>
+                            <constraint firstItem="O7l-t9-hNf" firstAttribute="leading" secondItem="PUq-ll-PCp" secondAttribute="leading" constant="32" id="LPi-mu-aCK"/>
                             <constraint firstItem="qST-pN-tDx" firstAttribute="top" secondItem="PUq-ll-PCp" secondAttribute="top" constant="60" id="Lg5-SR-r4O"/>
+                            <constraint firstItem="pjf-gH-9Xw" firstAttribute="leading" secondItem="PUq-ll-PCp" secondAttribute="leading" constant="32" id="Oxi-l4-pj3"/>
+                            <constraint firstItem="Esd-3w-SvN" firstAttribute="centerY" secondItem="Hyg-tH-vk0" secondAttribute="centerY" constant="50" id="PLx-2l-Azw"/>
+                            <constraint firstItem="O7a-8n-uAQ" firstAttribute="leading" secondItem="PUq-ll-PCp" secondAttribute="leading" constant="32" id="PSz-5j-F9f"/>
+                            <constraint firstItem="PUq-ll-PCp" firstAttribute="trailing" secondItem="O7l-t9-hNf" secondAttribute="trailing" constant="32" id="PlV-jd-8PI"/>
                             <constraint firstItem="p6k-3I-lA6" firstAttribute="centerY" secondItem="ylG-Sv-ptu" secondAttribute="centerY" id="TyB-fg-tY7"/>
+                            <constraint firstItem="pjf-gH-9Xw" firstAttribute="top" secondItem="Esd-3w-SvN" secondAttribute="bottom" constant="50" id="aK4-qR-dvj"/>
+                            <constraint firstItem="O7l-t9-hNf" firstAttribute="top" secondItem="qST-pN-tDx" secondAttribute="bottom" constant="50" id="fM1-75-hHn"/>
                             <constraint firstItem="ylG-Sv-ptu" firstAttribute="top" secondItem="PUq-ll-PCp" secondAttribute="top" constant="60" id="hf1-7V-28y"/>
                             <constraint firstItem="p6k-3I-lA6" firstAttribute="leading" secondItem="ylG-Sv-ptu" secondAttribute="trailing" constant="12" id="ho8-zC-E4a"/>
+                            <constraint firstItem="Esd-3w-SvN" firstAttribute="top" secondItem="z8E-qJ-Xtb" secondAttribute="bottom" constant="30" id="l1j-Jb-c36"/>
+                            <constraint firstItem="O7a-8n-uAQ" firstAttribute="top" secondItem="O7l-t9-hNf" secondAttribute="bottom" constant="16" id="oaN-EU-O73"/>
                             <constraint firstItem="qST-pN-tDx" firstAttribute="centerX" secondItem="Hyg-tH-vk0" secondAttribute="centerX" id="snE-Lq-bUl"/>
                             <constraint firstItem="PUq-ll-PCp" firstAttribute="trailing" secondItem="p6k-3I-lA6" secondAttribute="trailing" constant="32" id="x2w-xc-m4s"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PUq-ll-PCp"/>
                     </view>
+                    <connections>
+                        <outlet property="majorLabel" destination="O7a-8n-uAQ" id="SQ7-F2-gY2"/>
+                        <outlet property="minorTextField" destination="Esd-3w-SvN" id="Q9r-fi-H5X"/>
+                        <outlet property="regionUUIDLabel" destination="O7l-t9-hNf" id="3Ly-eM-TW4"/>
+                        <outlet property="retrieveBeaconButton" destination="pjf-gH-9Xw" id="BIv-JR-JgY"/>
+                        <outlet property="sessionImageView" destination="ylG-Sv-ptu" id="7XB-jM-0wV"/>
+                        <outlet property="titleLabel" destination="qST-pN-tDx" id="xsa-KK-ALm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tAt-4G-MKa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -792,6 +834,7 @@
         <image name="install" width="32" height="32"/>
         <image name="left-arrow" width="16" height="16"/>
         <image name="manualMode" width="32" height="32"/>
+        <image name="retrieve" width="32" height="32"/>
         <image name="right-arrow" width="16" height="16"/>
         <image name="up-arrow" width="16" height="16"/>
     </resources>

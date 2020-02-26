@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9769D45424052EFE000B503F /* BeaconCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45324052EFE000B503F /* BeaconCategory.swift */; };
 		9769D45624053FD2000B503F /* BeaconInstallationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */; };
 		9769D4582405505F000B503F /* BeaconAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D4572405505F000B503F /* BeaconAnnotation.swift */; };
 		9769D45A24057293000B503F /* BeaconHandlingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45924057293000B503F /* BeaconHandlingService.swift */; };
@@ -22,11 +21,10 @@
 		9794017123FEF48F00670FE3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9794017023FEF48F00670FE3 /* Main.storyboard */; };
 		AAE07AD6240685C100674A0D /* Colors+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE07AD5240685C100674A0D /* Colors+Extension.swift */; };
 		AAE07AD82406A2D200674A0D /* HistoricViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE07AD72406A2D200674A0D /* HistoricViewController.swift */; };
-		AAE07ADA2406A42900674A0D /* HandleBeaconsManualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE07AD92406A42900674A0D /* HandleBeaconsManualViewController.swift */; };
+		AAE07ADA2406A42900674A0D /* RetrieveBeaconsManualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		9769D45324052EFE000B503F /* BeaconCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconCategory.swift; sourceTree = "<group>"; };
 		9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconInstallationViewController.swift; sourceTree = "<group>"; };
 		9769D4572405505F000B503F /* BeaconAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconAnnotation.swift; sourceTree = "<group>"; };
 		9769D45924057293000B503F /* BeaconHandlingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconHandlingService.swift; sourceTree = "<group>"; };
@@ -43,7 +41,7 @@
 		9794017023FEF48F00670FE3 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		AAE07AD5240685C100674A0D /* Colors+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Colors+Extension.swift"; sourceTree = "<group>"; };
 		AAE07AD72406A2D200674A0D /* HistoricViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricViewController.swift; sourceTree = "<group>"; };
-		AAE07AD92406A42900674A0D /* HandleBeaconsManualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleBeaconsManualViewController.swift; sourceTree = "<group>"; };
+		AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrieveBeaconsManualViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,25 +74,64 @@
 		9794015B23FEF42800670FE3 /* Beacon Handler Colocator */ = {
 			isa = PBXGroup;
 			children = (
-				9794015C23FEF42800670FE3 /* AppDelegate.swift */,
-				9794015E23FEF42800670FE3 /* SceneDelegate.swift */,
-				9794016023FEF42800670FE3 /* ScannerViewController.swift */,
-				9794017023FEF48F00670FE3 /* Main.storyboard */,
-				9794016523FEF42800670FE3 /* Assets.xcassets */,
-				9794016723FEF42800670FE3 /* LaunchScreen.storyboard */,
+				AAE07ADB2406BB0C00674A0D /* Core */,
 				9794016A23FEF42800670FE3 /* Info.plist */,
-				9769D45324052EFE000B503F /* BeaconCategory.swift */,
+				9794016523FEF42800670FE3 /* Assets.xcassets */,
+				9794017023FEF48F00670FE3 /* Main.storyboard */,
+				9794016023FEF42800670FE3 /* ScannerViewController.swift */,
 				9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */,
-				9769D4572405505F000B503F /* BeaconAnnotation.swift */,
-				9769D45924057293000B503F /* BeaconHandlingService.swift */,
-				9769D45B2405806F000B503F /* OnboardingActionSelectionViewController.swift */,
-				9769D45D240580F5000B503F /* OnboardingSettingsViewController.swift */,
-				9769D45F2405816F000B503F /* BeaconSessionType.swift */,
-				AAE07AD5240685C100674A0D /* Colors+Extension.swift */,
+				AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */,
 				AAE07AD72406A2D200674A0D /* HistoricViewController.swift */,
-				AAE07AD92406A42900674A0D /* HandleBeaconsManualViewController.swift */,
+				AAE07ADF2406BEBE00674A0D /* Services */,
+				AAE07ADC2406BDCC00674A0D /* Onboarding */,
+				AAE07ADD2406BE5400674A0D /* BeaconDataModels */,
+				AAE07ADE2406BE9600674A0D /* Helpers */,
 			);
 			path = "Beacon Handler Colocator";
+			sourceTree = "<group>";
+		};
+		AAE07ADB2406BB0C00674A0D /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				9794015C23FEF42800670FE3 /* AppDelegate.swift */,
+				9794015E23FEF42800670FE3 /* SceneDelegate.swift */,
+				9794016723FEF42800670FE3 /* LaunchScreen.storyboard */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		AAE07ADC2406BDCC00674A0D /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				9769D45B2405806F000B503F /* OnboardingActionSelectionViewController.swift */,
+				9769D45D240580F5000B503F /* OnboardingSettingsViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		AAE07ADD2406BE5400674A0D /* BeaconDataModels */ = {
+			isa = PBXGroup;
+			children = (
+				9769D45F2405816F000B503F /* BeaconSessionType.swift */,
+				9769D4572405505F000B503F /* BeaconAnnotation.swift */,
+			);
+			path = BeaconDataModels;
+			sourceTree = "<group>";
+		};
+		AAE07ADE2406BE9600674A0D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				AAE07AD5240685C100674A0D /* Colors+Extension.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		AAE07ADF2406BEBE00674A0D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9769D45924057293000B503F /* BeaconHandlingService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,12 +209,11 @@
 				9769D4582405505F000B503F /* BeaconAnnotation.swift in Sources */,
 				9769D45A24057293000B503F /* BeaconHandlingService.swift in Sources */,
 				AAE07AD82406A2D200674A0D /* HistoricViewController.swift in Sources */,
-				AAE07ADA2406A42900674A0D /* HandleBeaconsManualViewController.swift in Sources */,
+				AAE07ADA2406A42900674A0D /* RetrieveBeaconsManualViewController.swift in Sources */,
 				9794016123FEF42800670FE3 /* ScannerViewController.swift in Sources */,
 				9769D45E240580F5000B503F /* OnboardingSettingsViewController.swift in Sources */,
 				9769D45624053FD2000B503F /* BeaconInstallationViewController.swift in Sources */,
 				AAE07AD6240685C100674A0D /* Colors+Extension.swift in Sources */,
-				9769D45424052EFE000B503F /* BeaconCategory.swift in Sources */,
 				9794015D23FEF42800670FE3 /* AppDelegate.swift in Sources */,
 				9769D45C2405806F000B503F /* OnboardingActionSelectionViewController.swift in Sources */,
 				9794015F23FEF42800670FE3 /* SceneDelegate.swift in Sources */,
