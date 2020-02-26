@@ -11,8 +11,13 @@ import UIKit
 
 class OnboardingSettingsViewController: UIViewController, UITextFieldDelegate {
     
+    @IBOutlet weak var welcomeLabel: UILabel!
+    @IBOutlet weak var sessionImageView: UIImageView!
+    
     @IBOutlet weak var regionContainerView: UIView!
     @IBOutlet weak var majorContainerView: UIView!
+    @IBOutlet weak var regionUUIDLabel: UILabel!
+    @IBOutlet weak var majorLabel: UILabel!
     
     @IBOutlet weak var regionUUIDTextField: UITextField!
     @IBOutlet weak var majorTextField: UITextField!
@@ -24,6 +29,27 @@ class OnboardingSettingsViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if sessionType == .install {
+            welcomeLabel.text = "Preparing beacon installation"
+            sessionImageView.image = UIImage(named: "install")
+        } else {
+            welcomeLabel.text = "Preparing beacon retrieval"
+            sessionImageView.image = UIImage(named: "retrieve")
+        }
+        welcomeLabel.textColor = UIColor.wizardPurple
+        
+        regionUUIDLabel.textColor = UIColor.wizardMiddleColor
+        majorLabel.textColor = UIColor.wizardMiddleColor
+        
+        manualModeButton.setTitleColor(UIColor.wizardPurple, for: .normal)
+        
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.frame = CGRect(x: 0.0, y: 0.0, width: continueButton.frame.size.width, height: continueButton.frame.size.height)
+        gradient.colors = [UIColor.wizardPurple.cgColor, UIColor.wizardBlue.cgColor]
+        gradient.startPoint = CGPoint(x: 0.0,y: 0.5)
+        gradient.endPoint = CGPoint(x: 1.0,y: 0.5)
+        continueButton.layer.insertSublayer(gradient, at: 0)
         
         regionContainerView.layer.borderWidth = 1
         regionContainerView.layer.borderColor = UIColor.lightGray.cgColor
@@ -82,9 +108,9 @@ class OnboardingSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func actionManualMode(_ sender: Any) {
-        guard let scannerViewController = storyboard?.instantiateViewController(withIdentifier: "ScannerViewController") as? ScannerViewController else { return }
-        scannerViewController.sessionType = sessionType
-        self.navigationController?.pushViewController(scannerViewController, animated: true)
+        guard let handleBeaconsManualViewController = storyboard?.instantiateViewController(withIdentifier: "HandleBeaconsManualViewController") as? HandleBeaconsManualViewController else { return }
+        handleBeaconsManualViewController.sessionType = sessionType
+        self.navigationController?.pushViewController(handleBeaconsManualViewController, animated: true)
     }
     
 }

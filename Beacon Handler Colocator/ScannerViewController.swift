@@ -13,6 +13,10 @@ class ScannerViewController: UIViewController {
 
     var sessionType: BeaconSessionType!
     
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var sessionImageView: UIImageView!
+    
+    @IBOutlet weak var scannerStatusLabel: UILabel!
     @IBOutlet weak var scannerDataContainerView: UIView!
     @IBOutlet weak var regionUUIDLabel: UILabel!
     @IBOutlet weak var majorLabel: UILabel!
@@ -20,6 +24,9 @@ class ScannerViewController: UIViewController {
     
     @IBOutlet weak var noiseLevelLabel: UILabel!
     @IBOutlet weak var closestBeaconLabel: UILabel!
+    
+    @IBOutlet weak var displayHandledBeaconsButton: UIButton!
+    @IBOutlet weak var resetBeaconsProximityButton: UIButton!
     
     // For the best proximity and accuracy, place the iPhone with the lock screen button next to the beacon
     // The best results are when the beacon in NOT on the back of the phone or over the screen
@@ -76,11 +83,33 @@ class ScannerViewController: UIViewController {
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = -1
         
-        scannerDataContainerView.layer.borderWidth = 1
-        scannerDataContainerView.layer.borderColor = UIColor.lightGray.cgColor
-        
+        configureViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureScanner()
         startScanner()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopScanner()
+    }
+    
+    private func configureViews() {
+        titleLabel.textColor = UIColor.wizardPurple
+        scannerStatusLabel.textColor = UIColor.wizardMiddleColor
+        resetBeaconsProximityButton.setTitleColor(UIColor.wizardPurple, for: .normal)
+        displayHandledBeaconsButton.setTitleColor(UIColor.wizardPurple, for: .normal)
+        
+        scannerDataContainerView.layer.borderWidth = 1
+        scannerDataContainerView.layer.borderColor = UIColor.lightGray.cgColor
+        if sessionType == .install {
+            sessionImageView.image = UIImage(named: "install")
+        } else {
+            sessionImageView.image = UIImage(named: "retrieve")
+        }
     }
     
     private func configureScanner() {
@@ -130,7 +159,7 @@ class ScannerViewController: UIViewController {
         confirmStableClosestBeaconTimer?.invalidate()
         confirmStableClosestBeaconTimer = nil
         
-        if closestBeacon!.rssi <= -30 || closestBeacon!.accuracy > 0.02 { return }
+        if closestBeacon!.rssi <= -20 || closestBeacon!.accuracy > 0.02 { return }
         
         confirmStableClosestBeaconTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { _ in
             if self.closestBeacon == nil { return }
@@ -282,6 +311,11 @@ class ScannerViewController: UIViewController {
     @IBAction func actionResetProximity(_ sender: Any) {
         closestBeacon = nil
         detectedBeacons.removeAll()
+    }
+    
+    @IBAction func actionDisplayHistoric(_ sender: Any) {
+        guard let historicViewController = storyboard?.instantiateViewController(withIdentifier: "HistoricViewController") else { return }
+        self.present(historicViewController, animated: true, completion: nil)
     }
 }
 
