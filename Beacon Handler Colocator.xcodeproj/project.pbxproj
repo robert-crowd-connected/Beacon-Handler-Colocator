@@ -23,6 +23,8 @@
 		AAE07AD6240685C100674A0D /* Colors+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE07AD5240685C100674A0D /* Colors+Extension.swift */; };
 		AAE07AD82406A2D200674A0D /* HistoricViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE07AD72406A2D200674A0D /* HistoricViewController.swift */; };
 		AAE07ADA2406A42900674A0D /* RetrieveBeaconsManualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */; };
+		AAE07AE32406CA8000674A0D /* installBeacon.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AAE07AE22406CA8000674A0D /* installBeacon.mp3 */; };
+		AAE07AE52406CA8800674A0D /* retrieveBeacon.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AAE07AE42406CA8800674A0D /* retrieveBeacon.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,8 @@
 		AAE07AD5240685C100674A0D /* Colors+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Colors+Extension.swift"; sourceTree = "<group>"; };
 		AAE07AD72406A2D200674A0D /* HistoricViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricViewController.swift; sourceTree = "<group>"; };
 		AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrieveBeaconsManualViewController.swift; sourceTree = "<group>"; };
+		AAE07AE22406CA8000674A0D /* installBeacon.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = installBeacon.mp3; sourceTree = "<group>"; };
+		AAE07AE42406CA8800674A0D /* retrieveBeacon.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = retrieveBeacon.mp3; sourceTree = "<group>"; };
 		E0C23DF85763808921168646 /* Pods_Beacon_Handler_Colocator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Beacon_Handler_Colocator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E220C3D8ABD366A3388BAA7D /* Pods-Beacon Handler Colocator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Beacon Handler Colocator.release.xcconfig"; path = "Target Support Files/Pods-Beacon Handler Colocator/Pods-Beacon Handler Colocator.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -83,6 +87,8 @@
 			children = (
 				AAE07ADB2406BB0C00674A0D /* Core */,
 				9794016A23FEF42800670FE3 /* Info.plist */,
+				AAE07AE22406CA8000674A0D /* installBeacon.mp3 */,
+				AAE07AE42406CA8800674A0D /* retrieveBeacon.mp3 */,
 				9794016523FEF42800670FE3 /* Assets.xcassets */,
 				9794017023FEF48F00670FE3 /* Main.storyboard */,
 				9794016023FEF42800670FE3 /* ScannerViewController.swift */,
@@ -219,7 +225,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				9794016923FEF42800670FE3 /* LaunchScreen.storyboard in Resources */,
+				AAE07AE52406CA8800674A0D /* retrieveBeacon.mp3 in Resources */,
 				9794016623FEF42800670FE3 /* Assets.xcassets in Resources */,
+				AAE07AE32406CA8000674A0D /* installBeacon.mp3 in Resources */,
 				9794017123FEF48F00670FE3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
