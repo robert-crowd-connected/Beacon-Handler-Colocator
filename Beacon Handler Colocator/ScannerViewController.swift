@@ -9,7 +9,12 @@
 import UIKit
 import CoreLocation
 
-class ScannerViewController: UIViewController {
+protocol ScannerViewControllerDelegate: class {
+    func startScanner()
+    func stopMonitoringBeacon(beacon: CLBeacon)
+}
+
+class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
 
     var sessionType: BeaconSessionType!
     
@@ -58,6 +63,8 @@ class ScannerViewController: UIViewController {
     }
     
     var detectedBeacons = [CLBeacon]()
+    var excludedBeaconMinors = [NSNumber]()
+    
     var closestBeacon: CLBeacon? = nil {
         didSet {
             if closestBeacon != nil {
@@ -84,17 +91,8 @@ class ScannerViewController: UIViewController {
         locationManager.desiredAccuracy = -1
         
         configureViews()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         configureScanner()
         startScanner()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        stopScanner()
     }
     
     private func configureViews() {
@@ -127,8 +125,12 @@ class ScannerViewController: UIViewController {
         majorLabel.text = "Major \(majorValue)"
     }
     
-    private func startScanner() {
+    internal func startScanner() {
         if regionConstraint == nil { return }
+        
+        closestBeacon = nil
+        detectedBeacons.removeAll()
+        
         locationManager.startRangingBeacons(satisfying: regionConstraint!)
         
         closestBeaconTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { _ in
@@ -149,6 +151,10 @@ class ScannerViewController: UIViewController {
         scannerStatusSwitch.isOn = false
     }
     
+    public func stopMonitoringBeacon(beacon: CLBeacon) {
+        excludedBeaconMinors.append(beacon.minor)
+    }
+    
     private func restartScanner() {
         stopScanner()
         configureScanner()
@@ -159,7 +165,7 @@ class ScannerViewController: UIViewController {
         confirmStableClosestBeaconTimer?.invalidate()
         confirmStableClosestBeaconTimer = nil
         
-        if closestBeacon!.rssi <= -20 || closestBeacon!.accuracy > 0.02 { return }
+        if closestBeacon!.rssi <= -20 || closestBeacon!.accuracy > 0.03 { return }
         
         confirmStableClosestBeaconTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { _ in
             if self.closestBeacon == nil { return }
@@ -256,9 +262,17 @@ class ScannerViewController: UIViewController {
     }
     
     private func installBeacon() {
-        if closestBeacon == nil { return }
+        // Stop scanning for making sure that the closestbeacon value is not changed meanwhile
+        stopScanner()
+        
+        if closestBeacon == nil {
+            startScanner()
+            return
+        }
+        
         guard let beaconInstallationViewController = storyboard?.instantiateViewController(withIdentifier: "BeaconInstallationViewController") as? BeaconInstallationViewController else { return }
         beaconInstallationViewController.beacon = closestBeacon!
+        beaconInstallationViewController.delegate = self
         navigationController?.pushViewController(beaconInstallationViewController, animated: true)
     }
     
@@ -273,48 +287,24 @@ class ScannerViewController: UIViewController {
         
         BeaconHandlingService.shared.retrieve(iBeacon: self.closestBeacon!)
         
-        //TODO Make sound
-        //TODO stop scanning for this beacon
-        //TODO Add it to a local list, no UserDefaults
-        
         let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",
                                              message: "Major \(closestBeacon!.major)  Minor \(closestBeacon!.minor)", preferredStyle: .alert)
         self.present(successAlert, animated: false, completion: {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 self.dismiss(animated: true, completion: nil)
-                //Restart scanning since the closestBeacon value can be changed now
+                self.stopMonitoringBeacon(beacon: self.closestBeacon!)
                 self.startScanner()
             }
         })
-        
-//        let alert = UIAlertController(title: "Retrieve the Beacon?",
-//                                      message: "Are you sure you want to retrieve iBeacon (Major \(closestBeacon!.major),  Minor \(closestBeacon!.minor))?", preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
-//            BeaconHandlingService.shared.retrieve(iBeacon: self.closestBeacon!)
-//
-//            let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",
-//                                          message: nil, preferredStyle: .alert)
-//            self.present(successAlert, animated: false, completion: {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                    self.dismiss(animated: true, completion: nil)
-//                    //Restart scanning since the closestBeacon value can be changed now
-//                    self.startScanner()
-//                }
-//            })
-//        }))
-//        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { _ in
-//            self.startScanner()
-//        }))
-//        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func actionResetProximity(_ sender: Any) {
-        closestBeacon = nil
-        detectedBeacons.removeAll()
+        startScanner()
     }
     
     @IBAction func actionDisplayHistoric(_ sender: Any) {
-        guard let historicViewController = storyboard?.instantiateViewController(withIdentifier: "HistoricViewController") else { return }
+        guard let historicViewController = storyboard?.instantiateViewController(withIdentifier: "HistoricViewController") as? HistoricViewController else { return }
+        historicViewController.sessionType = sessionType
         self.present(historicViewController, animated: true, completion: nil)
     }
 }
@@ -328,6 +318,8 @@ extension ScannerViewController: CLLocationManagerDelegate {
         
         for beacon in beacons {
             if (beacon.accuracy < 0 || beacon.proximity == .near || beacon.proximity == .far || beacon.proximity == .unknown) { continue }
+            if excludedBeaconMinors.contains(beacon.minor) { continue }
+            
             detectedBeacons.append(beacon)
             
 //            print("Beacon RSSI \(beacon.rssi)   Accuracy \(beacon.accuracy)   Minor \(beacon.minor)")

@@ -60,9 +60,8 @@ class RetrieveBeaconsManualViewController: UIViewController {
             return
         }
         
-       BeaconHandlingService.shared.retrieveBeaconManual(minor: minorInt)
+        BeaconHandlingService.shared.retrieveBeaconManual(regionUUID: regionUUIDString!, major: majorInt!, minor: minorInt)
         
-       //TODO Make sound
        //TODO Add it to a local list, no UserDefaults
        
        let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",

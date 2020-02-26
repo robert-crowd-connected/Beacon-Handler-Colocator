@@ -13,6 +13,7 @@ import UIKit
 
 class BeaconInstallationViewController: UIViewController {
     
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var beaconDataLabel: UILabel!
     @IBOutlet weak var beaconUUIDLabel: UILabel!
     
@@ -23,7 +24,11 @@ class BeaconInstallationViewController: UIViewController {
     @IBOutlet weak var moveDownButton: UIButton!
     @IBOutlet weak var moveLeftButton: UIButton!
     
+    @IBOutlet weak var installButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
+    
     public var beacon: CLBeacon!
+    public var delegate: ScannerViewControllerDelegate?
     
     private var beaconAnnotation: BeaconAnnotation? {
         didSet {
@@ -36,6 +41,17 @@ class BeaconInstallationViewController: UIViewController {
         
         beaconDataLabel.text = "iBeacon Major \(beacon.major)  Minor \(beacon.minor)"
         beaconUUIDLabel.text = "UUID \(beacon.uuid)"
+        
+        titleLabel.textColor = UIColor.wizardPurple
+        cancelButton.setTitleColor(UIColor.wizardPurple, for: .normal)
+        beaconDataLabel.textColor = UIColor.wizardMiddleColor
+        
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.frame = CGRect(x: 0.0, y: 0.0, width: installButton.frame.size.width, height: installButton.frame.size.height)
+        gradient.colors = [UIColor.wizardPurple.cgColor, UIColor.wizardBlue.cgColor]
+        gradient.startPoint = CGPoint(x: 0.0,y: 0.5)
+        gradient.endPoint = CGPoint(x: 1.0,y: 0.5)
+        installButton.layer.insertSublayer(gradient, at: 0)
         
         mapView.delegate = self
         
@@ -168,18 +184,23 @@ class BeaconInstallationViewController: UIViewController {
     }
     
     @IBAction func actionInstall(_ sender: Any) {
-        if beaconAnnotation == nil { return }
-        BeaconHandlingService.shared.install(iBeacon: beacon, at: beaconAnnotation!.coordinate)
+        if beaconAnnotation == nil {
+            let alert = UIAlertController(title: "Location missing",
+                                                 message: "Add place of installment  on the map before submit", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+            self.present(alert, animated: false, completion: { })
+            return
+        }
         
-        //TODO Make Sound
-        //TODO Stop monitoring this ebacon
-        // Add it to a local list
+        BeaconHandlingService.shared.install(iBeacon: beacon, at: beaconAnnotation!.coordinate)
         
         let successAlert = UIAlertController(title: "iBeacon successfully installed!",
                                              message: "Latitude \(beaconAnnotation!.coordinate.latitude)\nLongitude \(beaconAnnotation!.coordinate.longitude)", preferredStyle: .alert)
         self.present(successAlert, animated: false, completion: {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
                 self.dismiss(animated: true, completion: {
+                    self.delegate?.stopMonitoringBeacon(beacon: self.beacon)
+                    self.delegate?.startScanner()
                     self.navigationController?.popViewController(animated: true)
                 })
             }
@@ -187,6 +208,7 @@ class BeaconInstallationViewController: UIViewController {
     }
     
     @IBAction func actionCancelInstallation(_ sender: Any) {
+        self.delegate?.startScanner()
         navigationController?.popViewController(animated: true)
     }
 }
@@ -198,7 +220,7 @@ extension BeaconInstallationViewController: MKMapViewDelegate {
         let pinView = MKPinAnnotationView(annotation: BeaconAnnotation(location: annotation.coordinate, beacon: beacon), reuseIdentifier: "pin")
         pinView.canShowCallout = true
         pinView.rightCalloutAccessoryView = UIButton(type: .infoDark)
-        pinView.pinTintColor = UIColor.darkGray
+        pinView.pinTintColor = UIColor.wizardPurple
         
         return pinView
     }
