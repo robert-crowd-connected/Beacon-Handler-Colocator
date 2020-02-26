@@ -12,3 +12,12 @@ enum BeaconSessionType: String {
     case install = "Install"
     case retrieve = "Retrieve"
 }
+
+
+enum NoiseLevel: String {
+    case none = "None"
+    case weak = "Weak"
+    case medium = "Medium"
+    case high = "High"
+    case veryHigh = "Very High"
+}

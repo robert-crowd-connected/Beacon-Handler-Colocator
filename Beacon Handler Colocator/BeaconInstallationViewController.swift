@@ -171,6 +171,10 @@ class BeaconInstallationViewController: UIViewController {
         if beaconAnnotation == nil { return }
         BeaconHandlingService.shared.install(iBeacon: beacon, at: beaconAnnotation!.coordinate)
         
+        //TODO Make Sound
+        //TODO Stop monitoring this ebacon
+        // Add it to a local list
+        
         let successAlert = UIAlertController(title: "iBeacon successfully installed!",
                                              message: "Latitude \(beaconAnnotation!.coordinate.latitude)\nLongitude \(beaconAnnotation!.coordinate.longitude)", preferredStyle: .alert)
         self.present(successAlert, animated: false, completion: {

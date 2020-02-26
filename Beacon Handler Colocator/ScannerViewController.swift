@@ -18,6 +18,7 @@ class ScannerViewController: UIViewController {
     @IBOutlet weak var majorLabel: UILabel!
     @IBOutlet weak var scannerStatusSwitch: UISwitch!
     
+    @IBOutlet weak var noiseLevelLabel: UILabel!
     @IBOutlet weak var closestBeaconLabel: UILabel!
     @IBOutlet weak var installBeaconButton: UIButton!
     
@@ -33,22 +34,19 @@ class ScannerViewController: UIViewController {
     
     var regionConstraint: CLBeaconIdentityConstraint?
        
+    var noiseLevel: NoiseLevel = .none {
+        didSet {
+            noiseLevelLabel.text = "Noise Level \(noiseLevel.rawValue)"
+            if confirmStableClosestBeaconTimer != nil && noiseLevel == .medium || noiseLevel == .high || noiseLevel == .veryHigh {
+                configureStableClosesBeaconTimer()
+            }
+        }
+    }
+    
     var closestBeaconMinor: NSNumber? = nil {
         willSet(newValue) {
             if newValue != nil && newValue != closestBeaconMinor {
-                confirmStableClosestBeaconTimer?.invalidate()
-                confirmStableClosestBeaconTimer = nil
-                
-                if closestBeacon!.rssi <= -20 || closestBeacon!.accuracy > 0.01 { return }
-                
-                confirmStableClosestBeaconTimer = Timer.scheduledTimer(withTimeInterval: 4, repeats: false, block: { _ in
-                    if self.closestBeacon == nil { return }
-                    if self.sessionType == .retrieve {
-                        self.retrieveBeacon()
-                    } else {
-                        self.installBeacon()
-                    }
-                })
+                configureStableClosesBeaconTimer()
             }
         }
     }
@@ -78,6 +76,7 @@ class ScannerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         locationManager.requestWhenInUseAuthorization()
+        locationManager.desiredAccuracy = -1
         
         scannerDataContainerView.layer.borderWidth = 1
         scannerDataContainerView.layer.borderColor = UIColor.lightGray.cgColor
@@ -129,16 +128,85 @@ class ScannerViewController: UIViewController {
         startScanner()
     }
     
+    private func configureStableClosesBeaconTimer() {
+        confirmStableClosestBeaconTimer?.invalidate()
+        confirmStableClosestBeaconTimer = nil
+        
+        if closestBeacon!.rssi <= -30 || closestBeacon!.accuracy > 0.02 { return }
+        
+        confirmStableClosestBeaconTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { _ in
+            if self.closestBeacon == nil { return }
+            if self.sessionType == .retrieve {
+                self.retrieveBeacon()
+            } else {
+                self.installBeacon()
+            }
+        })
+    }
+    
     @objc func updateClosestBeacon() {
         var max = -1000
+        var intermediateClosestBeacon: CLBeacon? = nil
+        
+        var otherCloseBeacons = [NSNumber]()
+        var otherVeryCloseBeacons = [NSNumber]()
+        var allDifferentBeacons = [NSNumber]()
+        
         for beacon in detectedBeacons {
             if beacon.rssi > max {
-                closestBeacon = beacon
-                max = closestBeacon!.rssi
-            } else if beacon.rssi == max && closestBeacon != nil {
-                if closestBeacon!.accuracy > beacon.accuracy {
-                    closestBeacon = beacon
+                intermediateClosestBeacon = beacon
+                max = intermediateClosestBeacon!.rssi
+            } else {
+                if beacon.rssi == max && intermediateClosestBeacon != nil {
+                    if intermediateClosestBeacon!.accuracy > beacon.accuracy {
+                        intermediateClosestBeacon = beacon
+                    }
                 }
+            }
+        }
+        
+        for beacon in detectedBeacons {
+            if !allDifferentBeacons.contains(beacon.minor) {
+                allDifferentBeacons.append(beacon.minor)
+            }
+            
+            if abs(beacon.rssi - intermediateClosestBeacon!.rssi) <= 20 && abs(beacon.accuracy - intermediateClosestBeacon!.accuracy) <= 0.075 {
+                if !otherCloseBeacons.contains(beacon.minor) && intermediateClosestBeacon!.minor != beacon.minor {
+                    otherCloseBeacons.append(beacon.minor)
+                }
+            }
+            
+            if abs(beacon.rssi - intermediateClosestBeacon!.rssi) <= 4 && abs(beacon.accuracy - intermediateClosestBeacon!.accuracy) <= 0.005 {
+                if !otherVeryCloseBeacons.contains(beacon.minor) && intermediateClosestBeacon!.minor != beacon.minor {
+                    otherVeryCloseBeacons.append(beacon.minor)
+                }
+            }
+        }
+        
+        closestBeacon = intermediateClosestBeacon
+        
+        calculcateNoiseLevel(monitoredBeacons: allDifferentBeacons.count,          // up to 3 meters
+                             closeBeacons: otherCloseBeacons.count,                // up to 1 meter
+                             veryClosebeacons: otherVeryCloseBeacons.count)        // up to 0.5 meters
+    }
+    
+    private func calculcateNoiseLevel(monitoredBeacons: Int, closeBeacons: Int, veryClosebeacons: Int) {
+        if closeBeacons == 0 && veryClosebeacons == 0 {
+            noiseLevel = .none
+        } else {
+            var noise = 0.75 * Double(veryClosebeacons) + 0.25 * Double(closeBeacons)
+            if noise >= Double(monitoredBeacons / 2) {
+                noise *= 1.5
+            }
+            
+            if noise < 1 {
+                noiseLevel = .weak
+            } else if noise < 3 {
+                noiseLevel = .medium
+            } else if noise <= 8 {
+                noiseLevel = .high
+            } else {
+                noiseLevel = .veryHigh
             }
         }
     }
@@ -146,7 +214,7 @@ class ScannerViewController: UIViewController {
     @objc func refreshDetectedBeacons() {
         let now = Date().timeIntervalSince1970
         detectedBeacons = detectedBeacons.filter({ (beacon) -> Bool in
-            beacon.timestamp.timeIntervalSince1970 + 3.5 > now // removed beacons appearances from more than 3 seconds ago
+            beacon.timestamp.timeIntervalSince1970 + 4.0 > now // removed beacons appearances from more than 4 seconds ago
         })
     }
     
@@ -179,25 +247,42 @@ class ScannerViewController: UIViewController {
             startScanner()
             return
         }
-        let alert = UIAlertController(title: "Retrieve the Beacon?",
-                                      message: "Are you sure you want to retrieve iBeacon (Major \(closestBeacon!.major),  Minor \(closestBeacon!.minor))?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
-            BeaconHandlingService.shared.retrieve(iBeacon: self.closestBeacon!)
-            
-            let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",
-                                          message: nil, preferredStyle: .alert)
-            self.present(successAlert, animated: false, completion: {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    self.dismiss(animated: true, completion: nil)
-                    //Restart scanning since the closestBeacon value can be changed now
-                    self.startScanner()
-                }
-            })
-        }))
-        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { _ in
-            self.startScanner()
-        }))
-        self.present(alert, animated: true, completion: nil)
+        
+        BeaconHandlingService.shared.retrieve(iBeacon: self.closestBeacon!)
+        
+        //TODO Make sound
+        //TODO stop scanning for this beacon
+        //TODO Add it to a local list, no UserDefaults
+        
+        let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",
+                                             message: nil, preferredStyle: .alert)
+        self.present(successAlert, animated: false, completion: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.dismiss(animated: true, completion: nil)
+                //Restart scanning since the closestBeacon value can be changed now
+                self.startScanner()
+            }
+        })
+        
+//        let alert = UIAlertController(title: "Retrieve the Beacon?",
+//                                      message: "Are you sure you want to retrieve iBeacon (Major \(closestBeacon!.major),  Minor \(closestBeacon!.minor))?", preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+//            BeaconHandlingService.shared.retrieve(iBeacon: self.closestBeacon!)
+//
+//            let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",
+//                                          message: nil, preferredStyle: .alert)
+//            self.present(successAlert, animated: false, completion: {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                    self.dismiss(animated: true, completion: nil)
+//                    //Restart scanning since the closestBeacon value can be changed now
+//                    self.startScanner()
+//                }
+//            })
+//        }))
+//        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { _ in
+//            self.startScanner()
+//        }))
+//        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func actionResetProximity(_ sender: Any) {
@@ -215,8 +300,9 @@ extension ScannerViewController: CLLocationManagerDelegate {
         
         for beacon in beacons {
             if (beacon.accuracy < 0 || beacon.proximity == .near || beacon.proximity == .far || beacon.proximity == .unknown) { continue }
-
             detectedBeacons.append(beacon)
+            
+//            print("Beacon RSSI \(beacon.rssi)   Accuracy \(beacon.accuracy)   Minor \(beacon.minor)")
         }
     }
 }

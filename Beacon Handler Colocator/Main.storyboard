@@ -164,6 +164,12 @@
                                     <color key="titleColor" red="0.0" green="0.29628838280000003" blue="0.49997976039999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Noise level" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bEG-XB-iIC">
+                                <rect key="frame" x="32" y="258.5" width="68" height="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -178,7 +184,9 @@
                             <constraint firstItem="FlG-ac-c0b" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="kDe-Lc-MlR"/>
                             <constraint firstItem="oTh-sd-bGD" firstAttribute="top" secondItem="Qfp-SX-rqU" secondAttribute="bottom" constant="40" id="mz6-E8-eaO"/>
                             <constraint firstItem="Qfp-SX-rqU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="nsN-qX-mVx"/>
+                            <constraint firstItem="bEG-XB-iIC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="pPy-X3-M3c"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bFI-ie-Ku7" secondAttribute="trailing" constant="24" id="qz2-1f-moD"/>
+                            <constraint firstItem="bFI-ie-Ku7" firstAttribute="top" secondItem="bEG-XB-iIC" secondAttribute="bottom" constant="10" id="rc2-0Q-2Vm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -187,6 +195,7 @@
                         <outlet property="closestBeaconLabel" destination="WYk-8T-Yv1" id="d1W-2N-9ua"/>
                         <outlet property="installBeaconButton" destination="Fjz-Ua-Iv2" id="PgF-d3-Ttd"/>
                         <outlet property="majorLabel" destination="yuB-bx-98n" id="VcZ-15-13G"/>
+                        <outlet property="noiseLevelLabel" destination="bEG-XB-iIC" id="E1W-he-uwt"/>
                         <outlet property="regionUUIDLabel" destination="mOA-8D-lww" id="IdQ-OO-AmD"/>
                         <outlet property="scannerDataContainerView" destination="oTh-sd-bGD" id="CD3-VJ-tdd"/>
                         <outlet property="scannerStatusSwitch" destination="Zeo-D8-xkV" id="lUy-yA-Pu1"/>
