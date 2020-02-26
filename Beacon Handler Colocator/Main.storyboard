@@ -39,40 +39,18 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bFI-ie-Ku7">
                                 <rect key="frame" x="24" y="285.5" width="366" height="200"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Closest Beacon Not Determined" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WYk-8T-Yv1">
-                                        <rect key="frame" x="75" y="40" width="216.5" height="17.5"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Closest Beacon Not Determined" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WYk-8T-Yv1">
+                                        <rect key="frame" x="67.5" y="90.5" width="231" height="19"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                                        <color key="textColor" red="0.23062737944162437" green="0.23062737944162437" blue="0.23062737944162437" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fjz-Ua-Iv2">
-                                        <rect key="frame" x="103" y="89.5" width="160" height="36"/>
-                                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="36" id="cQE-9M-xhX"/>
-                                            <constraint firstAttribute="width" constant="160" id="iA6-Sf-S0X"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
-                                        <state key="normal" title="Install">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="6"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="actionInstallBeacon:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KoQ-BT-M1W"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.89829582253886009" green="0.89829582253886009" blue="0.89829582253886009" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="Fjz-Ua-Iv2" firstAttribute="top" secondItem="WYk-8T-Yv1" secondAttribute="bottom" constant="32" id="OXB-o7-Jkd"/>
                                     <constraint firstItem="WYk-8T-Yv1" firstAttribute="centerX" secondItem="bFI-ie-Ku7" secondAttribute="centerX" id="Zt4-Cn-upn"/>
                                     <constraint firstAttribute="height" constant="200" id="lQQ-FD-10i"/>
-                                    <constraint firstItem="WYk-8T-Yv1" firstAttribute="top" secondItem="bFI-ie-Ku7" secondAttribute="top" constant="40" id="tpI-BZ-ntJ"/>
-                                    <constraint firstItem="Fjz-Ua-Iv2" firstAttribute="centerX" secondItem="bFI-ie-Ku7" secondAttribute="centerX" id="wU4-Fo-avH"/>
+                                    <constraint firstItem="WYk-8T-Yv1" firstAttribute="centerY" secondItem="bFI-ie-Ku7" secondAttribute="centerY" id="rMO-Az-rXg"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -193,7 +171,6 @@
                     <navigationItem key="navigationItem" id="YrW-sg-ryY"/>
                     <connections>
                         <outlet property="closestBeaconLabel" destination="WYk-8T-Yv1" id="d1W-2N-9ua"/>
-                        <outlet property="installBeaconButton" destination="Fjz-Ua-Iv2" id="PgF-d3-Ttd"/>
                         <outlet property="majorLabel" destination="yuB-bx-98n" id="VcZ-15-13G"/>
                         <outlet property="noiseLevelLabel" destination="bEG-XB-iIC" id="E1W-he-uwt"/>
                         <outlet property="regionUUIDLabel" destination="mOA-8D-lww" id="IdQ-OO-AmD"/>

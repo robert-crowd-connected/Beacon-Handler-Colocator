@@ -20,7 +20,6 @@ class ScannerViewController: UIViewController {
     
     @IBOutlet weak var noiseLevelLabel: UILabel!
     @IBOutlet weak var closestBeaconLabel: UILabel!
-    @IBOutlet weak var installBeaconButton: UIButton!
     
     // For the best proximity and accuracy, place the iPhone with the lock screen button next to the beacon
     // The best results are when the beacon in NOT on the back of the phone or over the screen
@@ -56,14 +55,13 @@ class ScannerViewController: UIViewController {
         didSet {
             if closestBeacon != nil {
                 let distance = Double(round(1000 * closestBeacon!.accuracy) / 1000)
-                closestBeaconLabel.text = "Closest Beacon\n\nMinor \(closestBeacon!.minor)     Accuracy \(distance)     RSSI \(closestBeacon!.rssi)"
+                closestBeaconLabel.text = "iBeacon searching... \n\n\nMinor \(closestBeacon!.minor)     \n\nAccuracy \(distance)     RSSI \(closestBeacon!.rssi)"
                 
                 if closestBeacon!.minor != closestBeaconMinor {
                     closestBeaconMinor = closestBeacon!.minor
                 }
            } else {
                 closestBeaconLabel.text = "Closest Beacon Not Determined"
-                installBeaconButton.isHidden = true
                 closestBeaconMinor = nil
            }
         }
@@ -228,10 +226,6 @@ class ScannerViewController: UIViewController {
         }
     }
     
-    @IBAction func actionInstallBeacon(_ sender: Any) {
-        installBeacon()
-    }
-    
     private func installBeacon() {
         if closestBeacon == nil { return }
         guard let beaconInstallationViewController = storyboard?.instantiateViewController(withIdentifier: "BeaconInstallationViewController") as? BeaconInstallationViewController else { return }
@@ -255,9 +249,9 @@ class ScannerViewController: UIViewController {
         //TODO Add it to a local list, no UserDefaults
         
         let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",
-                                             message: nil, preferredStyle: .alert)
+                                             message: "Major \(closestBeacon!.major)  Minor \(closestBeacon!.minor)", preferredStyle: .alert)
         self.present(successAlert, animated: false, completion: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 self.dismiss(animated: true, completion: nil)
                 //Restart scanning since the closestBeacon value can be changed now
                 self.startScanner()
