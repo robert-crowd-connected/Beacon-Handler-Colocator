@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		620A20E3DCAB38BFCC649ACC /* Pods_Beacon_Handler_Colocator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0C23DF85763808921168646 /* Pods_Beacon_Handler_Colocator.framework */; };
 		9769D45624053FD2000B503F /* BeaconInstallationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */; };
 		9769D4582405505F000B503F /* BeaconAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D4572405505F000B503F /* BeaconAnnotation.swift */; };
 		9769D45A24057293000B503F /* BeaconHandlingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45924057293000B503F /* BeaconHandlingService.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		70E5231E1D73B80BE3167E5D /* Pods-Beacon Handler Colocator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Beacon Handler Colocator.debug.xcconfig"; path = "Target Support Files/Pods-Beacon Handler Colocator/Pods-Beacon Handler Colocator.debug.xcconfig"; sourceTree = "<group>"; };
 		9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconInstallationViewController.swift; sourceTree = "<group>"; };
 		9769D4572405505F000B503F /* BeaconAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconAnnotation.swift; sourceTree = "<group>"; };
 		9769D45924057293000B503F /* BeaconHandlingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconHandlingService.swift; sourceTree = "<group>"; };
@@ -42,6 +44,8 @@
 		AAE07AD5240685C100674A0D /* Colors+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Colors+Extension.swift"; sourceTree = "<group>"; };
 		AAE07AD72406A2D200674A0D /* HistoricViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricViewController.swift; sourceTree = "<group>"; };
 		AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrieveBeaconsManualViewController.swift; sourceTree = "<group>"; };
+		E0C23DF85763808921168646 /* Pods_Beacon_Handler_Colocator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Beacon_Handler_Colocator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E220C3D8ABD366A3388BAA7D /* Pods-Beacon Handler Colocator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Beacon Handler Colocator.release.xcconfig"; path = "Target Support Files/Pods-Beacon Handler Colocator/Pods-Beacon Handler Colocator.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				620A20E3DCAB38BFCC649ACC /* Pods_Beacon_Handler_Colocator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,6 +65,8 @@
 			children = (
 				9794015B23FEF42800670FE3 /* Beacon Handler Colocator */,
 				9794015A23FEF42800670FE3 /* Products */,
+				FA8FE63AF716A4846E47423B /* Pods */,
+				A7BF4FECBD3B7E1790FD0353 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -82,12 +89,20 @@
 				9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */,
 				AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */,
 				AAE07AD72406A2D200674A0D /* HistoricViewController.swift */,
-				AAE07ADF2406BEBE00674A0D /* Services */,
 				AAE07ADC2406BDCC00674A0D /* Onboarding */,
+				AAE07ADF2406BEBE00674A0D /* Services */,
 				AAE07ADD2406BE5400674A0D /* BeaconDataModels */,
 				AAE07ADE2406BE9600674A0D /* Helpers */,
 			);
 			path = "Beacon Handler Colocator";
+			sourceTree = "<group>";
+		};
+		A7BF4FECBD3B7E1790FD0353 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E0C23DF85763808921168646 /* Pods_Beacon_Handler_Colocator.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		AAE07ADB2406BB0C00674A0D /* Core */ = {
@@ -134,6 +149,15 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		FA8FE63AF716A4846E47423B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				70E5231E1D73B80BE3167E5D /* Pods-Beacon Handler Colocator.debug.xcconfig */,
+				E220C3D8ABD366A3388BAA7D /* Pods-Beacon Handler Colocator.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -141,9 +165,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9794016D23FEF42800670FE3 /* Build configuration list for PBXNativeTarget "Beacon Handler Colocator" */;
 			buildPhases = (
+				C6E1D9E2DF79BBB47345C4D8 /* [CP] Check Pods Manifest.lock */,
 				9794015523FEF42800670FE3 /* Sources */,
 				9794015623FEF42800670FE3 /* Frameworks */,
 				9794015723FEF42800670FE3 /* Resources */,
+				FB136D0582F8A03F5E21AF16 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -199,6 +225,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C6E1D9E2DF79BBB47345C4D8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Beacon Handler Colocator-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FB136D0582F8A03F5E21AF16 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Beacon Handler Colocator/Pods-Beacon Handler Colocator-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Beacon Handler Colocator/Pods-Beacon Handler Colocator-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Beacon Handler Colocator/Pods-Beacon Handler Colocator-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9794015523FEF42800670FE3 /* Sources */ = {
@@ -350,6 +418,7 @@
 		};
 		9794016E23FEF42800670FE3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 70E5231E1D73B80BE3167E5D /* Pods-Beacon Handler Colocator.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -368,6 +437,7 @@
 		};
 		9794016F23FEF42800670FE3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E220C3D8ABD366A3388BAA7D /* Pods-Beacon Handler Colocator.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

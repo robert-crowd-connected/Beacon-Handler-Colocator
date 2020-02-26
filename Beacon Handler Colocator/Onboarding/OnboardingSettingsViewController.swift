@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class OnboardingSettingsViewController: UIViewController, UITextFieldDelegate {
+class OnboardingSettingsViewController: UIViewController {
     
     @IBOutlet weak var welcomeLabel: UILabel!
     @IBOutlet weak var sessionImageView: UIImageView!
@@ -61,9 +61,6 @@ class OnboardingSettingsViewController: UIViewController, UITextFieldDelegate {
         majorContainerView.layer.borderWidth = 1
         majorContainerView.layer.borderColor = UIColor.lightGray.cgColor
         
-        regionUUIDTextField.delegate = self
-        majorTextField.delegate = self
-        
         if let regionUUID = UserDefaults.standard.value(forKey: kRegionUUIDStorageKey) as? String,
             let majorValue = UserDefaults.standard.value(forKey: kMajorValueStorageKey) as? Int {
             regionUUIDTextField.text = regionUUID
@@ -72,11 +69,6 @@ class OnboardingSettingsViewController: UIViewController, UITextFieldDelegate {
             changeButtonsVisibility(to: false)
         }
     }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-           self.view.endEditing(true)
-           return false
-       }
     
     @IBAction func actionChangedRegion(_ sender: UITextField) {
         if let newRegion = sender.text, newRegion.count > 20 {

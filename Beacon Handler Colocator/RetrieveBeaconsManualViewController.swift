@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class RetrieveBeaconsManualViewController: UIViewController, UITextFieldDelegate {
+class RetrieveBeaconsManualViewController: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var sessionImageView: UIImageView!
@@ -25,7 +25,6 @@ class RetrieveBeaconsManualViewController: UIViewController, UITextFieldDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        minorTextField.delegate = self
     
         guard let uuid = UserDefaults.standard.value(forKey: kRegionUUIDStorageKey) as? String,
             let major = UserDefaults.standard.value(forKey: kMajorValueStorageKey) as? Int else {
@@ -50,11 +49,6 @@ class RetrieveBeaconsManualViewController: UIViewController, UITextFieldDelegate
         gradient.startPoint = CGPoint(x: 0.0,y: 0.5)
         gradient.endPoint = CGPoint(x: 1.0,y: 0.5)
         retrieveBeaconButton.layer.insertSublayer(gradient, at: 0)
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return false
     }
     
     @IBAction func actionRetrieveBeacon(_ sender: Any) {

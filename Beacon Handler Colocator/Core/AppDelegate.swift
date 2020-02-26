@@ -7,13 +7,13 @@
 //
 
 import UIKit
+import IQKeyboardManagerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        IQKeyboardManager.shared.enable = true
         
         UserDefaults.standard.set("2c2d41fb-d4c5-4a4d-a49a-e8fd5c256293", forKey: kRegionUUIDStorageKey)
         UserDefaults.standard.set(0, forKey: kMajorValueStorageKey)
