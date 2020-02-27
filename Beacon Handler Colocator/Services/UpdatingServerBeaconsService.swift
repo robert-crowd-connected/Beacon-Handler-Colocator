@@ -53,11 +53,6 @@ class UpdatingServerBeaconsService {
             .responseString {
                 response in
                 
-                if response.response?.statusCode == 200 {
-                    completion(true, nil)
-                    return
-                }
-                
                 switch response.result {
                     
                 case let .success(value):
@@ -116,7 +111,6 @@ class UpdatingServerBeaconsService {
             .responseString {
                 response in
                 
-                //TODO Fix this error
                 print(response)
                 
                 switch response.result {
