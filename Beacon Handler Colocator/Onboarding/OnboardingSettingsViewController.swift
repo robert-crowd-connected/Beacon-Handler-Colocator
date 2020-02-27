@@ -14,11 +14,15 @@ class OnboardingSettingsViewController: UIViewController {
     @IBOutlet weak var welcomeLabel: UILabel!
     @IBOutlet weak var sessionImageView: UIImageView!
     
+    @IBOutlet weak var appKeyContainerView: UIView!
     @IBOutlet weak var regionContainerView: UIView!
     @IBOutlet weak var majorContainerView: UIView!
+    
+    @IBOutlet weak var appKeyLabel: UILabel!
     @IBOutlet weak var regionUUIDLabel: UILabel!
     @IBOutlet weak var majorLabel: UILabel!
     
+    @IBOutlet weak var appKeyTextField: UITextField!
     @IBOutlet weak var regionUUIDTextField: UITextField!
     @IBOutlet weak var majorTextField: UITextField!
     
@@ -44,6 +48,7 @@ class OnboardingSettingsViewController: UIViewController {
         }
         
         welcomeLabel.textColor = UIColor.wizardPurple
+        appKeyLabel.textColor = UIColor.wizardMiddleColor
         regionUUIDLabel.textColor = UIColor.wizardMiddleColor
         majorLabel.textColor = UIColor.wizardMiddleColor
         manualModeButton.setTitleColor(UIColor.wizardPurple, for: .normal)
@@ -55,18 +60,35 @@ class OnboardingSettingsViewController: UIViewController {
         gradient.endPoint = CGPoint(x: 1.0,y: 0.5)
         continueButton.layer.insertSublayer(gradient, at: 0)
         
+        appKeyContainerView.layer.borderWidth = 1
+        appKeyContainerView.layer.borderColor = UIColor.lightGray.cgColor
         regionContainerView.layer.borderWidth = 1
         regionContainerView.layer.borderColor = UIColor.lightGray.cgColor
-        
         majorContainerView.layer.borderWidth = 1
         majorContainerView.layer.borderColor = UIColor.lightGray.cgColor
         
-        if let regionUUID = UserDefaults.standard.value(forKey: kRegionUUIDStorageKey) as? String,
+        if let key = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String,
+            let regionUUID = UserDefaults.standard.value(forKey: kRegionUUIDStorageKey) as? String,
             let majorValue = UserDefaults.standard.value(forKey: kMajorValueStorageKey) as? Int {
+            appKeyTextField.text = key
             regionUUIDTextField.text = regionUUID
             majorTextField.text = "\(majorValue)"
         } else {
             changeButtonsVisibility(to: false)
+        }
+    }
+    
+    @IBAction func actionChangeAppKey(_ sender: UITextField) {
+        if let newKey = sender.text, newKey.count == 8 {
+            UserDefaults.standard.set(newKey, forKey: kApplicationKeyStorageKey)
+            checkSettings()
+            let successAlert = UIAlertController(title: "Application Key successfully updated!",
+                                                 message: nil, preferredStyle: .alert)
+            self.present(successAlert, animated: false, completion: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            })
         }
     }
     
@@ -100,7 +122,8 @@ class OnboardingSettingsViewController: UIViewController {
     }
     
     private func checkSettingsConfiguration() -> Bool {
-        if let _ = UserDefaults.standard.value(forKey: kRegionUUIDStorageKey) as? String,
+        if let _ = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String,
+            let _ = UserDefaults.standard.value(forKey: kRegionUUIDStorageKey) as? String,
             let _ = UserDefaults.standard.value(forKey: kMajorValueStorageKey) as? Int {
             return true
         } else {
@@ -111,7 +134,7 @@ class OnboardingSettingsViewController: UIViewController {
     @IBAction func actionContinue(_ sender: Any) {
         if !checkSettingsConfiguration() {
             let alert = UIAlertController(title: "Configuration data missing",
-                                                 message: "Make sure a region UUID and a Major are set up before continuing", preferredStyle: .alert)
+                                                 message: "Make sure an App Key, a region UUID and a Major are set up before continuing", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
             self.present(alert, animated: false, completion: { })
             return
