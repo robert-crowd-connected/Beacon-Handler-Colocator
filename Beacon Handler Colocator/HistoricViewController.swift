@@ -43,10 +43,14 @@ extension HistoricViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = actions[indexPath.row].description
-        cell.textLabel?.textColor = UIColor.darkGray
-        cell.textLabel?.font = UIFont(name: "HelveticaNueue", size: 15)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ActionBeaconCell") as? ActionBeaconCell else {
+            return UITableViewCell()
+        }
+        cell.configure(action: actions[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
     }
 }

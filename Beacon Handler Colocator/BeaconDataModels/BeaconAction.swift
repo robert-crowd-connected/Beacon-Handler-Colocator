@@ -27,6 +27,6 @@ class BeaconAction {
         self.coordinates = coordinates
         
         self.timestamp = Date()
-        self.description = "\(actionType.rawValue) Beacon    Major \(major)  Minor \(minor)  UUID \(region)"
+        self.description = "Major \(major)  Minor \(minor)  on  \(timestamp.description)"
     }
 }

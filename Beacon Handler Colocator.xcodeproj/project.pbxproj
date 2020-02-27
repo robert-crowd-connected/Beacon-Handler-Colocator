@@ -99,11 +99,11 @@
 				9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */,
 				AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */,
 				AAE07AD72406A2D200674A0D /* HistoricViewController.swift */,
+				AAE07AE82406DB9700674A0D /* ActionBeaconCell.swift */,
 				AAE07ADC2406BDCC00674A0D /* Onboarding */,
 				AAE07ADF2406BEBE00674A0D /* Services */,
 				AAE07ADD2406BE5400674A0D /* BeaconDataModels */,
 				AAE07ADE2406BE9600674A0D /* Helpers */,
-				AAE07AE82406DB9700674A0D /* ActionBeaconCell.swift */,
 			);
 			path = "Beacon Handler Colocator";
 			sourceTree = "<group>";
