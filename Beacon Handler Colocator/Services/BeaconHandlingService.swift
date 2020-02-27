@@ -46,55 +46,53 @@ class BeaconHandlingService {
         }
     }
     
-    public func install(iBeacon beacon: CLBeacon, at location: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
-        //TODO Get surfaceId
-        
-        let serverBeacon = ServerBeacon(id:  beacon.uuid.uuidString.lowercased(),
+    public func install(iBeacon beacon: CLBeacon, at location: CLLocationCoordinate2D, completion: @escaping (Bool, String?) -> Void) {
+        let serverBeacon = ServerBeacon(id: composeBeaconID(region: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor)),
                                         lat: location.latitude,
                                         lng: location.longitude,
                                         alt: 1,
                                         surfaceId: serverBeaconsService.surfaceId,
-                                        beaconType: "bluetooth",
+                                        beaconType: "IBEACON",
                                         beaconState: "ACTIVE")
         
-        serverBeaconsService.putBeacon(beacon: serverBeacon) { success in
+        serverBeaconsService.putBeacon(beacon: serverBeacon) { success, errorMessage in
             if success {
                 self.installSoundEffect?.play()
                 self.addBeaconInHistoric(actionType: .install, region: beacon.uuid.uuidString, major: beacon.major, minor: beacon.minor, coordinates: location)
-                completion(true)
+                completion(true, errorMessage)
             } else {
-                completion(false)
+                completion(false, errorMessage)
             }
         }
     }
     
-    public func retrieve(iBeacon beacon: CLBeacon, completion: @escaping (Bool) -> Void) {
-        retrieveBeaconManual(regionUUID: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor)) { success in
-             completion(success)
+    public func retrieve(iBeacon beacon: CLBeacon, completion: @escaping (Bool, String?) -> Void) {
+        retrieveBeaconManual(regionUUID: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor)) { success, errorMessage in
+             completion(success, errorMessage)
         }
     }
     
-    public func retrieveBeaconManual(regionUUID: String, major: Int, minor: Int, completion: @escaping (Bool) -> Void) {
+    public func retrieveBeaconManual(regionUUID: String, major: Int, minor: Int, completion: @escaping (Bool, String?) -> Void) {
         let beaconId = composeBeaconID(region: regionUUID, major: major, minor: minor)
         
-        serverBeaconsService.getBeacon(withId: beaconId) { success, serverBeacon in
+        serverBeaconsService.getBeacon(withId: beaconId) { success, errorMessage, serverBeacon in
             if success {
                 if var updatedServerBeacon = serverBeacon {
                     updatedServerBeacon.beaconState = "RETRIEVED"
-                    self.serverBeaconsService.updateBeacon(beacon: updatedServerBeacon) { success in
+                    self.serverBeaconsService.updateBeacon(beacon: updatedServerBeacon) { success, updateErrorMessage in
                         if success {
                             self.retrieveSoundEffect?.play()
-                            self.addBeaconInHistoric(actionType: .install, region: regionUUID, major: NSNumber(value: major), minor: NSNumber(value: minor))
-                            completion(true)
+                            self.addBeaconInHistoric(actionType: .retrieve, region: regionUUID, major: NSNumber(value: major), minor: NSNumber(value: minor))
+                            completion(true, nil)
                         } else {
-                            completion(false)
+                            completion(false, updateErrorMessage)
                         }
                     }
                 } else {
-                    completion(false)
+                    completion(false, errorMessage)
                 }
             } else {
-                completion(false)
+                completion(false, errorMessage)
             }
         }
     }

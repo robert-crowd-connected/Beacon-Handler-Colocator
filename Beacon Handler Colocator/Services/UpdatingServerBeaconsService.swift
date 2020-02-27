@@ -11,9 +11,7 @@ import Foundation
 
 class UpdatingServerBeaconsService {
     
-    private init() {
-        getServerAccess()
-    }
+    private init() {}
        
     static var shared = UpdatingServerBeaconsService()
     
@@ -23,84 +21,18 @@ class UpdatingServerBeaconsService {
     
     public var surfaceId = "worldSurface"
     
-    private func getServerAccess() {
-        //TODO Get an AuthorizationBearerToken
-    }
-    
-    public func putBeacon(beacon: ServerBeacon, completion: @escaping (Bool) -> Void) {
-        guard let url = URL(string: "\(baseURL)\(beaconSufix)") else {
-            completion(false)
+    public func putBeacon(beacon: ServerBeacon, completion: @escaping (Bool, String?) -> Void) {
+        guard let key = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String,
+           let token = UserDefaults.standard.value(forKey: kAuthorizationTokenStorageKey) as? String else {
+            completion(false, kNoAuthorizationDataFound)
             return
         }
-        guard let key = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String,
-            let token = UserDefaults.standard.value(forKey: kAuthorizationTokenStorageKey) as? String else {
-                completion(false)
-                return
-        }
-        
-        let beaconJSON = ["id": beacon.id,
-                          "lat": beacon.lat,
-                          "lng": beacon.lng,
-                          "alt": beacon.alt,
-                          "surfaceId": beacon.surfaceId,
-                          "beaconType": beacon.beaconType,
-                          "beaconState": beacon.beaconState] as [String : Any]
-        
-        let parameters: Parameters = ["app": key,
-                                      "beacons": [beaconJSON]]
-        let headers: HTTPHeaders = [
-            "Authorization" : token,
-            "Content-Type": "application/json"
-        ]
-        let encoding: ParameterEncoding = JSONEncoding.prettyPrinted  // URLEncoding.default
-        
-        AF.request(url,
-                   method: .put,
-                   parameters: parameters,
-                   encoding: encoding,
-                   headers: headers)
-            .responseString {
-                response in
-                switch response.result {
-                    
-                case let .success(value):
-                    guard let responseData = value.data(using: .utf8) else {
-                        completion(false)
-                        return
-                    }
-                    guard let responseJSON = (try? JSONSerialization.jsonObject(with: responseData)) as? [String: Any] else {
-                        completion(false)
-                        return
-                    }
-                    
-                    if let code = responseJSON["code"] as? String, !code.contains("200") {
-                        print("Put beacon request unsuccessful. Code: \(code) \(responseJSON["description"] as? String ?? "unknown description")")
-                        completion(false)
-                        return
-                    }
-                    
-                    completion(true)
-                    
-                case let .failure(error):
-                    print("Put beacon request unsuccessful. Error: \(error)")
-                    completion(false)
-                }
-        }
-    }
-    
-    public func updateBeacon(beacon: ServerBeacon, completion: @escaping (Bool) -> Void) {
-        guard let url = URL(string: "\(baseURL)\(beaconSufix)/\(beacon.id)") else {
-            completion(false)
+        guard let url = URL(string: "\(baseURL)\(beaconSufix)?app=\(key)") else {
+            completion(false, kWrongUrlFormat)
             return
         }
-        guard let key = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String,
-            let token = UserDefaults.standard.value(forKey: kAuthorizationTokenStorageKey) as? String else {
-                completion(false)
-                return
-        }
-        
-        let parameters: Parameters = [//"app": key
-                                      "id": beacon.id,
+      
+        let parameters: Parameters = ["id": beacon.id,
                                       "lat": beacon.lat,
                                       "lng": beacon.lng,
                                       "alt": beacon.alt,
@@ -111,7 +43,70 @@ class UpdatingServerBeaconsService {
             "Authorization" : token,
             "Content-Type": "application/json"
         ]
-        let encoding: ParameterEncoding = JSONEncoding.prettyPrinted  // URLEncoding.default
+        let encoding: ParameterEncoding = JSONEncoding.default
+        
+        AF.request(url,
+                   method: .post,
+                   parameters: parameters,
+                   encoding: encoding,
+                   headers: headers)
+            .responseString {
+                response in
+                
+                if response.response?.statusCode == 200 {
+                    completion(true, nil)
+                    return
+                }
+                
+                switch response.result {
+                    
+                case let .success(value):
+                    guard let responseData = value.data(using: .utf8) else {
+                        completion(false, kResponseDataDoesntMatchExpectedType)
+                        return
+                    }
+                    guard let responseJSON = (try? JSONSerialization.jsonObject(with: responseData)) as? [String: Any] else {
+                        completion(false, kResponseDataDoesntMatchExpectedType)
+                        return
+                    }
+                    
+                    if let code = responseJSON["code"] as? String, !code.contains("200") {
+                        let issueDescription = responseJSON["description"] as? String ?? kIssueDefaultDescription
+                        completion(false, "Response Code " + code + " " + issueDescription)
+                        return
+                    }
+                    
+                    completion(true, nil)
+                    
+                case let .failure(error):
+                    completion(false, kRequestFailed + (error.errorDescription ?? kIssueDefaultDescription))
+                }
+        }
+    }
+    
+    public func updateBeacon(beacon: ServerBeacon, completion: @escaping (Bool, String?) -> Void) {
+        guard let key = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String,
+            let token = UserDefaults.standard.value(forKey: kAuthorizationTokenStorageKey) as? String else {
+                completion(false, kNoAuthorizationDataFound)
+                return
+        }
+        guard let url = URL(string: "\(baseURL)\(beaconSufix)/\(beacon.id)?app=\(key)") else {
+            completion(false, kWrongUrlFormat)
+            return
+        }
+       
+        let parameters: Parameters = ["id": beacon.id,
+                                      "lat": beacon.lat,
+                                      "lng": beacon.lng,
+                                      "alt": beacon.alt,
+                                      "surfaceId": beacon.surfaceId,
+                                      "beaconType": beacon.beaconType,
+                                      "beaconState": beacon.beaconState]
+        let headers: HTTPHeaders = [
+            "Authorization" : token,
+            "Content-Type": "application/json"
+        ]
+        let encoding: ParameterEncoding = JSONEncoding.default
         
         AF.request(url,
                    method: .put,
@@ -120,45 +115,50 @@ class UpdatingServerBeaconsService {
                    headers: headers)
             .responseString {
                 response in
+                
+                if response.response?.statusCode == 200 {
+                    completion(true, nil)
+                    return
+                }
+                
                 switch response.result {
                     
                 case let .success(value):
                     guard let responseData = value.data(using: .utf8) else {
-                        completion(false)
+                        completion(false, kResponseDataDoesntMatchExpectedType)
                         return
                     }
                     guard let responseJSON = (try? JSONSerialization.jsonObject(with: responseData)) as? [String: Any] else {
-                        completion(false)
+                        completion(false, kResponseDataDoesntMatchExpectedType)
                         return
                     }
-                    
+
                     if let code = responseJSON["code"] as? String, !code.contains("200") {
-                        print("Update beacon request unsuccessful. Code: \(code) \(responseJSON["description"] as? String ?? "unknown description")")
-                        completion(false)
+                       let issueDescription = responseJSON["description"] as? String ?? kIssueDefaultDescription
+                        completion(false, "Response Code " + code + " " + issueDescription)
                         return
                     }
-                    
-                    completion(true)
+
+                    completion(true, nil)
                     
                 case let .failure(error):
-                    print("Update beacon request unsuccessful. Error: \(error)")
-                    completion(false)
+                    completion(false, kRequestFailed + (error.errorDescription ?? kIssueDefaultDescription))
                 }
         }
     }
     
-    public func getBeacon(withId id: String, completion: @escaping (Bool, ServerBeacon?) -> Void) {
-        guard let url = URL(string: "\(baseURL)\(beaconSufix)/\(id)") else {
-            completion(false, nil)
-            return
-        }
+    public func getBeacon(withId id: String, completion: @escaping (Bool, String?, ServerBeacon?) -> Void) {
         guard let key = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String,
             let token = UserDefaults.standard.value(forKey: kAuthorizationTokenStorageKey) as? String else {
-                completion(false, nil)
+                completion(false, kNoAuthorizationDataFound, nil)
                 return
         }
+        guard let url = URL(string: "\(baseURL)\(beaconSufix)/\(id)?app=\(key)") else {
+            completion(false, kWrongUrlFormat, nil)
+            return
+        }
         
-        let parameters: Parameters = ["app": key]
+        let parameters: Parameters = [:]
         let headers: HTTPHeaders = [
             "Authorization" : token,
             "Content-Type": "application/json"
@@ -176,17 +176,17 @@ class UpdatingServerBeaconsService {
                     
                 case let .success(value):
                     guard let responseData = value.data(using: .utf8) else {
-                        completion(false, nil)
+                        completion(false, kResponseDataDoesntMatchExpectedType, nil)
                         return
                     }
                     guard let responseJSON = (try? JSONSerialization.jsonObject(with: responseData)) as? [String: Any] else {
-                        completion(false, nil)
+                        completion(false, kResponseDataDoesntMatchExpectedType, nil)
                         return
                     }
                     
                     if let code = responseJSON["code"] as? String, !code.contains("200") {
-                        print("Get beacon request unsuccessful. Code: \(code) \(responseJSON["description"] as? String ?? "unknown description")")
-                        completion(false, nil)
+                       let issueDescription = responseJSON["description"] as? String ?? kIssueDefaultDescription
+                        completion(false, "Response Code " + code + " " + issueDescription, nil)
                         return
                     }
                     
@@ -197,18 +197,16 @@ class UpdatingServerBeaconsService {
                         let surfaceId = responseJSON["surfaceId"] as? String,
                         let beaconType = responseJSON["beaconType"] as? String,
                         let beaconState = responseJSON["beaconState"] as? String else {
-                            print("GET Beacon response doesn't contain all required fields")
-                            print(responseJSON)
-                            completion(false, nil)
+                            print("GET Beacon response doesn't contain all required fields\n\(responseJSON)")
+                            completion(false, kResponseIsMissingFields, nil)
                             return
                     }
                     
                     let serverBeacon = ServerBeacon(id: id, lat: lat, lng: lng, alt: alt, surfaceId: surfaceId, beaconType: beaconType, beaconState: beaconState)
-                    completion(true, serverBeacon)
+                    completion(true, nil, serverBeacon)
                     
                 case let .failure(error):
-                    print("Get beacon request unsuccessful. Error: \(error)")
-                    completion(false, nil)
+                    completion(false, kRequestFailed + (error.errorDescription ?? kIssueDefaultDescription), nil)
                 }
         }
     }
@@ -252,7 +250,7 @@ class UpdatingServerBeaconsService {
                     }
                     
                     if let code = responseJSON["code"] as? String, !code.contains("200") {
-                        print("Get durface request unsuccessful. Code: \(code) \(responseJSON["description"] as? String ?? "unknown description"))")
+                        print("Get surfaces request unsuccessful. Code: \(code) \(responseJSON["description"] as? String ?? "unknown description")")
                         completion(false, nil)
                         return
                     }

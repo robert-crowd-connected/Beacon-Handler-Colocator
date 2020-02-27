@@ -60,7 +60,7 @@ class RetrieveBeaconsManualViewController: UIViewController {
             return
         }
         
-        BeaconHandlingService.shared.retrieveBeaconManual(regionUUID: regionUUIDString!, major: majorInt!, minor: minorInt) { success in
+        BeaconHandlingService.shared.retrieveBeaconManual(regionUUID: regionUUIDString!, major: majorInt!, minor: minorInt) { success, errorMessage in
             if success {
                 let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",
                                                      message: "\(self.majorLabel.text!)   Minor \(minor)", preferredStyle: .alert)
@@ -71,7 +71,7 @@ class RetrieveBeaconsManualViewController: UIViewController {
                 })
             } else {
                 let failureAlert = UIAlertController(title: "iBeacon retrieval failed!",
-                                                     message: "The beacon couldn't be retrieved on the server side", preferredStyle: .alert)
+                                                     message: errorMessage ?? kDefaultRequestErrorMessage, preferredStyle: .alert)
                 let action = UIAlertAction(title: "Okay", style: .default)
                 failureAlert.addAction(action)
                 self.present(failureAlert, animated: false, completion: nil)

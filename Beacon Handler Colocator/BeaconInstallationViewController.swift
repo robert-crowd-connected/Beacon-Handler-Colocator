@@ -41,7 +41,7 @@ class BeaconInstallationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        beaconDataLabel.text = "iBeacon Major \(beacon.major)  Minor \(beacon.minor)"
+        beaconDataLabel.text = " Major \(String(format: "%04d", beacon.major))  Minor \(beacon.minor)"
         beaconUUIDLabel.text = "UUID \(beacon.uuid)"
         
         titleLabel.textColor = UIColor.wizardPurple
@@ -209,7 +209,7 @@ class BeaconInstallationViewController: UIViewController {
             return
         }
         
-        BeaconHandlingService.shared.install(iBeacon: beacon, at: beaconAnnotation!.coordinate) { success in
+        BeaconHandlingService.shared.install(iBeacon: beacon, at: beaconAnnotation!.coordinate) { success, erroMessage in
             if success {
                 let successAlert = UIAlertController(title: "iBeacon successfully installed!",
                                                      message: "Latitude \(self.beaconAnnotation!.coordinate.latitude)\nLongitude \(self.beaconAnnotation!.coordinate.longitude)", preferredStyle: .alert)
@@ -224,7 +224,7 @@ class BeaconInstallationViewController: UIViewController {
                 })
             } else {
                 let failureAlert = UIAlertController(title: "iBeacon installation failed!",
-                                                     message: "The beacon couldn't be added on the server side", preferredStyle: .alert)
+                                                     message: erroMessage ?? kDefaultRequestErrorMessage, preferredStyle: .alert)
                 let action = UIAlertAction(title: "Okay", style: .default) { _ in
                     self.dismiss(animated: true, completion: {
                         self.delegate?.startScanner()
