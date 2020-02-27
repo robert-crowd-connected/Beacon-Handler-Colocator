@@ -116,10 +116,8 @@ class UpdatingServerBeaconsService {
             .responseString {
                 response in
                 
-                if response.response?.statusCode == 200 {
-                    completion(true, nil)
-                    return
-                }
+                //TODO Fix this error
+                print(response)
                 
                 switch response.result {
                     

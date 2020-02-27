@@ -44,7 +44,7 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
     }()
     
     var regionConstraint: CLBeaconIdentityConstraint?
-       
+    
     var noiseLevel: NoiseLevel = .none {
         didSet {
             noiseLevelLabel.text = "Noise Level \(noiseLevel.rawValue)"
@@ -119,9 +119,7 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         }
         regionConstraint = CLBeaconIdentityConstraint(uuid: UUID(uuidString: regionUUID)!,
                                                       major: CLBeaconMajorValue(majorValue))
-        closestBeacon = nil
-        detectedBeacons.removeAll()
-        
+    
         regionUUIDLabel.text = "Region UUID " + regionUUID
         majorLabel.text = "Major \(majorValue)"
     }
@@ -167,7 +165,7 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         confirmStableClosestBeaconTimer?.invalidate()
         confirmStableClosestBeaconTimer = nil
         
-        if closestBeacon!.rssi <= -20 || closestBeacon!.accuracy > 0.03 {
+        if closestBeacon!.rssi <= -20 || closestBeacon!.accuracy >= 0.03 {
             isBeaconTooFar = true
             return
         } else {
@@ -261,8 +259,6 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
     @IBAction func actionMonitoringStatusChanged(_ sender: UISwitch) {
         if sender.isOn {
             startScanner()
-            detectedBeacons.removeAll()
-            closestBeacon = nil
         } else {
             stopScanner()
         }
@@ -294,8 +290,6 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         
         BeaconHandlingService.shared.retrieve(iBeacon: self.closestBeacon!) { success, errorMessage in
             if success {
-                
-                // Edge case
                 if self.closestBeacon == nil {
                     self.startScanner()
                     return
@@ -305,18 +299,18 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
                                                      message: "Major \(self.closestBeacon!.major)  Minor \(self.closestBeacon!.minor)", preferredStyle: .alert)
                 self.present(successAlert, animated: false, completion: {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        self.dismiss(animated: true, completion: nil)
                         self.stopMonitoringBeacon(beacon: self.closestBeacon!)
                         self.startScanner()
+                        self.dismiss(animated: true, completion: nil)
                     }
                 })
             } else {
                 let failureAlert = UIAlertController(title: "iBeacon retrieval failed!",
                                                      message: errorMessage ?? kDefaultRequestErrorMessage, preferredStyle: .alert)
                 self.present(failureAlert, animated: false, completion: {
-                     DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                        self.dismiss(animated: true, completion: nil)
+                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.startScanner()
+                        self.dismiss(animated: true, completion: nil)
                     }
                 })
             }
@@ -340,14 +334,11 @@ extension ScannerViewController: CLLocationManagerDelegate {
         guard !beacons.isEmpty else {
             return
         }
-        
+
         for beacon in beacons {
             if (beacon.accuracy < 0 || beacon.proximity == .near || beacon.proximity == .far || beacon.proximity == .unknown) { continue }
             if excludedBeaconMinors.contains(beacon.minor) { continue }
-            
             detectedBeacons.append(beacon)
-            
-//            print("Beacon RSSI \(beacon.rssi)   Accuracy \(beacon.accuracy)   Minor \(beacon.minor)")
         }
     }
 }

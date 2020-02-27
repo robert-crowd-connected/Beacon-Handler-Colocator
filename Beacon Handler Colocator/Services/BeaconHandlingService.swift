@@ -9,6 +9,7 @@
 import AVFoundation
 import Foundation
 import CoreLocation
+import SwiftSpinner
 
 class BeaconHandlingService {
     
@@ -25,6 +26,7 @@ class BeaconHandlingService {
     
     private var installSoundEffect: AVAudioPlayer?
     private var retrieveSoundEffect: AVAudioPlayer?
+    
     
     private func configureSoundEffects() {
         let pathInstall = Bundle.main.path(forResource: "installBeacon.mp3", ofType:nil)!
@@ -47,6 +49,7 @@ class BeaconHandlingService {
     }
     
     public func install(iBeacon beacon: CLBeacon, at location: CLLocationCoordinate2D, completion: @escaping (Bool, String?) -> Void) {
+        SwiftSpinner.show("Installing iBeacon " + String(format: "%04d", Int(truncating: beacon.minor)))
         let serverBeacon = ServerBeacon(id: composeBeaconID(region: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor)),
                                         lat: location.latitude,
                                         lng: location.longitude,
@@ -56,6 +59,7 @@ class BeaconHandlingService {
                                         beaconState: "ACTIVE")
         
         serverBeaconsService.putBeacon(beacon: serverBeacon) { success, errorMessage in
+            SwiftSpinner.hide()
             if success {
                 self.installSoundEffect?.play()
                 self.addBeaconInHistoric(actionType: .install, region: beacon.uuid.uuidString, major: beacon.major, minor: beacon.minor, coordinates: location)
@@ -73,9 +77,11 @@ class BeaconHandlingService {
     }
     
     public func retrieveBeaconManual(regionUUID: String, major: Int, minor: Int, completion: @escaping (Bool, String?) -> Void) {
+        SwiftSpinner.show("Retrieving iBeacon " + String(format: "%04d", minor))
         let beaconId = composeBeaconID(region: regionUUID, major: major, minor: minor)
         
         serverBeaconsService.getBeacon(withId: beaconId) { success, errorMessage, serverBeacon in
+            SwiftSpinner.hide()
             if success {
                 if var updatedServerBeacon = serverBeacon {
                     updatedServerBeacon.beaconState = "RETRIEVED"

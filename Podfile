@@ -7,5 +7,6 @@ target 'Beacon Handler Colocator' do
 
 pod 'IQKeyboardManagerSwift'
 pod 'Alamofire', '~> 5.0'
+pod "SwiftSpinner"
 
 end

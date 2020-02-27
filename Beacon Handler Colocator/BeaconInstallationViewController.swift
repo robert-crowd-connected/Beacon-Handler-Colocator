@@ -41,7 +41,7 @@ class BeaconInstallationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        beaconDataLabel.text = " Major \(String(format: "%04d", beacon.major))  Minor \(beacon.minor)"
+        beaconDataLabel.text = " Major \(beacon.major)  Minor \(beacon.minor)"
         beaconUUIDLabel.text = "UUID \(beacon.uuid)"
         
         titleLabel.textColor = UIColor.wizardPurple
@@ -215,9 +215,9 @@ class BeaconInstallationViewController: UIViewController {
                                                      message: "Latitude \(self.beaconAnnotation!.coordinate.latitude)\nLongitude \(self.beaconAnnotation!.coordinate.longitude)", preferredStyle: .alert)
                 self.present(successAlert, animated: false, completion: {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+                        self.delegate?.stopMonitoringBeacon(beacon: self.beacon)
+                        self.delegate?.startScanner()
                         self.dismiss(animated: true, completion: {
-                            self.delegate?.stopMonitoringBeacon(beacon: self.beacon)
-                            self.delegate?.startScanner()
                             self.navigationController?.popViewController(animated: true)
                         })
                     }
