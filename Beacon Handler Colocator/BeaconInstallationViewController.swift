@@ -36,6 +36,8 @@ class BeaconInstallationViewController: UIViewController {
         }
     }
     
+    var tileRenderer: MKTileOverlayRenderer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,12 +55,27 @@ class BeaconInstallationViewController: UIViewController {
         gradient.endPoint = CGPoint(x: 1.0,y: 0.5)
         installButton.layer.insertSublayer(gradient, at: 0)
         
-        mapView.delegate = self
-        
         addTapGestures()
+        setupMap()
+        setupLocationManager()
+    }
+    
+    private func setupMap() {
+        mapView.delegate = self
         changeMoveBeaconButtonsVisibility(to: false)
         
-        setupLocationManager()
+        UpdatingServerBeaconsService.shared.getSurfaceTileName() { success, tileName in
+            if success, tileName != nil {
+                guard let appKey = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String else { return }
+                
+                let template = "https://d36oublijzdizs.cloudfront.net/\(appKey)/\(tileName!)/{z}/{x}/{y}.png"
+                let overlay = MKTileOverlay(urlTemplate: template)
+                overlay.canReplaceMapContent = false
+                
+                self.mapView.addOverlay(overlay, level: .aboveLabels)
+                self.tileRenderer = MKTileOverlayRenderer(tileOverlay: overlay)
+            }
+        }
     }
     
     private func addTapGestures() {
@@ -192,19 +209,32 @@ class BeaconInstallationViewController: UIViewController {
             return
         }
         
-        BeaconHandlingService.shared.install(iBeacon: beacon, at: beaconAnnotation!.coordinate)
-        
-        let successAlert = UIAlertController(title: "iBeacon successfully installed!",
-                                             message: "Latitude \(beaconAnnotation!.coordinate.latitude)\nLongitude \(beaconAnnotation!.coordinate.longitude)", preferredStyle: .alert)
-        self.present(successAlert, animated: false, completion: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
-                self.dismiss(animated: true, completion: {
-                    self.delegate?.stopMonitoringBeacon(beacon: self.beacon)
-                    self.delegate?.startScanner()
-                    self.navigationController?.popViewController(animated: true)
+        BeaconHandlingService.shared.install(iBeacon: beacon, at: beaconAnnotation!.coordinate) { success in
+            if success {
+                let successAlert = UIAlertController(title: "iBeacon successfully installed!",
+                                                     message: "Latitude \(self.beaconAnnotation!.coordinate.latitude)\nLongitude \(self.beaconAnnotation!.coordinate.longitude)", preferredStyle: .alert)
+                self.present(successAlert, animated: false, completion: {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+                        self.dismiss(animated: true, completion: {
+                            self.delegate?.stopMonitoringBeacon(beacon: self.beacon)
+                            self.delegate?.startScanner()
+                            self.navigationController?.popViewController(animated: true)
+                        })
+                    }
                 })
+            } else {
+                let failureAlert = UIAlertController(title: "iBeacon installation failed!",
+                                                     message: "The beacon couldn't be added on the server side", preferredStyle: .alert)
+                let action = UIAlertAction(title: "Okay", style: .default) { _ in
+                    self.dismiss(animated: true, completion: {
+                        self.delegate?.startScanner()
+                        self.navigationController?.popViewController(animated: true)
+                    })
+                }
+                failureAlert.addAction(action)
+                self.present(failureAlert, animated: false, completion: nil)
             }
-        })
+        }
     }
     
     @IBAction func actionCancelInstallation(_ sender: Any) {
@@ -234,5 +264,12 @@ extension BeaconInstallationViewController: MKMapViewDelegate {
                 self.present(alert, animated: true, completion: nil)
             }
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay is MKTileOverlay && tileRenderer != nil {
+            return tileRenderer
+        }
+        return MKOverlayRenderer()
     }
 }

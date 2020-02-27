@@ -8,12 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		620A20E3DCAB38BFCC649ACC /* Pods_Beacon_Handler_Colocator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0C23DF85763808921168646 /* Pods_Beacon_Handler_Colocator.framework */; };
+		971F0C282407E9CC009570F3 /* ConstantsAndStorageKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971F0C272407E9CC009570F3 /* ConstantsAndStorageKeys.swift */; };
 		9769D45624053FD2000B503F /* BeaconInstallationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */; };
 		9769D4582405505F000B503F /* BeaconAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D4572405505F000B503F /* BeaconAnnotation.swift */; };
 		9769D45A24057293000B503F /* BeaconHandlingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45924057293000B503F /* BeaconHandlingService.swift */; };
 		9769D45C2405806F000B503F /* OnboardingActionSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45B2405806F000B503F /* OnboardingActionSelectionViewController.swift */; };
 		9769D45E240580F5000B503F /* OnboardingSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45D240580F5000B503F /* OnboardingSettingsViewController.swift */; };
 		9769D4602405816F000B503F /* BeaconSessionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45F2405816F000B503F /* BeaconSessionType.swift */; };
+		978221C62407CC4F003642FC /* UpdatingServerBeaconsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 978221C52407CC4F003642FC /* UpdatingServerBeaconsService.swift */; };
+		978221C82407CD42003642FC /* ServerBeacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 978221C72407CD42003642FC /* ServerBeacon.swift */; };
 		9794015D23FEF42800670FE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9794015C23FEF42800670FE3 /* AppDelegate.swift */; };
 		9794015F23FEF42800670FE3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9794015E23FEF42800670FE3 /* SceneDelegate.swift */; };
 		9794016123FEF42800670FE3 /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9794016023FEF42800670FE3 /* ScannerViewController.swift */; };
@@ -31,12 +34,15 @@
 
 /* Begin PBXFileReference section */
 		70E5231E1D73B80BE3167E5D /* Pods-Beacon Handler Colocator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Beacon Handler Colocator.debug.xcconfig"; path = "Target Support Files/Pods-Beacon Handler Colocator/Pods-Beacon Handler Colocator.debug.xcconfig"; sourceTree = "<group>"; };
+		971F0C272407E9CC009570F3 /* ConstantsAndStorageKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsAndStorageKeys.swift; sourceTree = "<group>"; };
 		9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconInstallationViewController.swift; sourceTree = "<group>"; };
 		9769D4572405505F000B503F /* BeaconAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconAnnotation.swift; sourceTree = "<group>"; };
 		9769D45924057293000B503F /* BeaconHandlingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconHandlingService.swift; sourceTree = "<group>"; };
 		9769D45B2405806F000B503F /* OnboardingActionSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingActionSelectionViewController.swift; sourceTree = "<group>"; };
 		9769D45D240580F5000B503F /* OnboardingSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSettingsViewController.swift; sourceTree = "<group>"; };
 		9769D45F2405816F000B503F /* BeaconSessionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconSessionType.swift; sourceTree = "<group>"; };
+		978221C52407CC4F003642FC /* UpdatingServerBeaconsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatingServerBeaconsService.swift; sourceTree = "<group>"; };
+		978221C72407CD42003642FC /* ServerBeacon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerBeacon.swift; sourceTree = "<group>"; };
 		9794015923FEF42800670FE3 /* Beacon Handler Colocator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Beacon Handler Colocator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9794015C23FEF42800670FE3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9794015E23FEF42800670FE3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -141,6 +147,7 @@
 				9769D45F2405816F000B503F /* BeaconSessionType.swift */,
 				9769D4572405505F000B503F /* BeaconAnnotation.swift */,
 				AAE07AE62406CB9800674A0D /* BeaconAction.swift */,
+				978221C72407CD42003642FC /* ServerBeacon.swift */,
 			);
 			path = BeaconDataModels;
 			sourceTree = "<group>";
@@ -149,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				AAE07AD5240685C100674A0D /* Colors+Extension.swift */,
+				971F0C272407E9CC009570F3 /* ConstantsAndStorageKeys.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -157,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				9769D45924057293000B503F /* BeaconHandlingService.swift */,
+				978221C52407CC4F003642FC /* UpdatingServerBeaconsService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -291,6 +300,7 @@
 				9769D4582405505F000B503F /* BeaconAnnotation.swift in Sources */,
 				9769D45A24057293000B503F /* BeaconHandlingService.swift in Sources */,
 				AAE07AD82406A2D200674A0D /* HistoricViewController.swift in Sources */,
+				978221C62407CC4F003642FC /* UpdatingServerBeaconsService.swift in Sources */,
 				AAE07ADA2406A42900674A0D /* RetrieveBeaconsManualViewController.swift in Sources */,
 				9794016123FEF42800670FE3 /* ScannerViewController.swift in Sources */,
 				9769D45E240580F5000B503F /* OnboardingSettingsViewController.swift in Sources */,
@@ -298,9 +308,11 @@
 				AAE07AD6240685C100674A0D /* Colors+Extension.swift in Sources */,
 				AAE07AE92406DB9700674A0D /* ActionBeaconCell.swift in Sources */,
 				9794015D23FEF42800670FE3 /* AppDelegate.swift in Sources */,
+				978221C82407CD42003642FC /* ServerBeacon.swift in Sources */,
 				9769D45C2405806F000B503F /* OnboardingActionSelectionViewController.swift in Sources */,
 				AAE07AE72406CB9800674A0D /* BeaconAction.swift in Sources */,
 				9794015F23FEF42800670FE3 /* SceneDelegate.swift in Sources */,
+				971F0C282407E9CC009570F3 /* ConstantsAndStorageKeys.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

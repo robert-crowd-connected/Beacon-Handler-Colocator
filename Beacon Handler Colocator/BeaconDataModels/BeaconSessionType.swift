@@ -8,10 +8,6 @@
 
 import Foundation
 
-let kMajorValueStorageKey = "MAJORVALUESTORAGEKEY"
-let kBeaconCattegoryStorageKey = "BEACONCATEGORYSTORAGEKEY"
-let kRegionUUIDStorageKey = "REGIONUUIDSTORAGEKEY"
-
 enum BeaconSessionType: String {
     case install = "Install"
     case retrieve = "Retrieve"

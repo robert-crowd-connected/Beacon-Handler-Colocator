@@ -14,9 +14,12 @@ class BeaconHandlingService {
     
     private init() {
         configureSoundEffects()
+        serverBeaconsService = UpdatingServerBeaconsService.shared
     }
     
     static var shared = BeaconHandlingService()
+    
+    private var serverBeaconsService: UpdatingServerBeaconsService!
     
     private var actionsHistoric = [BeaconAction]()
     
@@ -43,27 +46,66 @@ class BeaconHandlingService {
         }
     }
     
-    public func install(iBeacon beacon: CLBeacon, at location: CLLocationCoordinate2D) {
-        //TODO Call API with Beacon and Location data
+    public func install(iBeacon beacon: CLBeacon, at location: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
+        //TODO Get surfaceId
         
-        installSoundEffect?.play()
-        addBeaconInHistoric(actionType: .install, region: beacon.uuid.uuidString, major: beacon.major, minor: beacon.minor, coordinates: location)
+        let serverBeacon = ServerBeacon(id:  beacon.uuid.uuidString.lowercased(),
+                                        lat: location.latitude,
+                                        lng: location.longitude,
+                                        alt: 1,
+                                        surfaceId: serverBeaconsService.surfaceId,
+                                        beaconType: "bluetooth",
+                                        beaconState: "ACTIVE")
+        
+        serverBeaconsService.putBeacon(beacon: serverBeacon) { success in
+            if success {
+                self.installSoundEffect?.play()
+                self.addBeaconInHistoric(actionType: .install, region: beacon.uuid.uuidString, major: beacon.major, minor: beacon.minor, coordinates: location)
+                completion(true)
+            } else {
+                completion(false)
+            }
+        }
     }
     
-    public func retrieve(iBeacon beacon: CLBeacon) {
-        //TODO Call API with beacon data
-        
-        retrieveSoundEffect?.play()
-        addBeaconInHistoric(actionType: .install, region: beacon.uuid.uuidString, major: beacon.major, minor: beacon.minor)
+    public func retrieve(iBeacon beacon: CLBeacon, completion: @escaping (Bool) -> Void) {
+        retrieveBeaconManual(regionUUID: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor)) { success in
+             completion(success)
+        }
     }
     
-    public func retrieveBeaconManual(regionUUID: String, major: Int, minor: Int) {
-         //TODO Call API with beacon data
+    public func retrieveBeaconManual(regionUUID: String, major: Int, minor: Int, completion: @escaping (Bool) -> Void) {
+        let beaconId = composeBeaconID(region: regionUUID, major: major, minor: minor)
         
-        retrieveSoundEffect?.play()
-        addBeaconInHistoric(actionType: .install, region: regionUUID, major: NSNumber(value: major), minor: NSNumber(value: minor))
+        serverBeaconsService.getBeacon(withId: beaconId) { success, serverBeacon in
+            if success {
+                if var updatedServerBeacon = serverBeacon {
+                    updatedServerBeacon.beaconState = "RETRIEVED"
+                    self.serverBeaconsService.updateBeacon(beacon: updatedServerBeacon) { success in
+                        if success {
+                            self.retrieveSoundEffect?.play()
+                            self.addBeaconInHistoric(actionType: .install, region: regionUUID, major: NSNumber(value: major), minor: NSNumber(value: minor))
+                            completion(true)
+                        } else {
+                            completion(false)
+                        }
+                    }
+                } else {
+                    completion(false)
+                }
+            } else {
+                completion(false)
+            }
+        }
     }
     
+    private func composeBeaconID(region: String, major: Int, minor: Int) -> String {
+        let fullMajor = String(format: "%04d", major)
+        let fullMinor = String(format: "%04d", minor)
+        return "\(region.lowercased()):\(fullMajor):\(fullMinor)"
+    }
+    
+    // Historic
     public func getActionsHistoric() -> [BeaconAction] {
         return actionsHistoric
     }

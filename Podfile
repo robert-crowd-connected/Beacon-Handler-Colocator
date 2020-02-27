@@ -5,8 +5,7 @@ target 'Beacon Handler Colocator' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for Beacon Handler Colocator
-
 pod 'IQKeyboardManagerSwift'
+pod 'Alamofire', '~> 5.0'
 
 end

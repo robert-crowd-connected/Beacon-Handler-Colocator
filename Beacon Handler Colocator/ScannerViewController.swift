@@ -285,17 +285,29 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
             return
         }
         
-        BeaconHandlingService.shared.retrieve(iBeacon: self.closestBeacon!)
-        
-        let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",
-                                             message: "Major \(closestBeacon!.major)  Minor \(closestBeacon!.minor)", preferredStyle: .alert)
-        self.present(successAlert, animated: false, completion: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                self.dismiss(animated: true, completion: nil)
-                self.stopMonitoringBeacon(beacon: self.closestBeacon!)
-                self.startScanner()
+        BeaconHandlingService.shared.retrieve(iBeacon: self.closestBeacon!) { success in
+            if success {
+                let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",
+                                                     message: "Major \(self.closestBeacon!.major)  Minor \(self.closestBeacon!.minor)", preferredStyle: .alert)
+                self.present(successAlert, animated: false, completion: {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        self.dismiss(animated: true, completion: nil)
+                        self.stopMonitoringBeacon(beacon: self.closestBeacon!)
+                        self.startScanner()
+                    }
+                })
+            } else {
+                let failureAlert = UIAlertController(title: "iBeacon retrieval failed!",
+                                                     message: "The beacon couldn't be retrieved on the server side", preferredStyle: .alert)
+                let action = UIAlertAction(title: "Okay", style: .default) { _ in
+                    self.dismiss(animated: true, completion: {
+                        self.startScanner()
+                    })
+                }
+                failureAlert.addAction(action)
+                self.present(failureAlert, animated: false, completion: nil)
             }
-        })
+        }
     }
     
     @IBAction func actionResetProximity(_ sender: Any) {
