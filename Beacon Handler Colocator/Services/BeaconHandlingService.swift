@@ -29,7 +29,7 @@ class BeaconHandlingService {
     
     
     private func configureSoundEffects() {
-        let pathInstall = Bundle.main.path(forResource: "installBeacon.mp3", ofType:nil)!
+        let pathInstall = Bundle.main.path(forResource: "installBeacon.mp3", ofType: nil)!
         let urlInstall = URL(fileURLWithPath: pathInstall)
 
         do {

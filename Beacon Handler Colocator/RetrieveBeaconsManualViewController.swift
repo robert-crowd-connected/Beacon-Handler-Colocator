@@ -28,10 +28,10 @@ class RetrieveBeaconsManualViewController: UIViewController {
     
         guard let uuid = UserDefaults.standard.value(forKey: kRegionUUIDStorageKey) as? String,
             let major = UserDefaults.standard.value(forKey: kMajorValueStorageKey) as? Int else {
-                print("Retrieve beacons manually screen loaded without region UUID and major data. Redirected back to settings screen.")
                 self.navigationController?.popViewController(animated: false)
                 return
         }
+        
         regionUUIDString = uuid
         majorInt = major
         configureViews()

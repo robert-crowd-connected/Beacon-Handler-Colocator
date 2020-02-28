@@ -30,6 +30,7 @@
 		AAE07AE52406CA8800674A0D /* retrieveBeacon.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AAE07AE42406CA8800674A0D /* retrieveBeacon.mp3 */; };
 		AAE07AE72406CB9800674A0D /* BeaconAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE07AE62406CB9800674A0D /* BeaconAction.swift */; };
 		AAE07AE92406DB9700674A0D /* ActionBeaconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE07AE82406DB9700674A0D /* ActionBeaconCell.swift */; };
+		AAE07AED2409358900674A0D /* BeaconsPositionCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE07AEC2409358900674A0D /* BeaconsPositionCalculator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		AAE07AE42406CA8800674A0D /* retrieveBeacon.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = retrieveBeacon.mp3; sourceTree = "<group>"; };
 		AAE07AE62406CB9800674A0D /* BeaconAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconAction.swift; sourceTree = "<group>"; };
 		AAE07AE82406DB9700674A0D /* ActionBeaconCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionBeaconCell.swift; sourceTree = "<group>"; };
+		AAE07AEC2409358900674A0D /* BeaconsPositionCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconsPositionCalculator.swift; sourceTree = "<group>"; };
 		E0C23DF85763808921168646 /* Pods_Beacon_Handler_Colocator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Beacon_Handler_Colocator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E220C3D8ABD366A3388BAA7D /* Pods-Beacon Handler Colocator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Beacon Handler Colocator.release.xcconfig"; path = "Target Support Files/Pods-Beacon Handler Colocator/Pods-Beacon Handler Colocator.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,19 +99,17 @@
 			children = (
 				AAE07ADB2406BB0C00674A0D /* Core */,
 				9794016A23FEF42800670FE3 /* Info.plist */,
-				AAE07AE22406CA8000674A0D /* installBeacon.mp3 */,
-				AAE07AE42406CA8800674A0D /* retrieveBeacon.mp3 */,
-				9794016523FEF42800670FE3 /* Assets.xcassets */,
 				9794017023FEF48F00670FE3 /* Main.storyboard */,
 				9794016023FEF42800670FE3 /* ScannerViewController.swift */,
 				9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */,
 				AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */,
-				AAE07AD72406A2D200674A0D /* HistoricViewController.swift */,
-				AAE07AE82406DB9700674A0D /* ActionBeaconCell.swift */,
+				AAE07AEB2409340600674A0D /* Resources */,
+				AAE07AEA240933C500674A0D /* ActionsHistoric */,
 				AAE07ADC2406BDCC00674A0D /* Onboarding */,
 				AAE07ADF2406BEBE00674A0D /* Services */,
 				AAE07ADD2406BE5400674A0D /* BeaconDataModels */,
 				AAE07ADE2406BE9600674A0D /* Helpers */,
+				AAE07AEC2409358900674A0D /* BeaconsPositionCalculator.swift */,
 			);
 			path = "Beacon Handler Colocator";
 			sourceTree = "<group>";
@@ -168,6 +168,25 @@
 				978221C52407CC4F003642FC /* UpdatingServerBeaconsService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		AAE07AEA240933C500674A0D /* ActionsHistoric */ = {
+			isa = PBXGroup;
+			children = (
+				AAE07AD72406A2D200674A0D /* HistoricViewController.swift */,
+				AAE07AE82406DB9700674A0D /* ActionBeaconCell.swift */,
+			);
+			path = ActionsHistoric;
+			sourceTree = "<group>";
+		};
+		AAE07AEB2409340600674A0D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AAE07AE22406CA8000674A0D /* installBeacon.mp3 */,
+				AAE07AE42406CA8800674A0D /* retrieveBeacon.mp3 */,
+				9794016523FEF42800670FE3 /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		FA8FE63AF716A4846E47423B /* Pods */ = {
@@ -310,6 +329,7 @@
 				9794015D23FEF42800670FE3 /* AppDelegate.swift in Sources */,
 				978221C82407CD42003642FC /* ServerBeacon.swift in Sources */,
 				9769D45C2405806F000B503F /* OnboardingActionSelectionViewController.swift in Sources */,
+				AAE07AED2409358900674A0D /* BeaconsPositionCalculator.swift in Sources */,
 				AAE07AE72406CB9800674A0D /* BeaconAction.swift in Sources */,
 				9794015F23FEF42800670FE3 /* SceneDelegate.swift in Sources */,
 				971F0C282407E9CC009570F3 /* ConstantsAndStorageKeys.swift in Sources */,
