@@ -51,6 +51,10 @@ class RetrieveBeaconsManualViewController: UIViewController {
         retrieveBeaconButton.layer.insertSublayer(gradient, at: 0)
     }
     
+    @IBAction func actionBack(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     @IBAction func actionRetrieveBeacon(_ sender: Any) {
         guard let minor = minorTextField.text, minor.count > 3, let minorInt = Int(minor) else {
             let alert = UIAlertController(title: "Invalid Minor",

@@ -235,6 +235,15 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         }
     }
     
+    @IBAction func actionBack(_ sender: Any) {
+        stopScanner()
+        closestBeacon = nil
+        isBeaconTooFar = false
+        detectedBeacons.removeAll()
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     @IBAction func actionMonitoringStatusChanged(_ sender: UISwitch) {
         sender.isOn ? startScanner() : stopScanner()
     }

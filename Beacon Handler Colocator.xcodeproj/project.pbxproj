@@ -101,6 +101,7 @@
 				9794016A23FEF42800670FE3 /* Info.plist */,
 				9794017023FEF48F00670FE3 /* Main.storyboard */,
 				9794016023FEF42800670FE3 /* ScannerViewController.swift */,
+				AAE07AEC2409358900674A0D /* BeaconsPositionCalculator.swift */,
 				9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */,
 				AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */,
 				AAE07AEB2409340600674A0D /* Resources */,
@@ -109,7 +110,6 @@
 				AAE07ADF2406BEBE00674A0D /* Services */,
 				AAE07ADD2406BE5400674A0D /* BeaconDataModels */,
 				AAE07ADE2406BE9600674A0D /* Helpers */,
-				AAE07AEC2409358900674A0D /* BeaconsPositionCalculator.swift */,
 			);
 			path = "Beacon Handler Colocator";
 			sourceTree = "<group>";
