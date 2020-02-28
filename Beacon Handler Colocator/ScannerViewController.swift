@@ -57,9 +57,7 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
     var isBeaconTooFar = false
     var closestBeaconMinor: NSNumber? = nil {
         willSet(newValue) {
-            if newValue != nil && newValue != closestBeaconMinor {
-                configureStableClosesBeaconTimer()
-            }
+            configureStableClosesBeaconTimer()
         }
     }
     
@@ -76,8 +74,9 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
                     closestBeaconMinor = closestBeacon!.minor
                 }
            } else {
-                closestBeaconLabel.text = "Closest Beacon Not Determined"
                 closestBeaconMinor = nil
+                detectedBeacons.removeAll()
+                closestBeaconLabel.text = "Closest Beacon Not Determined"
            }
         }
     }
@@ -165,14 +164,22 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         confirmStableClosestBeaconTimer?.invalidate()
         confirmStableClosestBeaconTimer = nil
         
-        if closestBeacon!.rssi <= -20 || closestBeacon!.accuracy >= 0.03 {
+        if closestBeacon == nil {
+            isBeaconTooFar = false
+            return
+        }
+        
+        if closestBeacon!.rssi <= -25 || closestBeacon!.accuracy >= 0.03 {
             isBeaconTooFar = true
             return
         } else {
             isBeaconTooFar = false
         }
         
-        confirmStableClosestBeaconTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { _ in
+        // If beacon is right next to the phone, wait for 1.5 seconds. Otherwise wait 3 seconds
+        let confirmationBeaconInterval = closestBeacon!.rssi >= -10 ? 1.5 : 3
+        
+        confirmStableClosestBeaconTimer = Timer.scheduledTimer(withTimeInterval: confirmationBeaconInterval, repeats: false, block: { _ in
             if self.closestBeacon == nil { return }
             if self.sessionType == .retrieve {
                 self.retrieveBeacon()
@@ -265,41 +272,30 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
     }
     
     private func installBeacon() {
-        // Stop scanning for making sure that the closestbeacon value is not changed meanwhile
-        stopScanner()
-        
-        if closestBeacon == nil {
-            startScanner()
+        guard let beaconToBeInstalled = closestBeacon else {
             return
         }
+        stopScanner()
         
         guard let beaconInstallationViewController = storyboard?.instantiateViewController(withIdentifier: "BeaconInstallationViewController") as? BeaconInstallationViewController else { return }
-        beaconInstallationViewController.beacon = closestBeacon!
+        beaconInstallationViewController.beacon = beaconToBeInstalled
         beaconInstallationViewController.delegate = self
         navigationController?.pushViewController(beaconInstallationViewController, animated: true)
     }
     
     private func retrieveBeacon() {
-        // Stop scanning for making sure that the closestbeacon value is not changed meanwhile
-        stopScanner()
-        
-        if closestBeacon == nil {
-            startScanner()
+        guard let beaconToBeRetrieved = closestBeacon else {
             return
         }
+        stopScanner()
         
-        BeaconHandlingService.shared.retrieve(iBeacon: self.closestBeacon!) { success, errorMessage in
+        BeaconHandlingService.shared.retrieve(iBeacon: beaconToBeRetrieved) { success, errorMessage in
             if success {
-                if self.closestBeacon == nil {
-                    self.startScanner()
-                    return
-                }
-                
                 let successAlert = UIAlertController(title: "iBeacon successfully retrieved!",
-                                                     message: "Major \(self.closestBeacon!.major)  Minor \(self.closestBeacon!.minor)", preferredStyle: .alert)
+                                                     message: "Major \(beaconToBeRetrieved.major)  Minor \(beaconToBeRetrieved.minor)", preferredStyle: .alert)
                 self.present(successAlert, animated: false, completion: {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        self.stopMonitoringBeacon(beacon: self.closestBeacon!)
+                        self.stopMonitoringBeacon(beacon: beaconToBeRetrieved)
                         self.startScanner()
                         self.dismiss(animated: true, completion: nil)
                     }

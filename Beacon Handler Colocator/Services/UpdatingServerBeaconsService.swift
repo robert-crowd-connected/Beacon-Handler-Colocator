@@ -111,7 +111,10 @@ class UpdatingServerBeaconsService {
             .responseString {
                 response in
                 
-                print(response)
+                if response.response?.statusCode == 200 {
+                    completion(true, nil)
+                    return
+                }
                 
                 switch response.result {
                     
@@ -200,6 +203,35 @@ class UpdatingServerBeaconsService {
                 case let .failure(error):
                     completion(false, kRequestFailed + (error.errorDescription ?? kIssueDefaultDescription), nil)
                 }
+        }
+    }
+    
+    public func deleteBeacon(withID id: String, completion: @escaping (Bool) -> Void) {
+        guard let key = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String,
+            let token = UserDefaults.standard.value(forKey: kAuthorizationTokenStorageKey) as? String else {
+                completion(false)
+                return
+        }
+        guard let url = URL(string: "\(baseURL)\(beaconSufix)/\(id)?app=\(key)") else {
+            completion(false)
+            return
+        }
+        
+        let parameters: Parameters = [:]
+        let headers: HTTPHeaders = [
+            "Authorization" : token,
+            "Content-Type": "application/json"
+        ]
+        let encoding: ParameterEncoding = URLEncoding.default
+        
+        AF.request(url,
+                   method: .delete,
+                   parameters: parameters,
+                   encoding: encoding,
+                   headers: headers)
+            .responseString {
+                response in
+                completion(response.response?.statusCode == 200)
         }
     }
     

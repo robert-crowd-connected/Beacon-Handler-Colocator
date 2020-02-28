@@ -50,7 +50,8 @@ class BeaconHandlingService {
     
     public func install(iBeacon beacon: CLBeacon, at location: CLLocationCoordinate2D, completion: @escaping (Bool, String?) -> Void) {
         SwiftSpinner.show("Installing iBeacon " + String(format: "%04d", Int(truncating: beacon.minor)))
-        let serverBeacon = ServerBeacon(id: composeBeaconID(region: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor)),
+        let beaconId = composeBeaconID(region: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor))
+        let serverBeacon = ServerBeacon(id: beaconId,
                                         lat: location.latitude,
                                         lng: location.longitude,
                                         alt: 1,
@@ -77,11 +78,11 @@ class BeaconHandlingService {
     }
     
     public func retrieveBeaconManual(regionUUID: String, major: Int, minor: Int, completion: @escaping (Bool, String?) -> Void) {
-        SwiftSpinner.show("Retrieving iBeacon " + String(format: "%04d", minor))
+//        SwiftSpinner.show("Retrieving iBeacon " + String(format: "%04d", minor))
         let beaconId = composeBeaconID(region: regionUUID, major: major, minor: minor)
         
         serverBeaconsService.getBeacon(withId: beaconId) { success, errorMessage, serverBeacon in
-            SwiftSpinner.hide()
+//            SwiftSpinner.hide()
             if success {
                 if var updatedServerBeacon = serverBeacon {
                     updatedServerBeacon.beaconState = "RETRIEVED"
@@ -99,6 +100,31 @@ class BeaconHandlingService {
                 }
             } else {
                 completion(false, errorMessage)
+            }
+        }
+    }
+    
+    public func deleteAndInstallBeacon(iBeacon beacon: CLBeacon, at location: CLLocationCoordinate2D, completion: @escaping (Bool, String?) -> Void) {
+        SwiftSpinner.show("Deleting + Installing iBeacon " + String(format: "%04d", Int(truncating: beacon.minor)))
+        let beaconId = composeBeaconID(region: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor))
+        let serverBeacon = ServerBeacon(id: beaconId,
+                                        lat: location.latitude,
+                                        lng: location.longitude,
+                                        alt: 1,
+                                        surfaceId: serverBeaconsService.surfaceId,
+                                        beaconType: "IBEACON",
+                                        beaconState: "ACTIVE")
+        
+        serverBeaconsService.deleteBeacon(withID: beaconId) { _ in
+            self.serverBeaconsService.putBeacon(beacon: serverBeacon) { success, errorMessage in
+                SwiftSpinner.hide()
+                if success {
+                    self.installSoundEffect?.play()
+                    self.addBeaconInHistoric(actionType: .install, region: beacon.uuid.uuidString, major: beacon.major, minor: beacon.minor, coordinates: location)
+                    completion(true, errorMessage)
+                } else {
+                    completion(false, errorMessage)
+                }
             }
         }
     }

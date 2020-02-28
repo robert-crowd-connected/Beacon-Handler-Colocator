@@ -241,22 +241,22 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BlO-nU-zOn">
-                                                    <rect key="frame" x="26" y="19" width="346" height="30"/>
+                                                    <rect key="frame" x="26" y="19" width="346" height="16"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="Bsd-nF-TY9"/>
+                                                        <constraint firstAttribute="height" constant="16" id="Bsd-nF-TY9"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coordinates" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ikx-qN-O2N">
-                                                    <rect key="frame" x="26" y="81.5" width="346" height="16.5"/>
+                                                    <rect key="frame" x="26" y="67.5" width="346" height="16.5"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UUID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rdw-78-w1v">
-                                                    <rect key="frame" x="26" y="57" width="346" height="16.5"/>
+                                                    <rect key="frame" x="26" y="43" width="346" height="16.5"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -453,7 +453,6 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="actionInstall:" destination="mDw-Zg-L4E" eventType="touchUpInside" id="rHE-te-hq9"/>
-                                    <action selector="actionInstallBeacon:" destination="BYZ-38-t0r" eventType="touchUpInside" id="C4f-rd-kYF"/>
                                 </connections>
                             </button>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="y5f-7r-Mta">
@@ -541,6 +540,26 @@
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="90M-rY-nH4">
+                                <rect key="frame" x="24" y="761" width="132" height="35"/>
+                                <color key="backgroundColor" red="0.53747620559999998" green="0.53747620559999998" blue="0.53747620559999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="132" id="Eya-2G-rSg"/>
+                                    <constraint firstAttribute="height" constant="35" id="wFb-km-zKW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Delete + Install">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="actionDeleteAndInstallBeacon:" destination="mDw-Zg-L4E" eventType="touchUpInside" id="0bP-tJ-pRd"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -554,6 +573,7 @@
                             <constraint firstItem="7VW-0D-wMU" firstAttribute="top" secondItem="JUc-PU-gqU" secondAttribute="top" constant="20" id="Cri-LR-OB2"/>
                             <constraint firstItem="7VW-0D-wMU" firstAttribute="leading" secondItem="ATk-7w-byG" secondAttribute="trailing" constant="80" id="DhD-nE-G1l"/>
                             <constraint firstItem="lpQ-iI-AHS" firstAttribute="top" secondItem="y5f-7r-Mta" secondAttribute="bottom" constant="60" id="FrA-Hl-ymh"/>
+                            <constraint firstItem="90M-rY-nH4" firstAttribute="top" secondItem="lpQ-iI-AHS" secondAttribute="bottom" constant="12" id="IUn-9D-nuX"/>
                             <constraint firstItem="rC0-fJ-gdw" firstAttribute="centerX" secondItem="JUc-PU-gqU" secondAttribute="centerX" id="JYj-eH-E5A"/>
                             <constraint firstItem="5Sr-Uo-Ef8" firstAttribute="centerX" secondItem="0SY-qQ-C2I" secondAttribute="centerX" id="LBb-qC-Z0l"/>
                             <constraint firstItem="lpQ-iI-AHS" firstAttribute="leading" secondItem="pd3-Wh-Ruh" secondAttribute="leading" constant="24" id="MYB-J8-TFd"/>
@@ -564,6 +584,7 @@
                             <constraint firstItem="ATk-7w-byG" firstAttribute="centerY" secondItem="lpQ-iI-AHS" secondAttribute="centerY" id="fgI-Tf-7Y6"/>
                             <constraint firstItem="5Sr-Uo-Ef8" firstAttribute="top" secondItem="pd3-Wh-Ruh" secondAttribute="top" constant="25" id="hnl-hH-Vkj"/>
                             <constraint firstItem="zv3-Vm-Ibm" firstAttribute="leading" secondItem="pd3-Wh-Ruh" secondAttribute="leading" constant="16" id="kTl-Cg-lvz"/>
+                            <constraint firstItem="90M-rY-nH4" firstAttribute="leading" secondItem="pd3-Wh-Ruh" secondAttribute="leading" constant="24" id="mpt-wQ-egD"/>
                             <constraint firstItem="7VW-0D-wMU" firstAttribute="centerY" secondItem="lpQ-iI-AHS" secondAttribute="centerY" id="uLs-ow-RfS"/>
                             <constraint firstItem="y5f-7r-Mta" firstAttribute="leading" secondItem="pd3-Wh-Ruh" secondAttribute="leading" id="xQV-jv-lpk"/>
                             <constraint firstItem="rC0-fJ-gdw" firstAttribute="top" secondItem="JUc-PU-gqU" secondAttribute="bottom" constant="15" id="yZQ-m4-vbo"/>
@@ -575,6 +596,7 @@
                         <outlet property="beaconDataLabel" destination="zv3-Vm-Ibm" id="ky1-s1-C9e"/>
                         <outlet property="beaconUUIDLabel" destination="Xdg-NB-vGz" id="Okd-Ev-hxx"/>
                         <outlet property="cancelButton" destination="3L3-2d-Cyn" id="sXC-lT-yD9"/>
+                        <outlet property="deleteAndInstallButton" destination="90M-rY-nH4" id="vLj-aK-5ex"/>
                         <outlet property="installButton" destination="lpQ-iI-AHS" id="v3c-c3-qSb"/>
                         <outlet property="mapView" destination="y5f-7r-Mta" id="ZDp-JN-mcI"/>
                         <outlet property="moveDownButton" destination="rC0-fJ-gdw" id="dn8-Pv-0o3"/>
@@ -720,7 +742,6 @@
                                         <textInputTraits key="textInputTraits"/>
                                         <connections>
                                             <action selector="actionChangeAppKey:" destination="jmd-nI-XXI" eventType="editingDidEnd" id="7qG-vD-xiI"/>
-                                            <action selector="actionChangedRegion:" destination="jmd-nI-XXI" eventType="editingDidEnd" id="1Ua-kI-G4U"/>
                                         </connections>
                                     </textField>
                                 </subviews>
@@ -847,7 +868,6 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="actionContinue:" destination="jmd-nI-XXI" eventType="touchUpInside" id="ZyO-b2-Jdi"/>
                                     <action selector="actionRetrieveBeacon:" destination="3gx-j4-h0H" eventType="touchUpInside" id="K3T-u9-JZd"/>
                                 </connections>
                             </button>

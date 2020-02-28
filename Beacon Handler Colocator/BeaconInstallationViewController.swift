@@ -25,6 +25,7 @@ class BeaconInstallationViewController: UIViewController {
     @IBOutlet weak var moveLeftButton: UIButton!
     
     @IBOutlet weak var installButton: UIButton!
+    @IBOutlet weak var deleteAndInstallButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     
     public var beacon: CLBeacon!
@@ -40,6 +41,10 @@ class BeaconInstallationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        #if DEBUG
+        deleteAndInstallButton.isHidden = false
+        #endif
         
         beaconDataLabel.text = " Major \(beacon.major)  Minor \(beacon.minor)"
         beaconUUIDLabel.text = "UUID \(beacon.uuid)"
@@ -62,6 +67,7 @@ class BeaconInstallationViewController: UIViewController {
     
     private func setupMap() {
         mapView.delegate = self
+        mapView.showsBuildings = true
         changeMoveBeaconButtonsVisibility(to: false)
         
         UpdatingServerBeaconsService.shared.getSurfaceTileName() { success, tileName in
@@ -235,6 +241,47 @@ class BeaconInstallationViewController: UIViewController {
                 self.present(failureAlert, animated: false, completion: nil)
             }
         }
+    }
+    
+    @IBAction func actionDeleteAndInstallBeacon(_ sender: Any) {
+        #if DEBUG
+        
+        if beaconAnnotation == nil {
+            let alert = UIAlertController(title: "Location missing",
+                                                 message: "Add place of installment  on the map before submit", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+            self.present(alert, animated: false, completion: { })
+            return
+        }
+        
+        BeaconHandlingService.shared.deleteAndInstallBeacon(iBeacon: beacon, at: beaconAnnotation!.coordinate) { success, erroMessage in
+            if success {
+                let successAlert = UIAlertController(title: "iBeacon successfully deleted + installed!",
+                                                     message: "Latitude \(self.beaconAnnotation!.coordinate.latitude)\nLongitude \(self.beaconAnnotation!.coordinate.longitude)", preferredStyle: .alert)
+                self.present(successAlert, animated: false, completion: {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+                        self.delegate?.stopMonitoringBeacon(beacon: self.beacon)
+                        self.delegate?.startScanner()
+                        self.dismiss(animated: true, completion: {
+                            self.navigationController?.popViewController(animated: true)
+                        })
+                    }
+                })
+            } else {
+                let failureAlert = UIAlertController(title: "iBeacon delete + installation failed!",
+                                                     message: erroMessage ?? kDefaultRequestErrorMessage, preferredStyle: .alert)
+                let action = UIAlertAction(title: "Okay", style: .default) { _ in
+                    self.dismiss(animated: true, completion: {
+                        self.delegate?.startScanner()
+                        self.navigationController?.popViewController(animated: true)
+                    })
+                }
+                failureAlert.addAction(action)
+                self.present(failureAlert, animated: false, completion: nil)
+            }
+        }
+        
+        #endif
     }
     
     @IBAction func actionCancelInstallation(_ sender: Any) {
