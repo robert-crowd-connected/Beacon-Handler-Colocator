@@ -149,4 +149,9 @@ class OnboardingSettingsViewController: UIViewController {
         guard let handleBeaconsManualViewController = storyboard?.instantiateViewController(withIdentifier: "HandleBeaconsManualViewController") as? RetrieveBeaconsManualViewController else { return }
         self.navigationController?.pushViewController(handleBeaconsManualViewController, animated: true)
     }
+    
+    @IBAction func actionBack(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
 }

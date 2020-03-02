@@ -26,26 +26,26 @@ class BeaconHandlingService {
     
     private var installSoundEffect: AVAudioPlayer?
     private var retrieveSoundEffect: AVAudioPlayer?
-    
+    private var errorSoundEffect: AVAudioPlayer?
     
     private func configureSoundEffects() {
         let pathInstall = Bundle.main.path(forResource: "installBeacon.mp3", ofType: nil)!
         let urlInstall = URL(fileURLWithPath: pathInstall)
-
         do {
             installSoundEffect = try AVAudioPlayer(contentsOf: urlInstall)
-        } catch {
-            // couldn't load file :(
-        }
+        } catch { }
 
         let pathRetrieve = Bundle.main.path(forResource: "retrieveBeacon.mp3", ofType:nil)!
         let urlRetrieve = URL(fileURLWithPath: pathRetrieve)
-
         do {
             retrieveSoundEffect = try AVAudioPlayer(contentsOf: urlRetrieve)
-        } catch {
-            // couldn't load file :(
-        }
+        } catch { }
+        
+        let pathError = Bundle.main.path(forResource: "error.mp3", ofType:nil)!
+        let urlError = URL(fileURLWithPath: pathError)
+        do {
+            errorSoundEffect = try AVAudioPlayer(contentsOf: urlError)
+        } catch { }
     }
     
     public func install(iBeacon beacon: CLBeacon, at location: CLLocationCoordinate2D, completion: @escaping (Bool, String?) -> Void) {
@@ -66,6 +66,7 @@ class BeaconHandlingService {
                 self.addBeaconInHistoric(actionType: .install, region: beacon.uuid.uuidString, major: beacon.major, minor: beacon.minor, coordinates: location)
                 completion(true, errorMessage)
             } else {
+                self.errorSoundEffect?.play()
                 completion(false, errorMessage)
             }
         }
@@ -78,11 +79,11 @@ class BeaconHandlingService {
     }
     
     public func retrieveBeaconManual(regionUUID: String, major: Int, minor: Int, completion: @escaping (Bool, String?) -> Void) {
-//        SwiftSpinner.show("Retrieving iBeacon " + String(format: "%04d", minor))
+        SwiftSpinner.show("Retrieving iBeacon " + String(format: "%04d", minor))
         let beaconId = composeBeaconID(region: regionUUID, major: major, minor: minor)
         
         serverBeaconsService.getBeacon(withId: beaconId) { success, errorMessage, serverBeacon in
-//            SwiftSpinner.hide()
+            SwiftSpinner.hide()
             if success {
                 if var updatedServerBeacon = serverBeacon {
                     updatedServerBeacon.beaconState = "RETRIEVED"
@@ -92,13 +93,16 @@ class BeaconHandlingService {
                             self.addBeaconInHistoric(actionType: .retrieve, region: regionUUID, major: NSNumber(value: major), minor: NSNumber(value: minor))
                             completion(true, nil)
                         } else {
+                            self.errorSoundEffect?.play()
                             completion(false, updateErrorMessage)
                         }
                     }
                 } else {
+                    self.errorSoundEffect?.play()
                     completion(false, errorMessage)
                 }
             } else {
+                self.errorSoundEffect?.play()
                 completion(false, errorMessage)
             }
         }
@@ -123,6 +127,7 @@ class BeaconHandlingService {
                     self.addBeaconInHistoric(actionType: .install, region: beacon.uuid.uuidString, major: beacon.major, minor: beacon.minor, coordinates: location)
                     completion(true, errorMessage)
                 } else {
+                    self.errorSoundEffect?.play()
                     completion(false, errorMessage)
                 }
             }
