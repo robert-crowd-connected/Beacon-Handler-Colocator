@@ -481,7 +481,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.crowdconnected.ColocatorSimpleIntegrationApp.Beacon-Handler-Colocator";
+				PRODUCT_BUNDLE_IDENTIFIER = com.crowdconnected.BeaconWizardColocator;
 				PRODUCT_NAME = "Beacon Wizard Colocator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -501,7 +501,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.crowdconnected.ColocatorSimpleIntegrationApp.Beacon-Handler-Colocator";
+				PRODUCT_BUNDLE_IDENTIFIER = com.crowdconnected.BeaconWizardColocator;
 				PRODUCT_NAME = "Beacon Wizard Colocator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

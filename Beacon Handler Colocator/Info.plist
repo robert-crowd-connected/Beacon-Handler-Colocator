@@ -20,6 +20,12 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Want to get location always ans while in use</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Want to get location always</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Want to get location when in use</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -39,6 +45,10 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -60,18 +70,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    
-    <key>UIBackgroundModes</key>
-       <array>
-           <string>location</string>
-       </array>
-       
-       <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-       <string>Want to get location always ans while in use</string>
-       <key>NSLocationAlwaysUsageDescription</key>
-       <string>Want to get location always</string>
-       <key>NSLocationWhenInUseUsageDescription</key>
-       <string>Want to get location when in use</string>
-       
 </dict>
 </plist>
