@@ -45,6 +45,8 @@
 			</array>
 		</dict>
 	</dict>
+    <key>MGLMapboxAccessToken</key>
+    <string>pk.eyJ1Ijoicm9iZXJ0dGNvZGUiLCJhIjoiY2s3dWI3ZDNmMHhleDNuc2Zxdm52OTNnOCJ9._VRa2ZkS_pNOMGyvfqa7wA</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

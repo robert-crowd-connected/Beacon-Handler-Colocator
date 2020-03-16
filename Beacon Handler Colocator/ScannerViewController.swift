@@ -92,6 +92,12 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         configureViews()
         configureScanner()
         startScanner()
+        
+        //TODO Remove this. Only test purposes
+        guard let nonGeoBeaconVC = storyboard?.instantiateViewController(withIdentifier: "NonGeoBeaconInstallationViewController") as? NonGeoBeaconInstallationViewController else {
+            return
+        }
+        self.navigationController?.pushViewController(nonGeoBeaconVC, animated: true)
     }
     
     private func configureViews() {
