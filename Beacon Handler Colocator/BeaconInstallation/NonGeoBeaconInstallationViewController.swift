@@ -55,14 +55,14 @@ class NonGeoBeaconInstallationViewController: UIViewController {
                 self.tileWidth = width!
                 self.tileHeight = height!
                 
-                //TODO Download tile with name tileName and display it in mapImageView
+                self.mapImageView.contentMode = .scaleAspectFit
+                let fullDownloadString = "https://colocator-tiles.s3-eu-west-1.amazonaws.com/surfacete/" + tileName!
+                
+                Downloader.downloadImage(from: fullDownloadString) { image in
+                    self.resizeUIImageView(forImage: image)
+                }
             }
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        resizeUIImageView()
     }
     
     private func configureUI() {
@@ -79,7 +79,6 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         gradient.startPoint = CGPoint(x: 0.0,y: 0.5)
         gradient.endPoint = CGPoint(x: 1.0,y: 0.5)
         installButton.layer.insertSublayer(gradient, at: 0)
-        
     }
     
     private func configureScrollView() {
@@ -91,10 +90,11 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         mapScrollView.delegatePass = self
     }
     
-    private func resizeUIImageView() {
-        guard let image = UIImage(named: "readSurface") else { return }
+    private func resizeUIImageView(forImage image: UIImage) {
         let ratio = image.size.width / image.size.height
         let newWidth = insideScrollView.frame.height * ratio
+        
+        mapImageView.image = image
         
         mapImageView.frame.size = CGSize(width: newWidth, height: insideScrollView.frame.height)
         mapImageView.frame = CGRect(x: 0, y: 0, width: newWidth, height: insideScrollView.frame.height)
@@ -107,12 +107,6 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         mapImageView.rightAnchor.constraint(equalTo: insideScrollView.rightAnchor, constant: 0).isActive = true
         
         view.layoutSubviews()
-    }
-    
-    override func viewDidLayoutSubviews() {
-//        print("\nDid layout subviews")
-//        print("InsideScrollView \(insideScrollView.frame)")
-//        print("MapImageView \(mapImageView.frame)")
     }
     
     private func addTapGestures() {

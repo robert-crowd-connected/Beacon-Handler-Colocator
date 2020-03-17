@@ -487,7 +487,7 @@
                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oHQ-Vm-xpz">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="320"/>
                                         <subviews>
-                                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="readSurface" translatesAutoresizingMaskIntoConstraints="NO" id="gBV-XG-AV1">
+                                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gBV-XG-AV1">
                                                 <rect key="frame" x="-193" y="0.0" width="800" height="320"/>
                                             </imageView>
                                         </subviews>
@@ -1361,7 +1361,6 @@
         <image name="install" width="32" height="32"/>
         <image name="left-arrow" width="16" height="16"/>
         <image name="manualMode" width="32" height="32"/>
-        <image name="readSurface" width="800" height="231.5"/>
         <image name="retrieve" width="32" height="32"/>
         <image name="right-arrow" width="16" height="16"/>
         <image name="settings" width="32" height="32"/>
