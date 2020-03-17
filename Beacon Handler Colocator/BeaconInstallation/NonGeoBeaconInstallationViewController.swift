@@ -85,15 +85,19 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         mapScrollView.isScrollEnabled = true
         mapScrollView.minimumZoomScale = 1.0
         mapScrollView.maximumZoomScale = 1.0
-        
+    
         mapScrollView.delegate = self
         mapScrollView.delegatePass = self
     }
     
     private func resizeUIImageView(forImage image: UIImage) {
         let ratio = image.size.width / image.size.height
-        let newWidth = insideScrollView.frame.height * ratio
         
+        // Standard Height: 320
+        // Zoom x2 640
+        
+        let newWidth = insideScrollView.frame.height * ratio
+        // let newWidth = 640 * ratio
         mapImageView.image = image
         
         mapImageView.frame.size = CGSize(width: newWidth, height: insideScrollView.frame.height)
@@ -102,6 +106,11 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         insideScrollView.widthAnchor.constraint(equalToConstant: CGFloat(newWidth)).isActive = true
         insideScrollView.leftAnchor.constraint(equalTo: mapScrollView.contentLayoutGuide.leftAnchor, constant: 0).isActive = true
         insideScrollView.rightAnchor.constraint(equalTo: mapScrollView.contentLayoutGuide.rightAnchor, constant: 0).isActive = true
+        
+//         mapScrollView.frameLayoutGuide.heightAnchor.constraint(equalToConstant: 640).isActive = true
+//         insideScrollView.heightAnchor.constraint(equalToConstant: CGFloat(640)).isActive = true
+//         insideScrollView.topAnchor.constraint(equalTo: mapScrollView.contentLayoutGuide.topAnchor, constant: 0).isActive = true
+//         insideScrollView.bottomAnchor.constraint(equalTo: mapScrollView.contentLayoutGuide.bottomAnchor, constant: 0).isActive = true
         
         mapImageView.leftAnchor.constraint(equalTo: insideScrollView.leftAnchor, constant: 0).isActive = true
         mapImageView.rightAnchor.constraint(equalTo: insideScrollView.rightAnchor, constant: 0).isActive = true
