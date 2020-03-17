@@ -92,12 +92,6 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         configureViews()
         configureScanner()
         startScanner()
-        
-        //TODO Remove this. Only test purposes
-        guard let nonGeoBeaconVC = storyboard?.instantiateViewController(withIdentifier: "NonGeoBeaconInstallationViewController") as? NonGeoBeaconInstallationViewController else {
-            return
-        }
-        self.navigationController?.pushViewController(nonGeoBeaconVC, animated: true)
     }
     
     private func configureViews() {
@@ -201,12 +195,23 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         guard let beaconToBeInstalled = closestBeacon else { return }
         stopScanner()
         
-        guard let beaconInstallationViewController = storyboard?.instantiateViewController(withIdentifier: "BeaconInstallationViewController")
-            as? BeaconInstallationViewController else { return }
-        beaconInstallationViewController.beacon = beaconToBeInstalled
-        beaconInstallationViewController.delegate = self
+        let geoMapInstallation = UserDefaults.standard.value(forKey: "isGeoMap") as? Bool ?? false
         
-        navigationController?.pushViewController(beaconInstallationViewController, animated: true)
+        if geoMapInstallation {
+            guard let beaconInstallationViewController = storyboard?.instantiateViewController(withIdentifier: "BeaconInstallationViewController")
+                as? BeaconInstallationViewController else { return }
+            beaconInstallationViewController.beacon = beaconToBeInstalled
+            beaconInstallationViewController.delegate = self
+            
+            navigationController?.pushViewController(beaconInstallationViewController, animated: true)
+        } else {
+            guard let nonGeoBeaconViewController = storyboard?.instantiateViewController(withIdentifier: "NonGeoBeaconInstallationViewController")
+                as? NonGeoBeaconInstallationViewController else { return }
+            nonGeoBeaconViewController.beacon = beaconToBeInstalled
+            nonGeoBeaconViewController.delegate = self
+            
+            navigationController?.pushViewController(nonGeoBeaconViewController, animated: true)
+        }
     }
        
     private func retrieveBeacon() {

@@ -359,6 +359,7 @@
                                     <color key="titleColor" red="0.0" green="0.29628838280000003" blue="0.49997976039999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
+                                    <action selector="actionCancelInstallation:" destination="lbo-Ny-Xu2" eventType="touchUpInside" id="ENT-hS-GEj"/>
                                     <action selector="actionCancelInstallation:" destination="mDw-Zg-L4E" eventType="touchUpInside" id="kFb-8D-czq"/>
                                 </connections>
                             </button>
@@ -477,6 +478,7 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="actionDeleteAndInstallBeacon:" destination="mDw-Zg-L4E" eventType="touchUpInside" id="jjE-o7-eLH"/>
+                                    <action selector="actionDeleteAndInstallBeacon:" destination="lbo-Ny-Xu2" eventType="touchUpInside" id="wsk-or-RPW"/>
                                 </connections>
                             </button>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" bounces="NO" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Vh-6g-C0w" customClass="PassTouchesScrollView" customModule="Beacon_Wizard_Colocator" customModuleProvider="target">
@@ -485,7 +487,7 @@
                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oHQ-Vm-xpz">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="320"/>
                                         <subviews>
-                                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="readSurface" translatesAutoresizingMaskIntoConstraints="NO" id="gBV-XG-AV1">
+                                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="readSurface" translatesAutoresizingMaskIntoConstraints="NO" id="gBV-XG-AV1">
                                                 <rect key="frame" x="-193" y="0.0" width="800" height="320"/>
                                             </imageView>
                                         </subviews>
@@ -548,13 +550,19 @@
                         <viewLayoutGuide key="safeArea" id="XZU-xX-wGt"/>
                     </view>
                     <connections>
+                        <outlet property="beaconDataLabel" destination="MM3-6a-bPs" id="V5U-D1-s4z"/>
+                        <outlet property="beaconUUIDLabel" destination="7fF-Yb-wRI" id="be3-tW-5TW"/>
+                        <outlet property="cancelButton" destination="eHH-FX-Wne" id="jSP-1j-ejs"/>
+                        <outlet property="deleteAndInstallButton" destination="Axf-RN-jPL" id="0xp-g0-Xcb"/>
                         <outlet property="insideScrollView" destination="oHQ-Vm-xpz" id="OhM-Hl-tgP"/>
+                        <outlet property="installButton" destination="j0C-zf-B90" id="4jh-Vc-wfH"/>
                         <outlet property="mapImageView" destination="gBV-XG-AV1" id="kfv-dF-mln"/>
                         <outlet property="mapScrollView" destination="3Vh-6g-C0w" id="jxE-oI-L9x"/>
                         <outlet property="moveDownButton" destination="Nb2-g4-IQX" id="nJb-Ca-ufQ"/>
                         <outlet property="moveLeftButton" destination="OYc-Jz-U7d" id="gxu-Mb-LW3"/>
                         <outlet property="moveRightButton" destination="34U-rS-6AY" id="hxf-lh-Bb5"/>
                         <outlet property="moveUpButton" destination="lLJ-Bb-fKH" id="hVy-9B-yqJ"/>
+                        <outlet property="titleLabel" destination="3NV-Wu-ynS" id="ddM-pw-9J9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mZV-VY-hWo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

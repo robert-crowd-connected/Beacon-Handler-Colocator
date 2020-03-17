@@ -82,6 +82,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		972CE24B2420EF32001B5F89 /* BeaconInstallation */ = {
+			isa = PBXGroup;
+			children = (
+				9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */,
+				974E3898241F7F3A0093EF03 /* NonGeoBeaconInstallationViewController.swift */,
+				974E389C241FBD010093EF03 /* PassTouchesScrollView.swift */,
+			);
+			path = BeaconInstallation;
+			sourceTree = "<group>";
+		};
 		9794015023FEF42800670FE3 = {
 			isa = PBXGroup;
 			children = (
@@ -108,10 +118,8 @@
 				9794017023FEF48F00670FE3 /* Main.storyboard */,
 				9794016023FEF42800670FE3 /* ScannerViewController.swift */,
 				AAE07AEC2409358900674A0D /* BeaconsPositionCalculator.swift */,
-				9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */,
-				974E3898241F7F3A0093EF03 /* NonGeoBeaconInstallationViewController.swift */,
-				974E389C241FBD010093EF03 /* PassTouchesScrollView.swift */,
 				AAE07AD92406A42900674A0D /* RetrieveBeaconsManualViewController.swift */,
+				972CE24B2420EF32001B5F89 /* BeaconInstallation */,
 				AAE07AEB2409340600674A0D /* Resources */,
 				AAE07AEA240933C500674A0D /* ActionsHistoric */,
 				AAE07ADC2406BDCC00674A0D /* Onboarding */,

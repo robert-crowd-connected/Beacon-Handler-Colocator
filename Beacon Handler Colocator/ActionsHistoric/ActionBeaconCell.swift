@@ -21,8 +21,10 @@ class ActionBeaconCell: UITableViewCell {
         UUIDLabel.text = "UUID \(action.regionUUID)"
         if let coord = action.coordinates {
             coordinatesLabel.text = "Lat \(coord.latitude)   Lon \(coord.longitude)"
+        } else if let position = action.position {
+            coordinatesLabel.text = "X \(position.x)   Y \(position.y)"
         } else {
-            coordinatesLabel.text = "Unknown Coordinates"
+            coordinatesLabel.text = "Beacon Retrieved"
         }
     }
 }

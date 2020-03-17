@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreLocation
+import UIKit
 
 class BeaconAction {
     public var actionType: BeaconSessionType
@@ -15,16 +16,17 @@ class BeaconAction {
     public var major: Int
     public var minor: Int
     public var coordinates: CLLocationCoordinate2D?
-    
+    public var position: CGPoint?
     public var timestamp: Date
     public var description: String
     
-    public init(type: BeaconSessionType, region: String, major: Int, minor: Int, coordinates: CLLocationCoordinate2D?) {
+    public init(type: BeaconSessionType, region: String, major: Int, minor: Int, coordinates: CLLocationCoordinate2D?, position: CGPoint?) {
         self.actionType = type
         self.regionUUID = region
         self.major = major
         self.minor = minor
         self.coordinates = coordinates
+        self.position = position
         
         self.timestamp = Date()
         self.description = "Major \(major)  Minor \(minor)  on  \(timestamp.description)"

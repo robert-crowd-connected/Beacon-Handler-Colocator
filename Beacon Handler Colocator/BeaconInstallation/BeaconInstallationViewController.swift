@@ -46,6 +46,13 @@ class BeaconInstallationViewController: UIViewController {
         deleteAndInstallButton.isHidden = false
         #endif
         
+        configureUI()
+        addTapGestures()
+        setupMap()
+        setupLocationManager()
+    }
+    
+    private func configureUI() {
         beaconDataLabel.text = " Major \(beacon.major)  Minor \(beacon.minor)"
         beaconUUIDLabel.text = "UUID \(beacon.uuid)"
         
@@ -59,10 +66,6 @@ class BeaconInstallationViewController: UIViewController {
         gradient.startPoint = CGPoint(x: 0.0,y: 0.5)
         gradient.endPoint = CGPoint(x: 1.0,y: 0.5)
         installButton.layer.insertSublayer(gradient, at: 0)
-        
-        addTapGestures()
-        setupMap()
-        setupLocationManager()
     }
     
     private func setupMap() {
