@@ -195,9 +195,9 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         guard let beaconToBeInstalled = closestBeacon else { return }
         stopScanner()
         
-        let geoMapInstallation = UserDefaults.standard.value(forKey: kGeoPositionMapStorageKey) as? Bool ?? false
+        let geoMapInstallation = UserDefaults.standard.value(forKey: kGeoPositionMapStorageKey) as? Int ?? 1
         
-        if geoMapInstallation {
+        if geoMapInstallation == 1 {
             guard let beaconInstallationViewController = storyboard?.instantiateViewController(withIdentifier: "BeaconInstallationViewController")
                 as? BeaconInstallationViewController else { return }
             beaconInstallationViewController.beacon = beaconToBeInstalled

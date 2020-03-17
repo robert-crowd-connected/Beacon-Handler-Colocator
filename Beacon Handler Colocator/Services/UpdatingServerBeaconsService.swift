@@ -324,6 +324,7 @@ class UpdatingServerBeaconsService {
                 completion(false, kNoAuthorizationDataFound, nil)
                 return
         }
+    
         guard let url = URL(string: "\(baseURL)\(beaconSufix)/\(id)?app=\(key)?returnType=geojson") else {
             completion(false, kWrongUrlFormat, nil)
             return
@@ -331,8 +332,7 @@ class UpdatingServerBeaconsService {
         
         let parameters: Parameters = [:]
         let headers: HTTPHeaders = [
-            "Authorization" : token//,
-          //  "Content-Type": "application/json"
+            "Authorization" : token
         ]
         let encoding: ParameterEncoding = URLEncoding.default
         

@@ -920,22 +920,49 @@
                                     <action selector="actionChangedServerUsed:" destination="rWW-nq-sg2" eventType="valueChanged" id="BX0-1z-b9v"/>
                                 </connections>
                             </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Map Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8OR-Vg-UCd">
+                                <rect key="frame" x="32" y="235" width="130" height="19"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="130" id="f8e-IH-Rlg"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Psp-gB-Dz5">
+                                <rect key="frame" x="32" y="274" width="350" height="32"/>
+                                <segments>
+                                    <segment title="Non Geo"/>
+                                    <segment title="Geo"/>
+                                </segments>
+                                <connections>
+                                    <action selector="actionChangedMapType:" destination="rWW-nq-sg2" eventType="valueChanged" id="pN4-Cr-Pkr"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="8OR-Vg-UCd" firstAttribute="top" secondItem="dK3-xL-ez0" secondAttribute="bottom" constant="32" id="2z1-mx-PBS"/>
                             <constraint firstItem="sbj-oJ-6Yj" firstAttribute="top" secondItem="VFB-4l-IFa" secondAttribute="top" constant="25" id="4uy-1a-B8e"/>
+                            <constraint firstItem="VFB-4l-IFa" firstAttribute="trailing" secondItem="Psp-gB-Dz5" secondAttribute="trailing" constant="32" id="5WO-lM-h6l"/>
+                            <constraint firstItem="Psp-gB-Dz5" firstAttribute="top" secondItem="8OR-Vg-UCd" secondAttribute="bottom" constant="20" id="7dE-sW-6gX"/>
                             <constraint firstItem="sbj-oJ-6Yj" firstAttribute="centerX" secondItem="7qz-so-VEk" secondAttribute="centerX" id="Ais-q5-rQG"/>
+                            <constraint firstItem="8OR-Vg-UCd" firstAttribute="leading" secondItem="VFB-4l-IFa" secondAttribute="leading" constant="32" id="GEX-iE-bbH"/>
                             <constraint firstItem="fg0-9E-GBd" firstAttribute="leading" secondItem="7qz-so-VEk" secondAttribute="leading" constant="8" id="IYm-4L-HQx"/>
                             <constraint firstItem="VFB-4l-IFa" firstAttribute="trailing" secondItem="dK3-xL-ez0" secondAttribute="trailing" constant="32" id="MtL-AM-OMN"/>
                             <constraint firstItem="k4i-cK-biF" firstAttribute="top" secondItem="sbj-oJ-6Yj" secondAttribute="bottom" constant="40" id="OYN-6q-Nni"/>
                             <constraint firstItem="dK3-xL-ez0" firstAttribute="top" secondItem="k4i-cK-biF" secondAttribute="bottom" constant="20" id="Qsf-AU-EwB"/>
                             <constraint firstItem="fg0-9E-GBd" firstAttribute="top" secondItem="VFB-4l-IFa" secondAttribute="top" constant="23" id="UXW-eZ-cKe"/>
+                            <constraint firstItem="Psp-gB-Dz5" firstAttribute="leading" secondItem="VFB-4l-IFa" secondAttribute="leading" constant="32" id="VMD-90-xfc"/>
                             <constraint firstItem="dK3-xL-ez0" firstAttribute="leading" secondItem="VFB-4l-IFa" secondAttribute="leading" constant="32" id="ehC-HC-kEr"/>
                             <constraint firstItem="k4i-cK-biF" firstAttribute="leading" secondItem="VFB-4l-IFa" secondAttribute="leading" constant="32" id="y1d-bf-yXC"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="VFB-4l-IFa"/>
                     </view>
                     <connections>
+                        <outlet property="mapTypeLabel" destination="8OR-Vg-UCd" id="eJK-o9-1mG"/>
+                        <outlet property="mapTypeSegmentedControl" destination="Psp-gB-Dz5" id="BkX-bR-jiY"/>
                         <outlet property="serverUsedLabel" destination="k4i-cK-biF" id="R91-69-mYn"/>
                         <outlet property="serverUsedSegmentedControl" destination="dK3-xL-ez0" id="q8A-Hl-5yl"/>
                         <outlet property="titleLabel" destination="sbj-oJ-6Yj" id="yn0-I1-jkO"/>

@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.set("2c2d41fb-d4c5-4a4d-a49a-e8fd5c256293", forKey: kRegionUUIDStorageKey)
         UserDefaults.standard.set(0, forKey: kMajorValueStorageKey)
         
-        UserDefaults.standard.set(false, forKey: kGeoPositionMapStorageKey)
+        UserDefaults.standard.set(0, forKey: kGeoPositionMapStorageKey)
         
         return true
     }
