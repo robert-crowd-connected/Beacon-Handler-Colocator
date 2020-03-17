@@ -16,12 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enable = true
         
         UserDefaults.standard.set("surfkeya", forKey: kApplicationKeyStorageKey)
+        UserDefaults.standard.set(0, forKey: kServerUsedIndexStorageKey)
+        
         UserDefaults.standard.set("Basic QzdCRjcwQjE4MjBFQjU3N0YxRjc0NzVCMEQ2QTZFRTY6MUMzRTgzM0E4REZCRkYzNTgxODVFQkU2NDA0NjIwRjk0RjlGRDcyRTRDRTU4NDAyQ0M3OTQwRUQxRUIyMzNFQw==", forKey: kAuthorizationTokenStorageKey)
         
         UserDefaults.standard.set("2c2d41fb-d4c5-4a4d-a49a-e8fd5c256293", forKey: kRegionUUIDStorageKey)
         UserDefaults.standard.set(0, forKey: kMajorValueStorageKey)
         
-        UserDefaults.standard.set(false, forKey: "isGeoMap")
+        UserDefaults.standard.set(false, forKey: kGeoPositionMapStorageKey)
         
         return true
     }

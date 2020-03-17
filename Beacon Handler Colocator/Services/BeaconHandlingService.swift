@@ -97,7 +97,7 @@ class BeaconHandlingService {
     }
     
     public func retrieve(iBeacon beacon: CLBeacon, completion: @escaping (Bool, String?) -> Void) {
-        let geoMapInstallation = UserDefaults.standard.value(forKey: "isGeoMap") as? Bool ?? false
+        let geoMapInstallation = UserDefaults.standard.value(forKey: kGeoPositionMapStorageKey) as? Bool ?? false
         
         if geoMapInstallation {
             retrieveBeaconManual(regionUUID: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor)) { success, errorMessage in

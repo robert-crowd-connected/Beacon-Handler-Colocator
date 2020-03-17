@@ -78,6 +78,12 @@ class OnboardingSettingsViewController: UIViewController {
         }
     }
     
+    @IBAction func actionSettings(_ sender: Any) {
+        guard let settingsViewController = storyboard?.instantiateViewController(withIdentifier: "SettingsViewController")
+            as? SettingsViewController else { return }
+        self.navigationController?.pushViewController(settingsViewController, animated: true)
+    }
+    
     @IBAction func actionChangeAppKey(_ sender: UITextField) {
         if let newKey = sender.text, newKey.count == 8 {
             UserDefaults.standard.set(newKey, forKey: kApplicationKeyStorageKey)
@@ -140,13 +146,15 @@ class OnboardingSettingsViewController: UIViewController {
             return
         }
         
-        guard let scannerViewController = storyboard?.instantiateViewController(withIdentifier: "ScannerViewController") as? ScannerViewController else { return }
+        guard let scannerViewController = storyboard?.instantiateViewController(withIdentifier: "ScannerViewController")
+            as? ScannerViewController else { return }
         scannerViewController.sessionType = sessionType
         self.navigationController?.pushViewController(scannerViewController, animated: true)
     }
     
     @IBAction func actionManualMode(_ sender: Any) {
-        guard let handleBeaconsManualViewController = storyboard?.instantiateViewController(withIdentifier: "HandleBeaconsManualViewController") as? RetrieveBeaconsManualViewController else { return }
+        guard let handleBeaconsManualViewController = storyboard?.instantiateViewController(withIdentifier: "HandleBeaconsManualViewController")
+            as? RetrieveBeaconsManualViewController else { return }
         self.navigationController?.pushViewController(handleBeaconsManualViewController, animated: true)
     }
     

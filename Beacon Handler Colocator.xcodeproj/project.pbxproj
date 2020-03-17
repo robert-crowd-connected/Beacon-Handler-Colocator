@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		620A20E3DCAB38BFCC649ACC /* Pods_Beacon_Handler_Colocator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0C23DF85763808921168646 /* Pods_Beacon_Handler_Colocator.framework */; };
 		971F0C282407E9CC009570F3 /* ConstantsAndStorageKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971F0C272407E9CC009570F3 /* ConstantsAndStorageKeys.swift */; };
+		972CE24D24211608001B5F89 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 972CE24C24211608001B5F89 /* SettingsViewController.swift */; };
 		974E3899241F7F3A0093EF03 /* NonGeoBeaconInstallationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974E3898241F7F3A0093EF03 /* NonGeoBeaconInstallationViewController.swift */; };
 		974E389D241FBD010093EF03 /* PassTouchesScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974E389C241FBD010093EF03 /* PassTouchesScrollView.swift */; };
 		9769D45624053FD2000B503F /* BeaconInstallationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		70E5231E1D73B80BE3167E5D /* Pods-Beacon Handler Colocator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Beacon Handler Colocator.debug.xcconfig"; path = "Target Support Files/Pods-Beacon Handler Colocator/Pods-Beacon Handler Colocator.debug.xcconfig"; sourceTree = "<group>"; };
 		971F0C272407E9CC009570F3 /* ConstantsAndStorageKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsAndStorageKeys.swift; sourceTree = "<group>"; };
+		972CE24C24211608001B5F89 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		974E3898241F7F3A0093EF03 /* NonGeoBeaconInstallationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonGeoBeaconInstallationViewController.swift; sourceTree = "<group>"; };
 		974E389C241FBD010093EF03 /* PassTouchesScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassTouchesScrollView.swift; sourceTree = "<group>"; };
 		9769D45524053FD2000B503F /* BeaconInstallationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconInstallationViewController.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 			children = (
 				9769D45B2405806F000B503F /* OnboardingActionSelectionViewController.swift */,
 				9769D45D240580F5000B503F /* OnboardingSettingsViewController.swift */,
+				972CE24C24211608001B5F89 /* SettingsViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 			files = (
 				9769D4602405816F000B503F /* BeaconSessionType.swift in Sources */,
 				9769D4582405505F000B503F /* BeaconAnnotation.swift in Sources */,
+				972CE24D24211608001B5F89 /* SettingsViewController.swift in Sources */,
 				9769D45A24057293000B503F /* BeaconHandlingService.swift in Sources */,
 				AAE07AD82406A2D200674A0D /* HistoricViewController.swift in Sources */,
 				978221C62407CC4F003642FC /* UpdatingServerBeaconsService.swift in Sources */,

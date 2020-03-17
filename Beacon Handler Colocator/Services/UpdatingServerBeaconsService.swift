@@ -12,16 +12,21 @@ import Foundation
 class UpdatingServerBeaconsService {
     
     private init() {
-        //TODO make this adjustable
-        // Add a settings button
-        baseURL = developmentDomain
+        let serverIndex = UserDefaults.standard.value(forKey: kServerUsedIndexStorageKey) as? Int ?? 2
+        if serverIndex == 0 {
+            baseURL = developmentDomain
+        } else if serverIndex == 1 {
+            baseURL = stagingDomain
+        } else {
+            baseURL = productionDomain
+        }
     }
     
     static var shared = UpdatingServerBeaconsService()
     
-    private let productionDomain = "https://production.colocator.net/v2/"
     private let developmentDomain = "https://real-development.colocator.net/v2/"
     private let stagingDomain = "https://staging.colocator.net/v2/"
+    private let productionDomain = "https://production.colocator.net/v2/"
     
     private var baseURL = "https://staging.colocator.net/v2/"
     private var beaconSufix = "beacons"

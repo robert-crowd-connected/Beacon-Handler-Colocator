@@ -15,8 +15,10 @@ let kBeaconCattegoryStorageKey = "BEACONCATEGORYSTORAGEKEY"
 let kRegionUUIDStorageKey = "REGIONUUIDSTORAGEKEY"
 
 let kApplicationKeyStorageKey = "APPLICATIONKEYSTORAGEKEY"
+let kServerUsedIndexStorageKey = "SERVERUSEDINDEXSTORAGEKEY"
 let kAuthorizationTokenStorageKey = "AUTHORIZATIONTOKENSTORAGEKEY"
 
+let kGeoPositionMapStorageKey = "geopositionmapstoragekey"
 
 // Error Messages
 
