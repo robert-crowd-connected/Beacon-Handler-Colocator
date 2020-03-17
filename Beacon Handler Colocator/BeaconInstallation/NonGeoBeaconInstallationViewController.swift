@@ -231,9 +231,6 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         let finalY = adjustedPointPosition.y * CGFloat(tileHeight!) / mapImageView.frame.height
         
         let nonGeoPosition = CGPoint(x: finalX, y: finalY)
-        
-        print("Beacon would be installed at (\(finalX) , \(finalY))")
-        
         return nonGeoPosition
     }
     
