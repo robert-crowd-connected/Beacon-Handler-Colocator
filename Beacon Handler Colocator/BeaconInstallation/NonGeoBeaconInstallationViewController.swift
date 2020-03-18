@@ -18,8 +18,6 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     @IBOutlet weak var beaconUUIDLabel: UILabel!
     
     @IBOutlet weak var zoomLevellabel: UILabel!
-    @IBOutlet weak var zoomInButtom: UIButton!
-    @IBOutlet weak var zoomOutButton: UIButton!
     
     @IBOutlet weak var mapScrollView: PassTouchesScrollView!
     @IBOutlet weak var insideScrollView: UIView!
@@ -36,9 +34,9 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     
     var imageMap: UIImage? = nil
     
-    var zoomFactor: CGFloat = 2 {
+    var zoomFactor: CGFloat = 1 {
         didSet {
-            zoomLevellabel.text = "\(zoomFactor)x"
+            zoomLevellabel.text = "Zoom \(Double(round(1000 * zoomFactor) / 1000))x"
             let oldImageViewFrame = self.mapImageView.frame
             resizeUIImageView(zoomLevelChanged: true)
             movePinPointAtZoom(oldFrame: oldImageViewFrame)
@@ -64,7 +62,7 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         
         configureUI()
         configureScrollView()
-        addTapGestures()
+        addGestureRecognizers()
         
         SwiftSpinner.show("Loading the map")
         UpdatingServerBeaconsService.shared.getNonGeoSurface { (success, tileName, height, width) in
@@ -108,20 +106,6 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         gradient.startPoint = CGPoint(x: 0.0,y: 0.5)
         gradient.endPoint = CGPoint(x: 1.0,y: 0.5)
         installButton.layer.insertSublayer(gradient, at: 0)
-        
-        let gradient1: CAGradientLayer = CAGradientLayer()
-        gradient1.frame = CGRect(x: 0.0, y: 0.0, width: zoomInButtom.frame.size.width, height: zoomInButtom.frame.size.height)
-        gradient1.colors = [UIColor.wizardPurple.cgColor, UIColor.wizardBlue.cgColor]
-        gradient1.startPoint = CGPoint(x: 0.0,y: 0.5)
-        gradient1.endPoint = CGPoint(x: 1.0,y: 0.5)
-        zoomInButtom.layer.insertSublayer(gradient1, at: 0)
-        
-        let gradient2: CAGradientLayer = CAGradientLayer()
-        gradient2.frame = CGRect(x: 0.0, y: 0.0, width: zoomOutButton.frame.size.width, height: zoomOutButton.frame.size.height)
-        gradient2.colors = [UIColor.wizardPurple.cgColor, UIColor.wizardBlue.cgColor]
-        gradient2.startPoint = CGPoint(x: 0.0,y: 0.5)
-        gradient2.endPoint = CGPoint(x: 1.0,y: 0.5)
-        zoomOutButton.layer.insertSublayer(gradient2, at: 0)
     }
     
     private func configureScrollView() {
@@ -216,7 +200,7 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     private func movePinPointAtZoom(oldFrame: CGRect) {
         if pinPointView == nil { return }
         
-        UIView.animate(withDuration: 0.35) {
+        UIView.animate(withDuration: 0.001) {
             var origin = self.pinPointView!.frame.origin
             
             let widthPerncentage = origin.x / oldFrame.width
@@ -227,14 +211,16 @@ class NonGeoBeaconInstallationViewController: UIViewController {
             let newPinPointMapPercentage = self.pinPointWidth / self.mapImageView.frame.width
             let pinPointPerncetageDifference = newPinPointMapPercentage - oldPinPointMapPercentage
             
+            let invertedAspectRadio = self.mapImageView.frame.height / self.mapImageView.frame.width
+            
             origin.x = (widthPerncentage - pinPointPerncetageDifference / 2) * self.mapImageView.frame.width
-            origin.y = (heightPerncentage - pinPointPerncetageDifference / 2) * self.mapImageView.frame.height
+            origin.y = (heightPerncentage - pinPointPerncetageDifference / invertedAspectRadio) * self.mapImageView.frame.height
             
             self.pinPointView!.frame.origin = origin
         }
     }
     
-    private func addTapGestures() {
+    private func addGestureRecognizers() {
         let longTapRightButton = UILongPressGestureRecognizer(target: self,
                                                               action: #selector(longPressRightButton))
         moveRightButton.addGestureRecognizer(longTapRightButton)
@@ -250,6 +236,23 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         let longTapDownButton = UILongPressGestureRecognizer(target: self,
                                                              action: #selector(longPressDownButton))
         moveDownButton.addGestureRecognizer(longTapDownButton)
+        
+        let pinchMapImage = UIPinchGestureRecognizer(target: self, action:#selector(zoomMap(_:)))
+        mapImageView.addGestureRecognizer(pinchMapImage)
+    }
+    
+    @objc func zoomMap(_ pinch: UIPinchGestureRecognizer) {
+        if pinch.scale < 0.95 {
+            if zoomFactor >= 1.049 {
+                zoomFactor -= 0.05
+                pinch.scale = 1
+            }
+        } else if pinch.scale > 1.05 {
+            if zoomFactor <= 3.95 {
+                zoomFactor += 0.05
+                pinch.scale = 1
+            }
+        }
     }
     
     private func addOrMoveMarker(atPosition position: CGPoint) {
@@ -365,18 +368,6 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         
         let nonGeoPosition = CGPoint(x: finalX, y: finalY)
         return nonGeoPosition
-    }
-    
-    @IBAction func actionZoomIn(_ sender: Any) {
-        if zoomFactor <= 3.5 {
-            zoomFactor += 0.5
-        }
-    }
-    
-    @IBAction func actionZoomOut(_ sender: Any) {
-        if zoomFactor >= 1.5 {
-            zoomFactor -= 0.5
-        }
     }
     
     @IBAction func actionInstall(_ sender: Any) {
