@@ -9,6 +9,7 @@
 import Foundation
 import CoreLocation
 import UIKit
+import SwiftSpinner
 
 class NonGeoBeaconInstallationViewController: UIViewController {
 
@@ -65,6 +66,7 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         configureScrollView()
         addTapGestures()
         
+        SwiftSpinner.show("Loading the map")
         UpdatingServerBeaconsService.shared.getNonGeoSurface { (success, tileName, height, width) in
             if success && tileName != nil && height != nil && width != nil {
                 self.tileWidth = width!
@@ -74,6 +76,16 @@ class NonGeoBeaconInstallationViewController: UIViewController {
                 let fullDownloadString = "https://colocator-tiles.s3-eu-west-1.amazonaws.com/surfacete/" + tileName!
                 
                 Downloader.downloadImage(from: fullDownloadString) { image in
+                    SwiftSpinner.hide()
+                    
+                    if image == nil {
+                        let alert = UIAlertController(title: "Download failed!",
+                                                      message: "Failed to download map image", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+                        self.present(alert, animated: false, completion: { })
+                        return
+                    }
+                    
                     self.imageMap = image
                     self.resizeUIImageView()
                 }
@@ -211,23 +223,12 @@ class NonGeoBeaconInstallationViewController: UIViewController {
             let heightPerncentage = origin.y / oldFrame.height
             
             // adjust depending on how much % represents the width and height of the pinpoint view
+            let oldPinPointMapPercentage = self.pinPointWidth / oldFrame.width
+            let newPinPointMapPercentage = self.pinPointWidth / self.mapImageView.frame.width
+            let pinPointPerncetageDifference = newPinPointMapPercentage - oldPinPointMapPercentage
             
-            origin.x = widthPerncentage * self.mapImageView.frame.width
-            origin.y = heightPerncentage * self.mapImageView.frame.height
-            
-            print("""
-                
-PinPoint Moved
-Origin \(self.pinPointView!.frame.origin)
-New Origin \(origin)
-                
-Map Old Frame \(oldFrame)
-Map New Frame \(self.mapImageView.frame)
-                
-                PinPoint View was \(self.pinPointWidth / oldFrame.width)% of the map
-                PinPoint View is now \(self.pinPointWidth / self.mapImageView.frame.width)% of the map
-                
-""")
+            origin.x = (widthPerncentage - pinPointPerncetageDifference / 2) * self.mapImageView.frame.width
+            origin.y = (heightPerncentage - pinPointPerncetageDifference / 2) * self.mapImageView.frame.height
             
             self.pinPointView!.frame.origin = origin
         }
@@ -304,19 +305,19 @@ Map New Frame \(self.mapImageView.frame)
     }
     
     @objc func longPressRightButton(sender: UIGestureRecognizer) {
-        moveBeacon(direction: .right, distance: 8)
+        moveBeacon(direction: .right, distance: 6)
     }
     
     @objc func longPressLeftButton(sender: UIGestureRecognizer) {
-        moveBeacon(direction: .left, distance: 8)
+        moveBeacon(direction: .left, distance: 6)
     }
     
     @objc func longPressUpButton(sender: UIGestureRecognizer) {
-        moveBeacon(direction: .up, distance: 8)
+        moveBeacon(direction: .up, distance: 6)
     }
     
     @objc func longPressDownButton(sender: UIGestureRecognizer) {
-        moveBeacon(direction: .down, distance: 8)
+        moveBeacon(direction: .down, distance: 6)
     }
     
     @IBAction func actionMoveBeaconRight(_ sender: Any) {
