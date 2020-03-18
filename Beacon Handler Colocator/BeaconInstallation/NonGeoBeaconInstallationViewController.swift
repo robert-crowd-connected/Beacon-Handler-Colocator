@@ -16,6 +16,10 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     @IBOutlet weak var beaconDataLabel: UILabel!
     @IBOutlet weak var beaconUUIDLabel: UILabel!
     
+    @IBOutlet weak var zoomLevellabel: UILabel!
+    @IBOutlet weak var zoomInButtom: UIButton!
+    @IBOutlet weak var zoomOutButton: UIButton!
+    
     @IBOutlet weak var mapScrollView: PassTouchesScrollView!
     @IBOutlet weak var insideScrollView: UIView!
     @IBOutlet weak var mapImageView: UIImageView!
@@ -28,6 +32,17 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     @IBOutlet weak var installButton: UIButton!
     @IBOutlet weak var deleteAndInstallButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
+    
+    var imageMap: UIImage? = nil
+    
+    var zoomFactor: CGFloat = 2 {
+        didSet {
+            zoomLevellabel.text = "\(zoomFactor)x"
+            let oldImageViewFrame = self.mapImageView.frame
+            resizeUIImageView(zoomLevelChanged: true)
+            movePinPointAtZoom(oldFrame: oldImageViewFrame)
+        }
+    }
     
     var pinPointView: UIView?
     var pinPointHeight: CGFloat = 26
@@ -59,7 +74,8 @@ class NonGeoBeaconInstallationViewController: UIViewController {
                 let fullDownloadString = "https://colocator-tiles.s3-eu-west-1.amazonaws.com/surfacete/" + tileName!
                 
                 Downloader.downloadImage(from: fullDownloadString) { image in
-                    self.resizeUIImageView(forImage: image)
+                    self.imageMap = image
+                    self.resizeUIImageView()
                 }
             }
         }
@@ -72,6 +88,7 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         titleLabel.textColor = UIColor.wizardPurple
         cancelButton.setTitleColor(UIColor.wizardPurple, for: .normal)
         beaconDataLabel.textColor = UIColor.wizardMiddleColor
+        zoomLevellabel.textColor = UIColor.wizardPurple
         
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.frame = CGRect(x: 0.0, y: 0.0, width: installButton.frame.size.width, height: installButton.frame.size.height)
@@ -79,6 +96,20 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         gradient.startPoint = CGPoint(x: 0.0,y: 0.5)
         gradient.endPoint = CGPoint(x: 1.0,y: 0.5)
         installButton.layer.insertSublayer(gradient, at: 0)
+        
+        let gradient1: CAGradientLayer = CAGradientLayer()
+        gradient1.frame = CGRect(x: 0.0, y: 0.0, width: zoomInButtom.frame.size.width, height: zoomInButtom.frame.size.height)
+        gradient1.colors = [UIColor.wizardPurple.cgColor, UIColor.wizardBlue.cgColor]
+        gradient1.startPoint = CGPoint(x: 0.0,y: 0.5)
+        gradient1.endPoint = CGPoint(x: 1.0,y: 0.5)
+        zoomInButtom.layer.insertSublayer(gradient1, at: 0)
+        
+        let gradient2: CAGradientLayer = CAGradientLayer()
+        gradient2.frame = CGRect(x: 0.0, y: 0.0, width: zoomOutButton.frame.size.width, height: zoomOutButton.frame.size.height)
+        gradient2.colors = [UIColor.wizardPurple.cgColor, UIColor.wizardBlue.cgColor]
+        gradient2.startPoint = CGPoint(x: 0.0,y: 0.5)
+        gradient2.endPoint = CGPoint(x: 1.0,y: 0.5)
+        zoomOutButton.layer.insertSublayer(gradient2, at: 0)
     }
     
     private func configureScrollView() {
@@ -90,32 +121,116 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         mapScrollView.delegatePass = self
     }
     
-    private func resizeUIImageView(forImage image: UIImage) {
-        let ratio = image.size.width / image.size.height
+    private func resizeUIImageView(zoomLevelChanged: Bool = false) {
+        if imageMap == nil { return }
+        let ratio = imageMap!.size.width / imageMap!.size.height
         
-        // Standard Height: 320
-        // Zoom x2 640
+        let standardDimension: CGFloat = 320  // maximum height for ScrollView
+        let finalDimension = standardDimension * zoomFactor
+
+        if ratio == 1 {         // square
+            mapImageView.frame = CGRect(x: 0, y: 0, width: finalDimension, height: finalDimension)
+            
+            if zoomLevelChanged {
+                if let constraint = (insideScrollView.constraints.filter{ $0.firstAttribute == .height }.first) {
+                    constraint.constant = finalDimension
+                }
+                if let constraint = (insideScrollView.constraints.filter{ $0.firstAttribute == .width }.first) {
+                    constraint.constant = finalDimension
+                }
+                if let constraint = (mapScrollView.contentLayoutGuide.constraintsAffectingLayout(for: .vertical).filter{ $0.firstAttribute == .height }.first) {
+                    constraint.constant = finalDimension
+                }
+            } else {
+                insideScrollView.heightAnchor.constraint(equalToConstant: finalDimension).isActive = true
+                insideScrollView.widthAnchor.constraint(equalToConstant: finalDimension).isActive = true
+                mapScrollView.contentLayoutGuide.heightAnchor.constraint(equalToConstant: finalDimension).isActive = true
+            }
+            
+        } else if ratio > 1 {   // landscape
+            let newWidth = finalDimension * ratio
+            mapImageView.frame = CGRect(x: 0, y: 0, width: newWidth, height: finalDimension)
+            
+            if zoomLevelChanged {
+                if let constraint = (insideScrollView.constraints.filter{ $0.firstAttribute == .height }.first) {
+                    constraint.constant = finalDimension
+                }
+                if let constraint = (insideScrollView.constraints.filter{ $0.firstAttribute == .width }.first) {
+                    constraint.constant = newWidth
+                }
+                if let constraint = (mapScrollView.contentLayoutGuide.constraintsAffectingLayout(for: .vertical).filter{ $0.firstAttribute == .height }.first) {
+                    constraint.constant = finalDimension
+                }
+            } else {
+                insideScrollView.heightAnchor.constraint(equalToConstant: finalDimension).isActive = true
+                insideScrollView.widthAnchor.constraint(equalToConstant: newWidth).isActive = true
+                mapScrollView.contentLayoutGuide.heightAnchor.constraint(equalToConstant: finalDimension).isActive = true
+            }
+            
+        } else {                // portrait
+            let newHeight = finalDimension / ratio
+            mapImageView.frame = CGRect(x: 0, y: 0, width: finalDimension, height: newHeight)
+            
+            if zoomLevelChanged {
+                if let constraint = (insideScrollView.constraints.filter{ $0.firstAttribute == .height }.first) {
+                    constraint.constant = newHeight
+                }
+                if let constraint = (insideScrollView.constraints.filter{ $0.firstAttribute == .width }.first) {
+                    constraint.constant = finalDimension
+                }
+                if let constraint = (mapScrollView.contentLayoutGuide.constraintsAffectingLayout(for: .vertical).filter{ $0.firstAttribute == .height }.first) {
+                    constraint.constant = newHeight
+                }
+            } else {
+                insideScrollView.heightAnchor.constraint(equalToConstant: CGFloat(newHeight)).isActive = true
+                insideScrollView.widthAnchor.constraint(equalToConstant: CGFloat(finalDimension)).isActive = true
+                mapScrollView.contentLayoutGuide.heightAnchor.constraint(equalToConstant: newHeight).isActive = true
+            }
+        }
         
-        let newWidth = insideScrollView.frame.height * ratio
-        // let newWidth = 640 * ratio
-        mapImageView.image = image
+        mapImageView.image = imageMap!
         
-        mapImageView.frame.size = CGSize(width: newWidth, height: insideScrollView.frame.height)
-        mapImageView.frame = CGRect(x: 0, y: 0, width: newWidth, height: insideScrollView.frame.height)
-        
-        insideScrollView.widthAnchor.constraint(equalToConstant: CGFloat(newWidth)).isActive = true
         insideScrollView.leftAnchor.constraint(equalTo: mapScrollView.contentLayoutGuide.leftAnchor, constant: 0).isActive = true
         insideScrollView.rightAnchor.constraint(equalTo: mapScrollView.contentLayoutGuide.rightAnchor, constant: 0).isActive = true
-        
-//         mapScrollView.frameLayoutGuide.heightAnchor.constraint(equalToConstant: 640).isActive = true
-//         insideScrollView.heightAnchor.constraint(equalToConstant: CGFloat(640)).isActive = true
-//         insideScrollView.topAnchor.constraint(equalTo: mapScrollView.contentLayoutGuide.topAnchor, constant: 0).isActive = true
-//         insideScrollView.bottomAnchor.constraint(equalTo: mapScrollView.contentLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        insideScrollView.topAnchor.constraint(equalTo: mapScrollView.contentLayoutGuide.topAnchor, constant: 0).isActive = true
+        insideScrollView.bottomAnchor.constraint(equalTo: mapScrollView.contentLayoutGuide.bottomAnchor, constant: 0).isActive = true
         
         mapImageView.leftAnchor.constraint(equalTo: insideScrollView.leftAnchor, constant: 0).isActive = true
         mapImageView.rightAnchor.constraint(equalTo: insideScrollView.rightAnchor, constant: 0).isActive = true
         
         view.layoutSubviews()
+    }
+    
+    private func movePinPointAtZoom(oldFrame: CGRect) {
+        if pinPointView == nil { return }
+        
+        UIView.animate(withDuration: 0.35) {
+            var origin = self.pinPointView!.frame.origin
+            
+            let widthPerncentage = origin.x / oldFrame.width
+            let heightPerncentage = origin.y / oldFrame.height
+            
+            // adjust depending on how much % represents the width and height of the pinpoint view
+            
+            origin.x = widthPerncentage * self.mapImageView.frame.width
+            origin.y = heightPerncentage * self.mapImageView.frame.height
+            
+            print("""
+                
+PinPoint Moved
+Origin \(self.pinPointView!.frame.origin)
+New Origin \(origin)
+                
+Map Old Frame \(oldFrame)
+Map New Frame \(self.mapImageView.frame)
+                
+                PinPoint View was \(self.pinPointWidth / oldFrame.width)% of the map
+                PinPoint View is now \(self.pinPointWidth / self.mapImageView.frame.width)% of the map
+                
+""")
+            
+            self.pinPointView!.frame.origin = origin
+        }
     }
     
     private func addTapGestures() {
@@ -189,19 +304,19 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     }
     
     @objc func longPressRightButton(sender: UIGestureRecognizer) {
-        moveBeacon(direction: .right, distance: 5)
+        moveBeacon(direction: .right, distance: 8)
     }
     
     @objc func longPressLeftButton(sender: UIGestureRecognizer) {
-        moveBeacon(direction: .left, distance: 5)
+        moveBeacon(direction: .left, distance: 8)
     }
     
     @objc func longPressUpButton(sender: UIGestureRecognizer) {
-        moveBeacon(direction: .up, distance: 5)
+        moveBeacon(direction: .up, distance: 8)
     }
     
     @objc func longPressDownButton(sender: UIGestureRecognizer) {
-        moveBeacon(direction: .down, distance: 5)
+        moveBeacon(direction: .down, distance: 8)
     }
     
     @IBAction func actionMoveBeaconRight(_ sender: Any) {
@@ -224,9 +339,23 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         if pinPointView == nil { return nil }
         
         if tileHeight == nil || tileWidth == nil {
-            print("The dimension of the tile is unknown at this moment")
+            let alert = UIAlertController(title: "Unknown dimension!",
+                                          message: "The dimension of the tile is unknown at this moment", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+            self.present(alert, animated: false, completion: { })
+            
             return nil
         }
+        
+        if pinPointView!.frame.origin.x > self.mapImageView.frame.width || pinPointView!.frame.origin.y > self.mapImageView.frame.height {
+            let alert = UIAlertController(title: "Outside map!",
+                                          message: "The pinpoint is outside map area. Please move it accordingly", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+            self.present(alert, animated: false, completion: { })
+            
+            return nil
+        }
+        
         let adjustedPointPosition = CGPoint(x: pinPointView!.frame.origin.x + pinPointWidth / 2,
                                              y:pinPointView!.frame.origin.y + pinPointHeight)
         
@@ -235,6 +364,18 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         
         let nonGeoPosition = CGPoint(x: finalX, y: finalY)
         return nonGeoPosition
+    }
+    
+    @IBAction func actionZoomIn(_ sender: Any) {
+        if zoomFactor <= 3.5 {
+            zoomFactor += 0.5
+        }
+    }
+    
+    @IBAction func actionZoomOut(_ sender: Any) {
+        if zoomFactor >= 1.5 {
+            zoomFactor -= 0.5
+        }
     }
     
     @IBAction func actionInstall(_ sender: Any) {
