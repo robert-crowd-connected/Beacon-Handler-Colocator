@@ -40,7 +40,7 @@ class RetrieveBeaconsManualViewController: UIViewController {
     private func configureViews() {
         titleLabel.textColor = UIColor.wizardPurple
         
-        regionUUIDLabel.text = "Region UUID \(regionUUIDString!)"
+        regionUUIDLabel.text = "Region \(regionUUIDString!)"
         majorLabel.text = "Major \(majorInt!)"
         
         let gradient: CAGradientLayer = CAGradientLayer()

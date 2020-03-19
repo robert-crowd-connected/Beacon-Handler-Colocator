@@ -32,16 +32,20 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     @IBOutlet weak var deleteAndInstallButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     
+    private var preconfigured = false
     var imageMap: UIImage? = nil
     
     var zoomFactor: CGFloat = 1 {
         didSet {
             zoomLevellabel.text = "Zoom \(Double(round(1000 * zoomFactor) / 1000))x"
             let oldImageViewFrame = self.mapImageView.frame
+           
             resizeUIImageView(zoomLevelChanged: true)
             movePinPointAtZoom(oldFrame: oldImageViewFrame)
         }
     }
+    
+    let standardDimension: CGFloat = 320  // maximum height for ScrollView
     
     var pinPointView: UIView?
     var pinPointHeight: CGFloat = 26
@@ -64,31 +68,43 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         configureScrollView()
         addGestureRecognizers()
         
-        SwiftSpinner.show("Loading the map")
-        UpdatingServerBeaconsService.shared.getNonGeoSurface { (success, tileName, height, width) in
-            if success && tileName != nil && height != nil && width != nil {
-                self.tileWidth = width!
-                self.tileHeight = height!
-                
-                self.mapImageView.contentMode = .scaleAspectFit
-                let fullDownloadString = "https://colocator-tiles.s3-eu-west-1.amazonaws.com/surfacete/" + tileName!
-                
-                Downloader.downloadImage(from: fullDownloadString) { image in
-                    SwiftSpinner.hide()
+        self.mapImageView.contentMode = .scaleAspectFit
+        
+        if preconfigured {
+            self.resizeUIImageView()
+        } else {
+            SwiftSpinner.show("Loading the map")
+            UpdatingServerBeaconsService.shared.getNonGeoSurface { (success, tileName, height, width) in
+                if success && tileName != nil && height != nil && width != nil {
+                    self.tileWidth = width!
+                    self.tileHeight = height!
                     
-                    if image == nil {
-                        let alert = UIAlertController(title: "Download failed!",
-                                                      message: "Failed to download map image", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
-                        self.present(alert, animated: false, completion: { })
-                        return
+                    let fullDownloadString = "https://colocator-tiles.s3-eu-west-1.amazonaws.com/surfacete/" + tileName!
+                    
+                    Downloader.downloadImage(from: fullDownloadString) { image in
+                        SwiftSpinner.hide()
+                        
+                        if image == nil {
+                            let alert = UIAlertController(title: "Download failed!",
+                                                          message: "Failed to download map image", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+                            self.present(alert, animated: false, completion: { })
+                            return
+                        }
+                        
+                        self.imageMap = image
+                        self.resizeUIImageView()
                     }
-                    
-                    self.imageMap = image
-                    self.resizeUIImageView()
                 }
             }
         }
+    }
+    
+    public func configure(withImage image: UIImage, width: Int, height: Int) {
+        self.preconfigured = true
+        self.imageMap = image
+        self.tileWidth = width
+        self.tileHeight = height
     }
     
     private func configureUI() {
@@ -97,7 +113,6 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         
         titleLabel.textColor = UIColor.wizardPurple
         cancelButton.setTitleColor(UIColor.wizardPurple, for: .normal)
-        beaconDataLabel.textColor = UIColor.wizardMiddleColor
         zoomLevellabel.textColor = UIColor.wizardPurple
         
         let gradient: CAGradientLayer = CAGradientLayer()
@@ -120,10 +135,8 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     private func resizeUIImageView(zoomLevelChanged: Bool = false) {
         if imageMap == nil { return }
         let ratio = imageMap!.size.width / imageMap!.size.height
-        
-        let standardDimension: CGFloat = 320  // maximum height for ScrollView
         let finalDimension = standardDimension * zoomFactor
-
+     
         if ratio == 1 {         // square
             mapImageView.frame = CGRect(x: 0, y: 0, width: finalDimension, height: finalDimension)
             
@@ -372,7 +385,7 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     
     @IBAction func actionInstall(_ sender: Any) {
         if pinPointView == nil {
-            let alert = UIAlertController(title: "Location missing",
+            let alert = UIAlertController(title: "Location missing!",
                                           message: "Add place of installment  on the map before submit", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
             self.present(alert, animated: false, completion: { })
@@ -413,7 +426,7 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         #if DEBUG
         
         if pinPointView == nil {
-            let alert = UIAlertController(title: "Location missing",
+            let alert = UIAlertController(title: "Location missing!",
                                           message: "Add place of installment  on the map before submit", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
             self.present(alert, animated: false, completion: { })

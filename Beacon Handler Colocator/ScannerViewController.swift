@@ -25,7 +25,6 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
     @IBOutlet weak var scannerDataContainerView: UIView!
     @IBOutlet weak var regionUUIDLabel: UILabel!
     @IBOutlet weak var majorLabel: UILabel!
-    @IBOutlet weak var scannerStatusSwitch: UISwitch!
     
     @IBOutlet weak var noiseLevelLabel: UILabel!
     @IBOutlet weak var closestBeaconLabel: UILabel!
@@ -42,6 +41,7 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         locationManager.allowsBackgroundLocationUpdates = true
         return locationManager
     }()
+    
     var regionConstraint: CLBeaconIdentityConstraint?
     
     var isBeaconTooFar = false
@@ -52,7 +52,13 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         didSet {
             if closestBeacon != nil {
                 let beaconAccuracy = Double(round(1000 * closestBeacon!.accuracy) / 1000)
-                closestBeaconLabel.text = "iBeacon searching... \n\n\nMinor \(closestBeacon!.minor)     \n\nAccuracy \(beaconAccuracy)     RSSI \(closestBeacon!.rssi)"
+                
+                var closestBeaconTitle = "Identifying closest iBeacon ... \n\n\nMinor \(closestBeacon!.minor)"
+                if closestBeacon!.rssi < -23 || beaconAccuracy > 0.03 {
+                    closestBeaconTitle.append("\n\n\nTOO FAR")
+                }
+                    
+                closestBeaconLabel.text = closestBeaconTitle
                 
                 if closestBeacon!.minor != closestBeaconMinor || isBeaconTooFar {
                     closestBeaconMinor = closestBeacon!.minor
@@ -73,7 +79,7 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
     
     var noiseLevel: NoiseLevel = .none {
         didSet {
-            noiseLevelLabel.text = "Noise Level \(noiseLevel.rawValue)"
+            noiseLevelLabel.text = "Noise Level: \(noiseLevel.rawValue)"
             if confirmStableClosestBeaconTimer != nil && noiseLevel == .medium || noiseLevel == .high || noiseLevel == .veryHigh {
                 configureStableClosesBeaconTimer()
             }
@@ -84,6 +90,8 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
     var refreshDetectedBeaconsTimer: Timer?
     var confirmStableClosestBeaconTimer: Timer?
     
+    var nonGeoBeaconViewController: NonGeoBeaconInstallationViewController? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         locationManager.requestWhenInUseAuthorization()
@@ -92,11 +100,29 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         configureViews()
         configureScanner()
         startScanner()
+        
+        //Preconfigure NonGeo Map if it's the case
+        let geoPositionIndex = UserDefaults.standard.value(forKey: kGeoPositionMapStorageKey) as? Int ?? 1
+        if geoPositionIndex == 0 {
+            nonGeoBeaconViewController = storyboard?.instantiateViewController(withIdentifier: "NonGeoBeaconInstallationViewController")
+                as? NonGeoBeaconInstallationViewController
+            
+            UpdatingServerBeaconsService.shared.getNonGeoSurface { (success, tileName, height, width) in
+                if success && tileName != nil && height != nil && width != nil {
+                    let fullDownloadString = "https://colocator-tiles.s3-eu-west-1.amazonaws.com/surfacete/" + tileName!
+                    Downloader.downloadImage(from: fullDownloadString) { image in
+                      
+                        if image != nil {
+                            self.nonGeoBeaconViewController?.configure(withImage: image!, width: width!, height: height!)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     private func configureViews() {
         titleLabel.textColor = UIColor.wizardPurple
-        scannerStatusLabel.textColor = UIColor.wizardMiddleColor
         resetBeaconsProximityButton.setTitleColor(UIColor.wizardPurple, for: .normal)
         displayHandledBeaconsButton.setTitleColor(UIColor.wizardPurple, for: .normal)
         
@@ -116,7 +142,7 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         regionConstraint = CLBeaconIdentityConstraint(uuid: UUID(uuidString: regionUUID)!,
                                                       major: CLBeaconMajorValue(majorValue))
     
-        regionUUIDLabel.text = "Region UUID " + regionUUID
+        regionUUIDLabel.text = "Region " + regionUUID
         majorLabel.text = "Major \(majorValue)"
     }
     
@@ -134,15 +160,11 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         refreshDetectedBeaconsTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { _ in
             self.refreshDetectedBeacons()
         })
-        
-        scannerStatusSwitch.isOn = true
     }
     
     private func stopScanner() {
         if regionConstraint == nil { return }
         locationManager.stopRangingBeacons(satisfying: regionConstraint!)
-        
-        scannerStatusSwitch.isOn = false
     }
     
     public func stopMonitoringBeacon(beacon: CLBeacon) {
@@ -205,12 +227,17 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
             
             navigationController?.pushViewController(beaconInstallationViewController, animated: true)
         } else {
-            guard let nonGeoBeaconViewController = storyboard?.instantiateViewController(withIdentifier: "NonGeoBeaconInstallationViewController")
-                as? NonGeoBeaconInstallationViewController else { return }
-            nonGeoBeaconViewController.beacon = beaconToBeInstalled
-            nonGeoBeaconViewController.delegate = self
-            
-            navigationController?.pushViewController(nonGeoBeaconViewController, animated: true)
+            if nonGeoBeaconViewController != nil {
+                nonGeoBeaconViewController?.beacon = beaconToBeInstalled
+                nonGeoBeaconViewController?.delegate = self
+                
+                navigationController?.pushViewController(nonGeoBeaconViewController!, animated: true)
+            } else {
+                let alert = UIAlertController(title: "Download failed!",
+                                              message: "Failed to download map image", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+                self.present(alert, animated: false, completion: { })
+            }
         }
     }
        
@@ -255,18 +282,13 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         self.navigationController?.popViewController(animated: true)
     }
     
-    @IBAction func actionMonitoringStatusChanged(_ sender: UISwitch) {
-        sender.isOn ? startScanner() : stopScanner()
-    }
-    
     @IBAction func actionResetProximity(_ sender: Any) {
         startScanner()
     }
     
     @IBAction func actionDisplayHistoric(_ sender: Any) {
-        guard let historicViewController = storyboard?.instantiateViewController(withIdentifier: "HistoricViewController") as? HistoricViewController else { return }
-        historicViewController.sessionType = sessionType
-        
+        guard let historicViewController = storyboard?.instantiateViewController(withIdentifier: "HistoricViewController")
+            as? HistoricViewController else { return }
         self.present(historicViewController, animated: true, completion: nil)
     }
 }

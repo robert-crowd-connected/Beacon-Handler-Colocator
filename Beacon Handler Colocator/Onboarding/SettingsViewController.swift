@@ -23,9 +23,6 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         
         titleLabel.textColor = UIColor.wizardPurple
-        serverUsedLabel.textColor = UIColor.wizardMiddleColor
-        mapTypeLabel.textColor = UIColor.wizardMiddleColor
-        
         let serverIndex = UserDefaults.standard.value(forKey: kServerUsedIndexStorageKey) as? Int ?? 2
         serverUsedSegmentedControl.selectedSegmentIndex = serverIndex
         

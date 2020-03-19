@@ -11,10 +11,7 @@ import UIKit
 
 class HistoricViewController: UIViewController {
     
-    var sessionType: BeaconSessionType!
-    
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var sessionImageView: UIImageView!
     @IBOutlet weak var actionsTableView: UITableView!
     
     var actions = [BeaconAction]()
@@ -22,11 +19,6 @@ class HistoricViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         titleLabel.textColor = UIColor.wizardPurple
-        if sessionType == .install {
-            sessionImageView.image = UIImage(named: "install")
-        } else {
-            sessionImageView.image = UIImage(named: "retrieve")
-        }
         
         loadHistoricData()
     }

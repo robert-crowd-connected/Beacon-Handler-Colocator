@@ -29,6 +29,6 @@ class BeaconAction {
         self.position = position
         
         self.timestamp = Date()
-        self.description = "Major \(major)  Minor \(minor)  on  \(timestamp.description)"
+        self.description = "\(actionType.rawValue) Major \(major)  Minor \(minor)  on  \(timestamp.description)"
     }
 }

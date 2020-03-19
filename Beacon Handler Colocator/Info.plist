@@ -20,6 +20,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MGLMapboxAccessToken</key>
+	<string>pk.eyJ1Ijoicm9iZXJ0dGNvZGUiLCJhIjoiY2s3dWI3ZDNmMHhleDNuc2Zxdm52OTNnOCJ9._VRa2ZkS_pNOMGyvfqa7wA</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Want to get location always ans while in use</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -45,8 +47,6 @@
 			</array>
 		</dict>
 	</dict>
-    <key>MGLMapboxAccessToken</key>
-    <string>pk.eyJ1Ijoicm9iZXJ0dGNvZGUiLCJhIjoiY2s3dWI3ZDNmMHhleDNuc2Zxdm52OTNnOCJ9._VRa2ZkS_pNOMGyvfqa7wA</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
@@ -62,8 +62,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

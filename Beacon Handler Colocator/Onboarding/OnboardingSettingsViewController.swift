@@ -12,7 +12,8 @@ import UIKit
 class OnboardingSettingsViewController: UIViewController {
     
     @IBOutlet weak var welcomeLabel: UILabel!
-    @IBOutlet weak var sessionImageView: UIImageView!
+    
+    @IBOutlet weak var settingsButton: UIButton!
     
     @IBOutlet weak var appKeyContainerView: UIView!
     @IBOutlet weak var regionContainerView: UIView!
@@ -39,19 +40,17 @@ class OnboardingSettingsViewController: UIViewController {
     private func configureViews() {
         if sessionType == .install {
             welcomeLabel.text = "Preparing beacon installation"
-            sessionImageView.image = UIImage(named: "install")
             manualModeButton.isHidden = true
         } else {
             welcomeLabel.text = "Preparing beacon retrieval"
-            sessionImageView.image = UIImage(named: "retrieve")
             manualModeButton.isHidden = false
         }
         
         welcomeLabel.textColor = UIColor.wizardPurple
-        appKeyLabel.textColor = UIColor.wizardMiddleColor
-        regionUUIDLabel.textColor = UIColor.wizardMiddleColor
-        majorLabel.textColor = UIColor.wizardMiddleColor
+        
         manualModeButton.setTitleColor(UIColor.wizardPurple, for: .normal)
+        
+        settingsButton.setTitleColor(UIColor.wizardPurple, for: .normal)
         
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.frame = CGRect(x: 0.0, y: 0.0, width: continueButton.frame.size.width, height: continueButton.frame.size.height)

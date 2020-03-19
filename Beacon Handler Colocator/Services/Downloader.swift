@@ -14,12 +14,12 @@ class Downloader {
     static var mapImage: UIImage?
     
     static func downloadImage(from link: String, completion: @escaping (UIImage?) -> Void) {
-        guard let url = URL(string: link) else { return }
-        
         if mapImage != nil {
             completion(mapImage!)
             return
         }
+        
+        guard let url = URL(string: link) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,

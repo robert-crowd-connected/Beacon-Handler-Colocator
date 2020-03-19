@@ -58,7 +58,6 @@ class BeaconInstallationViewController: UIViewController {
         
         titleLabel.textColor = UIColor.wizardPurple
         cancelButton.setTitleColor(UIColor.wizardPurple, for: .normal)
-        beaconDataLabel.textColor = UIColor.wizardMiddleColor
         
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.frame = CGRect(x: 0.0, y: 0.0, width: installButton.frame.size.width, height: installButton.frame.size.height)
