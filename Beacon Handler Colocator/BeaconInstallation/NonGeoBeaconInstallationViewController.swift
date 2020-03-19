@@ -95,6 +95,13 @@ class NonGeoBeaconInstallationViewController: UIViewController {
                         self.imageMap = image
                         self.resizeUIImageView()
                     }
+                } else {
+                    SwiftSpinner.hide()
+                    
+                    let alert = UIAlertController(title: "Download failed!",
+                                                  message: "Failed to download map image", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+                    self.present(alert, animated: false, completion: { })
                 }
             }
         }
