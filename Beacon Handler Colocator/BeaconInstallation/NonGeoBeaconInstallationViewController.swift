@@ -99,7 +99,7 @@ class NonGeoBeaconInstallationViewController: UIViewController {
                     SwiftSpinner.hide()
                     
                     let alert = UIAlertController(title: "Download failed!",
-                                                  message: "Failed to download map image", preferredStyle: .alert)
+                                                  message: "Failed to get map surface details", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
                     self.present(alert, animated: false, completion: { })
                 }
