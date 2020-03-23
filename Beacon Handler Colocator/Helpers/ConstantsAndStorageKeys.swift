@@ -18,7 +18,7 @@ let kApplicationKeyStorageKey = "APPLICATIONKEYSTORAGEKEY"
 let kServerUsedIndexStorageKey = "SERVERUSEDINDEXSTORAGEKEY"
 let kAuthorizationTokenStorageKey = "AUTHORIZATIONTOKENSTORAGEKEY"
 
-let kGeoPositionMapStorageKey = "geopositionmapstoragekey"
+let kZoomLevelStorageKey = "ZOOMLEVELSTORAGEKEY"
 
 // Error Messages
 

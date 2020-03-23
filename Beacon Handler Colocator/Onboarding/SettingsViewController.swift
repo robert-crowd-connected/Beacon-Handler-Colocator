@@ -16,8 +16,9 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var serverUsedLabel: UILabel!
     @IBOutlet weak var serverUsedSegmentedControl: UISegmentedControl!
     
-    @IBOutlet weak var mapTypeLabel: UILabel!
-    @IBOutlet weak var mapTypeSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var zoomLavelLabel: UILabel!
+    @IBOutlet weak var minusButton: UIButton!
+    @IBOutlet weak var plusButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,16 +27,30 @@ class SettingsViewController: UIViewController {
         let serverIndex = UserDefaults.standard.value(forKey: kServerUsedIndexStorageKey) as? Int ?? 2
         serverUsedSegmentedControl.selectedSegmentIndex = serverIndex
         
-        let mapTypeIndex = UserDefaults.standard.value(forKey: kGeoPositionMapStorageKey) as? Int ?? 1
-        mapTypeSegmentedControl.selectedSegmentIndex = mapTypeIndex
+        let zoomLevel = UserDefaults.standard.value(forKey: kZoomLevelStorageKey) as? Int ?? 7
+        zoomLavelLabel.text = "\(zoomLevel)"
     }
     
     @IBAction func actionChangedServerUsed(_ sender: UISegmentedControl) {
         UserDefaults.standard.set(sender.selectedSegmentIndex, forKey: kServerUsedIndexStorageKey)
     }
     
-    @IBAction func actionChangedMapType(_ sender: UISegmentedControl) {
-        UserDefaults.standard.set(sender.selectedSegmentIndex, forKey: kGeoPositionMapStorageKey)
+    @IBAction func acttionMinusZoom(_ sender: Any) {
+        var zoomLevel = UserDefaults.standard.value(forKey: kZoomLevelStorageKey) as? Int ?? 7
+        if zoomLevel >= 1 {
+            zoomLevel -= 1
+            zoomLavelLabel.text = "\(zoomLevel)"
+            UserDefaults.standard.set(zoomLevel, forKey: kZoomLevelStorageKey)
+        }
+    }
+    
+    @IBAction func actionPlusZoom(_ sender: Any) {
+        var zoomLevel = UserDefaults.standard.value(forKey: kZoomLevelStorageKey) as? Int ?? 7
+        if zoomLevel <= 20 {
+            zoomLevel += 1
+            zoomLavelLabel.text = "\(zoomLevel)"
+            UserDefaults.standard.set(zoomLevel, forKey: kZoomLevelStorageKey)
+        }
     }
     
     @IBAction func actionBack(_ sender: Any) {

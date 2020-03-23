@@ -894,57 +894,100 @@
                                     <action selector="actionChangedServerUsed:" destination="rWW-nq-sg2" eventType="valueChanged" id="BX0-1z-b9v"/>
                                 </connections>
                             </segmentedControl>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Map Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8OR-Vg-UCd">
-                                <rect key="frame" x="32" y="235" width="130" height="19"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Maximum Zoon Level" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sg4-ce-fae">
+                                <rect key="frame" x="32" y="235" width="200" height="19"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="130" id="f8e-IH-Rlg"/>
+                                    <constraint firstAttribute="width" constant="200" id="U3a-cu-UQk"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Psp-gB-Dz5">
-                                <rect key="frame" x="32" y="274" width="350" height="32"/>
-                                <segments>
-                                    <segment title="Non Geo"/>
-                                    <segment title="Geo"/>
-                                </segments>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YK7-qm-SPj">
+                                <rect key="frame" x="196" y="277" width="22.5" height="24"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="20"/>
+                                <color key="textColor" red="0.2306273794" green="0.2306273794" blue="0.2306273794" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KbG-Yp-76g">
+                                <rect key="frame" x="116" y="270" width="40" height="40"/>
+                                <color key="backgroundColor" red="0.93321973089999999" green="0.93331867459999995" blue="0.93730396029999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="5L8-3q-lPx"/>
+                                    <constraint firstAttribute="width" constant="40" id="AO7-RQ-HAf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="30"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="6"/>
+                                <state key="normal" title="-">
+                                    <color key="titleColor" red="0.2306273794" green="0.2306273794" blue="0.2306273794" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="actionChangedMapType:" destination="rWW-nq-sg2" eventType="valueChanged" id="pN4-Cr-Pkr"/>
+                                    <action selector="acttionMinusZoom:" destination="rWW-nq-sg2" eventType="touchUpInside" id="j0s-JH-cIK"/>
                                 </connections>
-                            </segmentedControl>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tYS-cN-2XA">
+                                <rect key="frame" x="258.5" y="270" width="40" height="40"/>
+                                <color key="backgroundColor" red="0.93692209159999995" green="0.93692209159999995" blue="0.93692209159999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="4Tp-yI-MG1"/>
+                                    <constraint firstAttribute="width" constant="40" id="T7l-fZ-HwL"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="30"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="7"/>
+                                <state key="normal" title="+">
+                                    <color key="titleColor" red="0.2306273794" green="0.2306273794" blue="0.2306273794" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="actionPlusZoom:" destination="rWW-nq-sg2" eventType="touchUpInside" id="h1q-eh-tb1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="8OR-Vg-UCd" firstAttribute="top" secondItem="dK3-xL-ez0" secondAttribute="bottom" constant="32" id="2z1-mx-PBS"/>
                             <constraint firstItem="sbj-oJ-6Yj" firstAttribute="top" secondItem="VFB-4l-IFa" secondAttribute="top" constant="25" id="4uy-1a-B8e"/>
-                            <constraint firstItem="VFB-4l-IFa" firstAttribute="trailing" secondItem="Psp-gB-Dz5" secondAttribute="trailing" constant="32" id="5WO-lM-h6l"/>
-                            <constraint firstItem="Psp-gB-Dz5" firstAttribute="top" secondItem="8OR-Vg-UCd" secondAttribute="bottom" constant="20" id="7dE-sW-6gX"/>
+                            <constraint firstItem="sg4-ce-fae" firstAttribute="leading" secondItem="VFB-4l-IFa" secondAttribute="leading" constant="32" id="9ML-Z0-e2a"/>
                             <constraint firstItem="sbj-oJ-6Yj" firstAttribute="centerX" secondItem="7qz-so-VEk" secondAttribute="centerX" id="Ais-q5-rQG"/>
-                            <constraint firstItem="8OR-Vg-UCd" firstAttribute="leading" secondItem="VFB-4l-IFa" secondAttribute="leading" constant="32" id="GEX-iE-bbH"/>
+                            <constraint firstItem="YK7-qm-SPj" firstAttribute="leading" secondItem="KbG-Yp-76g" secondAttribute="trailing" constant="40" id="D2q-H0-fGz"/>
+                            <constraint firstItem="YK7-qm-SPj" firstAttribute="centerX" secondItem="7qz-so-VEk" secondAttribute="centerX" id="IUB-FA-zt9"/>
                             <constraint firstItem="fg0-9E-GBd" firstAttribute="leading" secondItem="7qz-so-VEk" secondAttribute="leading" constant="8" id="IYm-4L-HQx"/>
                             <constraint firstItem="VFB-4l-IFa" firstAttribute="trailing" secondItem="dK3-xL-ez0" secondAttribute="trailing" constant="32" id="MtL-AM-OMN"/>
+                            <constraint firstItem="sg4-ce-fae" firstAttribute="top" secondItem="dK3-xL-ez0" secondAttribute="bottom" constant="32" id="O0d-z7-Hcd"/>
                             <constraint firstItem="k4i-cK-biF" firstAttribute="top" secondItem="sbj-oJ-6Yj" secondAttribute="bottom" constant="40" id="OYN-6q-Nni"/>
                             <constraint firstItem="dK3-xL-ez0" firstAttribute="top" secondItem="k4i-cK-biF" secondAttribute="bottom" constant="20" id="Qsf-AU-EwB"/>
                             <constraint firstItem="fg0-9E-GBd" firstAttribute="top" secondItem="VFB-4l-IFa" secondAttribute="top" constant="23" id="UXW-eZ-cKe"/>
-                            <constraint firstItem="Psp-gB-Dz5" firstAttribute="leading" secondItem="VFB-4l-IFa" secondAttribute="leading" constant="32" id="VMD-90-xfc"/>
+                            <constraint firstItem="tYS-cN-2XA" firstAttribute="centerY" secondItem="KbG-Yp-76g" secondAttribute="centerY" id="VPk-G8-rd7"/>
                             <constraint firstItem="dK3-xL-ez0" firstAttribute="leading" secondItem="VFB-4l-IFa" secondAttribute="leading" constant="32" id="ehC-HC-kEr"/>
+                            <constraint firstItem="tYS-cN-2XA" firstAttribute="leading" secondItem="YK7-qm-SPj" secondAttribute="trailing" constant="40" id="mob-Xy-5gA"/>
+                            <constraint firstItem="YK7-qm-SPj" firstAttribute="top" secondItem="sg4-ce-fae" secondAttribute="bottom" constant="23" id="qXn-5A-gfh"/>
                             <constraint firstItem="k4i-cK-biF" firstAttribute="leading" secondItem="VFB-4l-IFa" secondAttribute="leading" constant="32" id="y1d-bf-yXC"/>
+                            <constraint firstItem="KbG-Yp-76g" firstAttribute="top" secondItem="sg4-ce-fae" secondAttribute="bottom" constant="16" id="y2j-Oy-974"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="VFB-4l-IFa"/>
                     </view>
                     <connections>
-                        <outlet property="mapTypeLabel" destination="8OR-Vg-UCd" id="eJK-o9-1mG"/>
-                        <outlet property="mapTypeSegmentedControl" destination="Psp-gB-Dz5" id="BkX-bR-jiY"/>
+                        <outlet property="minusButton" destination="KbG-Yp-76g" id="kg3-UA-Bff"/>
+                        <outlet property="plusButton" destination="tYS-cN-2XA" id="eX1-7d-Umn"/>
                         <outlet property="serverUsedLabel" destination="k4i-cK-biF" id="R91-69-mYn"/>
                         <outlet property="serverUsedSegmentedControl" destination="dK3-xL-ez0" id="q8A-Hl-5yl"/>
                         <outlet property="titleLabel" destination="sbj-oJ-6Yj" id="yn0-I1-jkO"/>
+                        <outlet property="zoomLavelLabel" destination="YK7-qm-SPj" id="HVn-qe-iUX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EV1-sH-QBg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="925" y="-625"/>
+            <point key="canvasLocation" x="924.63768115942037" y="-625.44642857142856"/>
         </scene>
         <!--Onboarding Settings View Controller-->
         <scene sceneID="r6N-Ga-gDi">

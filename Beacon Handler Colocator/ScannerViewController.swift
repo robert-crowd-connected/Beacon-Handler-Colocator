@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import SwiftSpinner
 
 protocol ScannerViewControllerDelegate: class {
     func startScanner()
@@ -90,7 +91,7 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
     var refreshDetectedBeaconsTimer: Timer?
     var confirmStableClosestBeaconTimer: Timer?
     
-    var nonGeoBeaconViewController: NonGeoBeaconInstallationViewController? = nil
+    var surfaceDataRequestFinished = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,22 +102,16 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         configureScanner()
         startScanner()
         
-        //Preconfigure NonGeo Map if it's the case
-        let geoPositionIndex = UserDefaults.standard.value(forKey: kGeoPositionMapStorageKey) as? Int ?? 1
-        if geoPositionIndex == 0 {
-            nonGeoBeaconViewController = storyboard?.instantiateViewController(withIdentifier: "NonGeoBeaconInstallationViewController")
-                as? NonGeoBeaconInstallationViewController
+        SwiftSpinner.show("Preparing Beacon Handling Setup")
+        SurfaceService.shared.getSurfaceData { success in
+            SwiftSpinner.hide()
+            self.surfaceDataRequestFinished = true
             
-            UpdatingServerBeaconsService.shared.getNonGeoSurface { (success, tileName, height, width) in
-                if success && tileName != nil && height != nil && width != nil {
-                    let fullDownloadString = "https://colocator-tiles.s3-eu-west-1.amazonaws.com/surfacete/" + tileName!
-                    Downloader.downloadImage(from: fullDownloadString) { image in
-                      
-                        if image != nil {
-                            self.nonGeoBeaconViewController?.configure(withImage: image!, width: width!, height: height!)
-                        }
-                    }
-                }
+            if !success {
+                let alert = UIAlertController(title: "Download failed!",
+                                              message: "Failed to download surface data", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+                self.present(alert, animated: false, completion: { })
             }
         }
     }
@@ -217,9 +212,12 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         guard let beaconToBeInstalled = closestBeacon else { return }
         stopScanner()
         
-        let geoMapInstallation = UserDefaults.standard.value(forKey: kGeoPositionMapStorageKey) as? Int ?? 1
+        // Wait for surface data to be downloaded
+        if surfaceDataRequestFinished == false {
+            sleep(2)
+        }
         
-        if geoMapInstallation == 1 {
+        if SurfaceService.shared.isGeoSurface == true {
             guard let beaconInstallationViewController = storyboard?.instantiateViewController(withIdentifier: "BeaconInstallationViewController")
                 as? BeaconInstallationViewController else { return }
             beaconInstallationViewController.beacon = beaconToBeInstalled
@@ -227,23 +225,23 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
             
             navigationController?.pushViewController(beaconInstallationViewController, animated: true)
         } else {
-            if nonGeoBeaconViewController != nil {
-                nonGeoBeaconViewController?.beacon = beaconToBeInstalled
-                nonGeoBeaconViewController?.delegate = self
+            guard let nonGeoBeaconViewController = storyboard?.instantiateViewController(withIdentifier: "NonGeoBeaconInstallationViewController")
+                    as? NonGeoBeaconInstallationViewController else { return }
+            nonGeoBeaconViewController.beacon = beaconToBeInstalled
+            nonGeoBeaconViewController.delegate = self
                 
-                navigationController?.pushViewController(nonGeoBeaconViewController!, animated: true)
-            } else {
-                let alert = UIAlertController(title: "Download failed!",
-                                              message: "Failed to download map image", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
-                self.present(alert, animated: false, completion: { })
-            }
+            navigationController?.pushViewController(nonGeoBeaconViewController, animated: true)
         }
     }
        
     private func retrieveBeacon() {
         guard let beaconToBeRetrieved = closestBeacon else { return }
         stopScanner()
+        
+        // Wait for surface data to be downloaded
+        if surfaceDataRequestFinished == false {
+            sleep(2)
+        }
         
         BeaconHandlingService.shared.retrieve(iBeacon: beaconToBeRetrieved) { success, errorMessage in
             if success {

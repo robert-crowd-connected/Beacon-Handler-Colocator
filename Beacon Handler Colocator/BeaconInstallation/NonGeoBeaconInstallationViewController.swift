@@ -32,7 +32,6 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     @IBOutlet weak var deleteAndInstallButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     
-    private var preconfigured = false
     var imageMap: UIImage? = nil
     
     var zoomFactor: CGFloat = 1 {
@@ -46,6 +45,7 @@ class NonGeoBeaconInstallationViewController: UIViewController {
     }
     
     let standardDimension: CGFloat = 320  // maximum height for ScrollView
+    var maximumZoomLevel: CGFloat = 7
     
     var pinPointView: UIView?
     var pinPointHeight: CGFloat = 26
@@ -70,48 +70,20 @@ class NonGeoBeaconInstallationViewController: UIViewController {
         
         self.mapImageView.contentMode = .scaleAspectFit
         
-        if preconfigured {
-            self.resizeUIImageView()
-        } else {
-            SwiftSpinner.show("Loading the map")
-            UpdatingServerBeaconsService.shared.getNonGeoSurface { (success, tileName, height, width) in
-                if success && tileName != nil && height != nil && width != nil {
-                    self.tileWidth = width!
-                    self.tileHeight = height!
-                    
-                    let fullDownloadString = "https://colocator-tiles.s3-eu-west-1.amazonaws.com/surfacete/" + tileName!
-                    
-                    Downloader.downloadImage(from: fullDownloadString) { image in
-                        SwiftSpinner.hide()
-                        
-                        if image == nil {
-                            let alert = UIAlertController(title: "Download failed!",
-                                                          message: "Failed to download map image", preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
-                            self.present(alert, animated: false, completion: { })
-                            return
-                        }
-                        
-                        self.imageMap = image
-                        self.resizeUIImageView()
-                    }
-                } else {
-                    SwiftSpinner.hide()
-                    
-                    let alert = UIAlertController(title: "Download failed!",
-                                                  message: "Failed to get map surface details", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
-                    self.present(alert, animated: false, completion: { })
-                }
-            }
+        maximumZoomLevel = CGFloat(UserDefaults.standard.value(forKey: kZoomLevelStorageKey) as? Int ?? 7) + 0.01
+        
+        if Downloader.mapImage == nil || SurfaceService.shared.mapWidth == nil || SurfaceService.shared.mapHeight == nil {
+            let alert = UIAlertController(title: "Download failed!",
+                                          message: "Failed to get map surface details. Retry again later", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+            self.present(alert, animated: false, completion: { })
+            return
         }
-    }
-    
-    public func configure(withImage image: UIImage, width: Int, height: Int) {
-        self.preconfigured = true
-        self.imageMap = image
-        self.tileWidth = width
-        self.tileHeight = height
+        
+        self.tileWidth = SurfaceService.shared.mapWidth
+        self.tileHeight = SurfaceService.shared.mapHeight
+        self.imageMap = Downloader.mapImage
+        self.resizeUIImageView()
     }
     
     private func configureUI() {
@@ -268,7 +240,7 @@ class NonGeoBeaconInstallationViewController: UIViewController {
                 pinch.scale = 1
             }
         } else if pinch.scale > 1.05 {
-            if zoomFactor <= 3.95 {
+            if zoomFactor <= maximumZoomLevel - 0.05 {
                 zoomFactor += 0.05
                 pinch.scale = 1
             }

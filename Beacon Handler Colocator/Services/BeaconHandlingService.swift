@@ -49,13 +49,18 @@ class BeaconHandlingService {
     }
     
     public func install(iBeacon beacon: CLBeacon, at location: CLLocationCoordinate2D, completion: @escaping (Bool, String?) -> Void) {
+        guard let surface = SurfaceService.shared.surfaceId else {
+            completion(false, "Cannot find the surface ID for installation")
+            return
+        }
+        
         SwiftSpinner.show("Installing iBeacon " + String(format: "%04d", Int(truncating: beacon.minor)))
         let beaconId = composeBeaconID(region: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor))
         let serverBeacon = ServerBeacon(id: beaconId,
                                         lat: location.latitude,
                                         lng: location.longitude,
                                         alt: 1,
-                                        surfaceId: serverBeaconsService.surfaceId,
+                                        surfaceId: surface,
                                         beaconType: "IBEACON",
                                         beaconState: "ACTIVE")
         
@@ -73,13 +78,18 @@ class BeaconHandlingService {
     }
     
     public func install(iBeacon beacon: CLBeacon, nonGeoPosition position: CGPoint, completion: @escaping (Bool, String?) -> Void) {
+        guard let surface = SurfaceService.shared.surfaceId else {
+            completion(false, "Cannot find the surface ID for installation")
+            return
+        }
+        
         SwiftSpinner.show("Installing iBeacon " + String(format: "%04d", Int(truncating: beacon.minor)))
         let beaconId = composeBeaconID(region: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor))
         let serverBeacon = ServerBeacon(id: beaconId,
                                         lat: 0,
                                         lng: 0,
                                         alt: 1,
-                                        surfaceId: serverBeaconsService.surfaceId,
+                                        surfaceId: surface,
                                         beaconType: "IBEACON",
                                         beaconState: "ACTIVE")
         
@@ -97,9 +107,12 @@ class BeaconHandlingService {
     }
     
     public func retrieve(iBeacon beacon: CLBeacon, completion: @escaping (Bool, String?) -> Void) {
-        let geoMapInstallation = UserDefaults.standard.value(forKey: kGeoPositionMapStorageKey) as? Int ?? 1
+        guard let isGeoMap = SurfaceService.shared.isGeoSurface else {
+            completion(false, "Cannot find surface data")
+            return
+        }
         
-        if geoMapInstallation == 1 {
+        if isGeoMap {
             retrieveBeaconManual(regionUUID: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor)) { success, errorMessage in
                  completion(success, errorMessage)
             }
@@ -178,13 +191,18 @@ class BeaconHandlingService {
     }
     
     public func deleteAndInstallBeacon(iBeacon beacon: CLBeacon, at location: CLLocationCoordinate2D, completion: @escaping (Bool, String?) -> Void) {
+        guard let surface = SurfaceService.shared.surfaceId else {
+            completion(false, "Cannot find the surface ID for installation")
+            return
+        }
+        
         SwiftSpinner.show("Deleting + Installing iBeacon " + String(format: "%04d", Int(truncating: beacon.minor)))
         let beaconId = composeBeaconID(region: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor))
         let serverBeacon = ServerBeacon(id: beaconId,
                                         lat: location.latitude,
                                         lng: location.longitude,
                                         alt: 1,
-                                        surfaceId: serverBeaconsService.surfaceId,
+                                        surfaceId: surface,
                                         beaconType: "IBEACON",
                                         beaconState: "ACTIVE")
         
@@ -204,13 +222,18 @@ class BeaconHandlingService {
     }
     
     public func deleteAndInstallBeacon(iBeacon beacon: CLBeacon, nonGeoPosition position: CGPoint, completion: @escaping (Bool, String?) -> Void) {
+        guard let surface = SurfaceService.shared.surfaceId else {
+            completion(false, "Cannot find the surface ID for installation")
+            return
+        }
+        
         SwiftSpinner.show("Deleting + Installing iBeacon " + String(format: "%04d", Int(truncating: beacon.minor)))
         let beaconId = composeBeaconID(region: beacon.uuid.uuidString, major: Int(truncating: beacon.major), minor: Int(truncating: beacon.minor))
         let serverBeacon = ServerBeacon(id: beaconId,
                                         lat: 0,
                                         lng: 0,
                                         alt: 1,
-                                        surfaceId: serverBeaconsService.surfaceId,
+                                        surfaceId: surface,
                                         beaconType: "IBEACON",
                                         beaconState: "ACTIVE")
 

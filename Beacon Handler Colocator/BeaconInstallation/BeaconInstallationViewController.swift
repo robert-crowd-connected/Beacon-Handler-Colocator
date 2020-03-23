@@ -72,18 +72,22 @@ class BeaconInstallationViewController: UIViewController {
         mapView.showsBuildings = true
         changeMoveBeaconButtonsVisibility(to: false)
         
-        UpdatingServerBeaconsService.shared.getSurfaceTileName() { success, tileName in
-            if success, tileName != nil {
-                guard let appKey = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String else { return }
-                
-                let template = "https://d36oublijzdizs.cloudfront.net/\(appKey)/\(tileName!)/{z}/{x}/{y}.png"
-                let overlay = MKTileOverlay(urlTemplate: template)
-                overlay.canReplaceMapContent = false
-                
-                self.mapView.addOverlay(overlay, level: .aboveLabels)
-                self.tileRenderer = MKTileOverlayRenderer(tileOverlay: overlay)
-            }
+        guard let tile = SurfaceService.shared.tileName else {
+            let alert = UIAlertController(title: "Download failed",
+                                                 message: "Failed to download surface data", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+            self.present(alert, animated: false, completion: { })
+            return
         }
+        
+        guard let appKey = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String else { return }
+                       
+        let template = "https://d36oublijzdizs.cloudfront.net/\(appKey)/\(tile)/{z}/{x}/{y}.png"
+        let overlay = MKTileOverlay(urlTemplate: template)
+        overlay.canReplaceMapContent = false
+       
+        self.mapView.addOverlay(overlay, level: .aboveLabels)
+        self.tileRenderer = MKTileOverlayRenderer(tileOverlay: overlay)
     }
     
     private func addTapGestures() {
