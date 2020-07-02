@@ -66,13 +66,14 @@ class OnboardingSettingsViewController: UIViewController {
         majorContainerView.layer.borderWidth = 1
         majorContainerView.layer.borderColor = UIColor.lightGray.cgColor
         
-        if let key = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String,
-            let regionUUID = UserDefaults.standard.value(forKey: kRegionUUIDStorageKey) as? String,
-            let majorValue = UserDefaults.standard.value(forKey: kMajorValueStorageKey) as? Int {
-            appKeyTextField.text = key
-            regionUUIDTextField.text = regionUUID
-            majorTextField.text = "\(majorValue)"
-        } else {
+        let key = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String
+        let regionUUID = UserDefaults.standard.value(forKey: kRegionUUIDStorageKey) as? String
+        let majorValue = UserDefaults.standard.value(forKey: kMajorValueStorageKey) as? Int
+        appKeyTextField.text = key
+        regionUUIDTextField.text = regionUUID
+        majorTextField.text = majorValue == nil ? "" : "\(majorValue!)"
+        
+        if key == nil || regionUUID == nil || majorValue == nil {
             changeButtonsVisibility(to: false)
         }
     }

@@ -15,10 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         IQKeyboardManager.shared.enable = true
     
-        UserDefaults.standard.set("Basic QzdCRjcwQjE4MjBFQjU3N0YxRjc0NzVCMEQ2QTZFRTY6MUMzRTgzM0E4REZCRkYzNTgxODVFQkU2NDA0NjIwRjk0RjlGRDcyRTRDRTU4NDAyQ0M3OTQwRUQxRUIyMzNFQw==", forKey: kAuthorizationTokenStorageKey)
+        // Token for API access
+        // Do NOT modify
+        UserDefaults.standard.set("Basic RDhFRDMzMTRFQkM4RENDMDM5MDZDQTZBRjU1MjE0RTM6RjU1QzNCRjc3NTZERkMyOTdDMkUwMUI5MDE2NzFBN0I3QjUzQjU4MkFFMkJDMUI2Qjg5NEVDNUVCODFGODA2NA==", forKey: kAuthorizationTokenStorageKey)
         UserDefaults.standard.set("2c2d41fb-d4c5-4a4d-a49a-e8fd5c256293", forKey: kRegionUUIDStorageKey)
         UserDefaults.standard.set(0, forKey: kMajorValueStorageKey)
-        
+    
         return true
     }
 

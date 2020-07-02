@@ -45,7 +45,15 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
     
     var regionConstraint: CLBeaconIdentityConstraint?
     
+    // A beacon should be at most 50cm apart from the phone
+    // to be validated as closest beacon.
+    // This behaviour prevent validating the closest beacon
+    // by mistake, avoiding issues like restrieving a wrong beacon
     var isBeaconTooFar = false
+    
+    // The beacons installed in the current session
+    // will be saved locally and ignored when scanning
+    // for new beacons to install, hence reducing unwanted noise
     var detectedBeacons = [CLBeacon]()
     var excludedBeaconMinors = [NSNumber]()
     
@@ -78,6 +86,10 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         }
     }
     
+    // Noise level is determined by the number of beacons nearby (< 1.5m)
+    // and the distance between the closest beacon and the rest of them.
+    // As long as there is medium noise (or worse), for safety reasons,
+    // the app won't validate the closest beacon.
     var noiseLevel: NoiseLevel = .none {
         didSet {
             noiseLevelLabel.text = "Noise Level: \(noiseLevel.rawValue)"
@@ -87,6 +99,12 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         }
     }
     
+    // At every 0.5 seconds, the closest beacon is updated
+    // by analyzing the available data and the criterias.
+    // A beacon should remain the closest one for 1.5 or 3 seconds straight
+    // to be validated.
+    // If it is closer than ~30cm, 1.5 seconds are required,
+    // otherwise 3 seconds are required
     var closestBeaconTimer: Timer?
     var refreshDetectedBeaconsTimer: Timer?
     var confirmStableClosestBeaconTimer: Timer?
@@ -103,13 +121,17 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         startScanner()
         
         SwiftSpinner.show("Preparing Beacon Handling Setup")
-        SurfaceService.shared.getSurfaceData { success in
+        
+        // Get surface data (tile or map image) before detecting the closest beacon
+        // for a frictionless experience
+        // Also, if that fails, the user should be warned and the process should be stopped
+        SurfaceService.shared.getSurfaceData { success, message in
             SwiftSpinner.hide()
             self.surfaceDataRequestFinished = true
             
             if !success {
                 let alert = UIAlertController(title: "Download failed!",
-                                              message: "Failed to download surface data", preferredStyle: .alert)
+                                              message: message ?? "Failed to download surface data", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
                 self.present(alert, animated: false, completion: { })
             }
@@ -212,7 +234,8 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         guard let beaconToBeInstalled = closestBeacon else { return }
         stopScanner()
         
-        // Wait for surface data to be downloaded
+        // Wait for surface data to be downloaded if it's not available yet
+        // In most cases 2 seconds should be enough
         if surfaceDataRequestFinished == false {
             sleep(2)
         }
@@ -238,7 +261,8 @@ class ScannerViewController: UIViewController, ScannerViewControllerDelegate {
         guard let beaconToBeRetrieved = closestBeacon else { return }
         stopScanner()
         
-        // Wait for surface data to be downloaded
+        // Wait for surface data to be downloaded if it's not available yet
+        // In most cases 2 seconds should be enough
         if surfaceDataRequestFinished == false {
             sleep(2)
         }

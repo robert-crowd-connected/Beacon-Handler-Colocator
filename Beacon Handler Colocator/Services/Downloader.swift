@@ -13,6 +13,7 @@ class Downloader {
  
     static var mapImage: UIImage?
     
+    // Download the map iamge and save it locally for the current session
     static func downloadImage(from link: String, completion: @escaping (UIImage?) -> Void) {
         if mapImage != nil {
             completion(mapImage!)
@@ -26,6 +27,7 @@ class Downloader {
                 let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
                 let data = data, error == nil,
                 let image = UIImage(data: data) else {
+                    
                     completion(nil)
                     return
             }

@@ -37,18 +37,22 @@ class SurfaceService {
     public var mapHeight: Int? = nil
     public var mapWidth: Int? = nil
     
-    public func getSurfaceData(completion: @escaping (Bool) -> Void) {
-        guard let url = URL(string: "\(baseURL)\(surfaceSufix)") else {
-            completion(false)
-            return
-        }
+    // Get the right map for the app key
+    // It cam be either a tile over the map itself
+    // or an image with specific width and height - in which case the coordinates will be (x,y)
+    public func getSurfaceData(completion: @escaping (Bool, String?) -> Void) {
         guard let key = UserDefaults.standard.value(forKey: kApplicationKeyStorageKey) as? String,
             let token = UserDefaults.standard.value(forKey: kAuthorizationTokenStorageKey) as? String else {
-                completion(false)
+                completion(false, "Key or token not found")
                 return
         }
         
-        let parameters: Parameters = ["app": key]
+        guard let url = URL(string: "\(baseURL)\(surfaceSufix)?app=\(key)") else {
+            completion(false, "Invalid URL for accessing surfaces")
+            return
+        }
+        
+        let parameters: Parameters = [:]
         let headers: HTTPHeaders = [
             "Authorization" : token,
             "Content-Type": "application/json"
@@ -67,22 +71,22 @@ class SurfaceService {
                     
                 case let .success(value):
                     guard let responseData = value.data(using: .utf8) else {
-                        completion(false)
+                        completion(false, nil)
                         return
                     }
                     guard let responseJSON = (try? JSONSerialization.jsonObject(with: responseData)) as? [String: Any] else {
-                        completion(false)
+                        completion(false, nil)
                         return
                     }
                     
                     if let code = responseJSON["code"] as? String, !code.contains("200") {
                         print("Get surfaces request unsuccessful. Code: \(code) \(responseJSON["description"] as? String ?? "unknown description")")
-                        completion(false)
+                        completion(false, "Getting surface failed with code \(code)")
                         return
                     }
                     
                     guard let surfacesJSON = responseJSON["surfaces"] as? [[String: Any]] else {
-                        completion(false)
+                        completion(false, "There are no surfaces for key \(key)")
                         return
                     }
                     
@@ -100,37 +104,37 @@ class SurfaceService {
                             
                             self.surfaceId = id
                             self.tileName = tile
-                            self.isGeoSurface = transform == 1
-                          
+                            self.isGeoSurface = transform != 0 
+                            
                             if self.isGeoSurface == false {
                                 guard let height = surfaceJSON["height"] as? Int,
                                    let width = surfaceJSON["width"] as? Int else {
-                                       completion(false)
+                                       completion(false, "Cannot find image dimensions for image map")
                                        return
                                 }
                                 
                                 self.mapHeight = height
                                 self.mapWidth = width
                                 
-                                 let fullDownloadString = "https://colocator-tiles.s3-eu-west-1.amazonaws.com/surfacete/" + tile
+                                 let fullDownloadString = "https://colocator-tiles.s3-eu-west-1.amazonaws.com/\(key)/" + tile
                                 Downloader.downloadImage(from: fullDownloadString) { _ in }
                                 
-                                completion(true)
+                                completion(true, nil)
                                 return
                                 
                             } else {
-                                completion(true)
+                                completion(true, nil)
                                 return
                             }
                         }
                     }
-                    
-                    completion(false)
+        
+                    completion(false, "Cannot find a surface for key \(key)")
                     return
                     
                 case let .failure(error):
                     print("Failed to get surfaces \(error.localizedDescription)")
-                    completion(false)
+                    completion(false, nil)
                 }
         }
     }
